@@ -1,0 +1,86 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div>
+        </div>
+        <div class="item-purchase-table">
+            <ngx-datatable class="material" [rows]="expireItemDetails" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="40" [scrollbarV]="true" [scrollbarH]="true">
+                <ngx-datatable-column *ngFor="let col of tablecolumns; let colIndex = index" [name]="col.name"
+                    [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'id' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'id') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)" data-column-key-name="id">{{rowIndex+1}}</span>
+                        <!-- Code for Column Itemcode -->
+                        <span
+                            *ngIf="col.field === 'itemcode' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'itemcode') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                            (click)="onClickSpan($event,rowIndex, colIndex)" [attr.data-column-name]="col.field"
+                            (keydown)="onAccountKeyDown($event)" data-column-key-name="itemcode">
+                            {{ row?.itemCode }}
+                        </span>
+
+                        <!-- Code for Column Itemname -->
+                        <span
+                            *ngIf="col.field === 'itemname' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'itemname') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                            (click)="onClickSpan($event,rowIndex, colIndex)" [attr.data-column-name]="col.field"
+                            (keydown)="onAccountKeyDown($event)" data-column-key-name="itemname">
+                            {{ row?.itemName }}
+                        </span>
+
+                        <!-- Code for Column ManufactureDate -->
+                        <span
+                            *ngIf="col.field === 'manufacturedate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'manufacturedate') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                            (click)="onClickSpan($event,rowIndex, colIndex)" [attr.data-column-name]="col.field"
+                            (keydown)="onAccountKeyDown($event)" data-column-key-name="manufacturedate"
+                            (dblclick)="handleDoubleClick($event)">
+                            {{ row?.manufactureDate | date: 'dd/MM/yyyy' }}
+                        </span>
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'manufacturedate' && enableInlineEditing && currentColumname == 'manufacturedate'  && rowIndex == currentRowIndex"
+                            value="{{row.manufactureDate | date: 'dd/MM/yyyy' }}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onAccountKeyDown($event)"
+                            (click)="onClickInput($event,rowIndex,colIndex)" [attr.data-column-name]="col.field"
+                            (blur)="onChangeManufactureDate($event, rowIndex)" appDateFormat>
+
+                        <!-- Code for Column ExpiryDate -->
+                        <span
+                            *ngIf="col.field === 'expirydate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'expirydate') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                            (click)="onClickSpan($event,rowIndex, colIndex)" [attr.data-column-name]="col.field"
+                            (keydown)="onAccountKeyDown($event)" data-column-key-name="expirydate" (dblclick)="handleDoubleClick($event)">
+                            {{ row?.expiryDate | date: 'dd/MM/yyyy' }}
+                        </span>
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'expirydate' && enableInlineEditing && currentColumname == 'expirydate'  && rowIndex == currentRowIndex"
+                            value="{{row.expiryDate | date: 'dd/MM/yyyy' }}" id="accountcell-{{rowIndex}}-{{colIndex}}"
+                            #gridCell (keydown)="onAccountKeyDown($event)"
+                            (click)="onClickInput($event,rowIndex,colIndex)" [attr.data-column-name]="col.field"
+                            (blur)="onChangeExpireDate($event, rowIndex)" appDateFormat>
+
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="row" style="margin-bottom: 20px;">
+            <div class="col-md-10"></div>
+            <div class="col-md-2 flex-wrapper">
+                <button class="btn btn-secondary ok-button" (click)="save()" (keydown)="handleOkbuttonkeydown($event)"
+                    #okbutton>OK</button>
+
+                <button class="btn btn-secondary close-button" (click)="cancelItems()"
+                    (keydown)="handleCancelbuttonkeydown($event)" #cancelbutton>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

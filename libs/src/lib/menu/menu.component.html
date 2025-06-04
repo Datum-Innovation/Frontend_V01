@@ -1,0 +1,15 @@
+<div [ngClass]="{ 'menu-wrapper': parentStyle }">
+  <ul *ngFor="let menuItem of menuItems$ | async" [ngClass]="{ 'menus': menuItem.parentID && menuItem.submenu?.length,'submenu': menuItem.parentID && !menuItem.submenu?.length}">
+    <li [ngClass]="{ 'has-submenu': menuItem.parentID && menuItem.submenu?.length }">
+        <span *ngIf="!menuItem.isPage"  [ngClass]="{'active':isMenuActive(menuItem.menuValue)}">{{ menuItem.menuValue }}</span>
+      <!-- <a (click)="navigateTo('app1')" *ngIf="menuItem.isPage" href={{menuItem.url.toLowerCase()}}>{{ menuItem.menuText }}</a> -->
+      <a *ngIf="menuItem.isPage && menuItem.url" [routerLink]="['/' + menuItem.url.toLowerCase()]" [queryParams]="{ pageId: menuItem.id, voucherNo:menuItem.voucherID }">{{ menuItem.menuValue }}</a>
+      <app-menu *ngIf="menuItem.submenu" [menuItems$]="menuItem.submenu"></app-menu>
+    </li>
+  </ul>
+  <!-- <ul  class="logout-wrapper" *ngIf="parentStyle">
+    <li>
+      <a (click)="logout()" class="logout-button">Logout</a>
+    </li>
+  </ul> -->
+</div>

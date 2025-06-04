@@ -1,0 +1,27 @@
+.project-sectionzz {
+    display: flex;
+    height: 33px;
+    padding: var(--2, 4px);
+    justify-content: flex-start; 
+    align-items: center;
+    gap: var(--2, 4px);
+    align-self: stretch;
+}
+
+.project-sectionzz label.form-label {
+    width: 9.188rem;
+    color: var(--Tertiary-600, #222);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.project-sectionzz input {
+    height: 25px;
+    padding: 5px var(--2, 4px);
+    flex: 0 1 auto; 
+    border-radius: var(--2, 4px);
+    border: 0.5px solid var(--Tertiary-600, #222);
+    max-width: 275px;
+}

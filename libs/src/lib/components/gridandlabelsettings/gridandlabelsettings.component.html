@@ -1,0 +1,152 @@
+<button type="button" class="btn btn-outline-secondary settings-icon" (click)="onClickSettings()" translate>
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+    <path d="M5.6875 0.875V2.625L4.8125 3.0625L3.5 1.75L1.75 3.5L3.0625 4.8125L2.625 5.6875H0.875V8.3125H2.625L3.0625 9.1875L1.75 10.5L3.5 12.25L4.8125 10.9375L5.6875 11.375V13.125H8.3125V11.375L9.1875 10.9375L10.5 12.25L12.25 10.5L10.9375 9.1875L11.375 8.3125H13.125V5.6875H11.375L10.9375 4.8125L12.25 3.5L10.5 1.75L9.1875 3.0625L8.3125 2.625V0.875H5.6875Z" stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 8.75C7.9665 8.75 8.75 7.9665 8.75 7C8.75 6.0335 7.9665 5.25 7 5.25C6.0335 5.25 5.25 6.0335 5.25 7C5.25 7.9665 6.0335 8.75 7 8.75Z" stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  Settings
+</button>
+
+<!-- Popup Overlay -->
+<div id="settingsPopup" class="popup-overlay" *ngIf="showSettingsPopup">
+  <div class="popup-content">
+    <!-- Popup Header -->
+    <div class="popup-header">
+      <h2>Settings</h2>
+      <button class="close-btn" (click)="closePopup()">×</button>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs">
+      <button class="tablinks" (click)="openTab('GridSettings')" [class.active]="selectedTab === 'GridSettings'"
+        id="defaultTab">Grid Settings</button>
+      <button class="tablinks" (click)="openTab('LabelSettings')" [class.active]="selectedTab == 'LabelSettings'">Label
+        Settings</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="GridSettings" *ngIf="showGridSettings" class="tabcontent">
+
+      <div #btngroup class="btn-group form-topbar" role="group" aria-label="Grid Settings">
+        <button type="button" class="btn btn-outline-secondary" (click)="onClickEditGridSettings()"
+          [class.top-button-active]="selectedGridSettingsId" translate>
+          <i class="large material-icons">edit</i>Edit</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveGridSettings()"
+          [disabled]="disableGridSettings" translate>
+          <i class="large material-icons">save</i>Save</button>
+        <button type="button" class="btn btn-outline-secondary" [disabled]="disableGridSettings"
+          (click)="onClickAddGridSettings()">+Add New</button>
+        <div style="margin-left: 10px;" class="flex-wrapper" *ngIf="showPasswordBox && selectedTab === 'GridSettings'">
+          <label for="Password" class="form-label ">Password</label>
+          <input type="text" class="form-control" [(ngModel)]="password">
+        </div>
+      </div>
+      <ngx-datatable class="material container striped" [rows]="allGridSettings" [columnMode]="'flex'"
+        [headerHeight]="50" [footerHeight]="50" [rowHeight]="50" [scrollbarV]="true"
+        (activate)="onClickGridSettings($event)" [limit]="10">
+
+
+        <ngx-datatable-column *ngFor="let col of gridColumns; let colIndex = index" [name]="col.name" [flexGrow]="2">
+          <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+
+            <!-- Grid name field -->
+            <span *ngIf="disableGridSettings && col.field === 'gridName'"> {{ row?.gridName }}</span>
+            <input type="text" class="form-control" *ngIf="!disableGridSettings && col.field === 'gridName'"
+              (change)="onChangeGridFields($event,'gridName',rowIndex)" value="{{ row?.gridName }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onGridColumKeyDown($event)" (click)="onClickGridInput(rowIndex,colIndex)">
+
+            <!-- Columnname field -->
+            <span *ngIf="disableGridSettings && col.field === 'columnname'"> {{ row?.columnName }}</span>
+            <input type="text" class="form-control" *ngIf="!disableGridSettings && col.field === 'columnname'"
+              (change)="onChangeGridFields($event,'columnName',rowIndex)" value="{{ row?.columnName }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onGridColumKeyDown($event)" (click)="onClickGridInput(rowIndex,colIndex)">
+
+            <span *ngIf="disableGridSettings  && col.field === 'originalcaption'">{{ row?.originalCaption}}</span>
+            <input type="text" class="form-control" *ngIf="!disableGridSettings && col.field === 'originalcaption'"
+              (change)="onChangeGridFields($event,'originalCaption',rowIndex)" value="{{ row?.originalCaption }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onGridColumKeyDown($event)" (click)="onClickGridInput(rowIndex,colIndex)">
+
+            <span *ngIf="disableGridSettings && col.field === 'newcaption'">{{ row?.newCaption}}</span>
+            <input type="text" class="form-control" *ngIf="!disableGridSettings && col.field === 'newcaption'"
+              (change)="onChangeGridFields($event,'newCaption',rowIndex)" value="{{ row?.newCaption }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onGridColumKeyDown($event)" (click)="onClickGridInput(rowIndex,colIndex)">
+
+
+            <span *ngIf="disableGridSettings  && col.field === 'arabiccaption'">{{ row?.arabicCaption}}</span>
+            <input type="text" class="form-control" *ngIf="!disableGridSettings  && col.field === 'arabiccaption'"
+              (change)="onChangeGridFields($event,'arabicCaption',rowIndex)" value="{{ row?.arabicCaption }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onGridColumKeyDown($event)" (click)="onClickGridInput(rowIndex,colIndex)">
+
+            <input *ngIf="col.field === 'visible'" type="checkbox" [checked]="row.visible"
+              (change)="onChangeVisible($event, rowIndex)" [disabled]="disableGridSettings"
+              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onGridColumKeyDown($event)" (click)="onClickGridInput(rowIndex,colIndex)">
+
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer></ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+
+    <div id="LabelSettings" *ngIf="showLabelSettings" class="tabcontent">
+      <div #btngroup class="btn-group form-topbar" role="group" aria-label="Label Settings">
+        <button type="button" class="btn btn-outline-secondary" (click)="onClickEditLabelSettings()"
+          [class.top-button-active]="selectedLabelSettingsId" translate>
+          <i class="large material-icons">edit</i>Edit</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveLabelSettings()"
+          [disabled]="disableLabelSettings" translate>
+          <i class="large material-icons">save</i>Save</button>
+        <button type="button" class="btn btn-outline-secondary" [disabled]="disableLabelSettings"
+          (click)="onClickAddLabelSettings()">+Add New</button>
+        <div style="margin-left: 10px;" class="flex-wrapper" *ngIf="showPasswordBox && selectedTab === 'LabelSettings'">
+          <label for="Password" class="form-label ">Password</label>
+          <input type="text" class="form-control" [(ngModel)]="password">
+        </div>
+      </div>
+      <ngx-datatable class="material container striped" [rows]="allLabelSettings" [columnMode]="'flex'"
+        [headerHeight]="50" [footerHeight]="50" [rowHeight]="50" [scrollbarV]="true"
+        (activate)="onClickLabelSettings($event)" [limit]="10">
+
+        <ngx-datatable-column *ngFor="let col of labelColumns; let colIndex = index" [name]="col.name" [flexGrow]="2">
+          <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+
+            <!-- Grid name field -->
+            <span *ngIf="disableLabelSettings && col.field === 'labelName'"> {{ row?.labelName }}</span>
+            <input type="text" class="form-control" *ngIf="!disableLabelSettings && col.field === 'labelName'"
+              (change)="onChangeLabelFields($event,'labelName',rowIndex)" value="{{ row?.labelName }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #labelCell (keydown)="onLabelColumKeyDown($event)" (click)="onClickLabelInput(rowIndex,colIndex)">
+
+            <span *ngIf="disableLabelSettings  && col.field === 'originalcaption'">{{ row?.originalCaption}}</span>
+            <input type="text" class="form-control" *ngIf="!disableLabelSettings && col.field === 'originalcaption'"
+              (change)="onChangeLabelFields($event,'originalCaption',rowIndex)" value="{{ row?.originalCaption }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #labelCell (keydown)="onLabelColumKeyDown($event)" (click)="onClickLabelInput(rowIndex,colIndex)">
+
+            <span *ngIf="disableLabelSettings && col.field === 'newcaption'">{{ row?.newCaption}}</span>
+            <input type="text" class="form-control" *ngIf="!disableLabelSettings && col.field === 'newcaption'"
+              (change)="onChangeLabelFields($event,'newCaption',rowIndex)" value="{{ row?.newCaption }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #labelCell (keydown)="onLabelColumKeyDown($event)" (click)="onClickLabelInput(rowIndex,colIndex)">
+
+
+            <span *ngIf="disableLabelSettings  && col.field === 'arabiccaption'">{{ row?.arabicCaption}}</span>
+            <input type="text" class="form-control" *ngIf="!disableLabelSettings  && col.field === 'arabiccaption'"
+              (change)="onChangeLabelFields($event,'arabicCaption',rowIndex)" value="{{ row?.arabicCaption }}"
+              id="cell-{{rowIndex}}-{{colIndex}}" #labelCell (keydown)="onLabelColumKeyDown($event)" (click)="onClickLabelInput(rowIndex,colIndex)">
+
+            <input *ngIf="col.field === 'visible'" type="checkbox" [checked]="row.visible"
+              (change)="onChangeLabelVisible($event, rowIndex)" [disabled]="disableLabelSettings"
+              id="cell-{{rowIndex}}-{{colIndex}}" #labelCell (keydown)="onLabelColumKeyDown($event)" (click)="onClickLabelInput(rowIndex,colIndex)">
+
+            <input *ngIf="col.field === 'enable'" type="checkbox" [checked]="row.enable"
+              (change)="onChangeLabelEnable($event, rowIndex)" [disabled]="disableLabelSettings"
+              id="cell-{{rowIndex}}-{{colIndex}}" #labelCell (keydown)="onLabelColumKeyDown($event)" (click)="onClickLabelInput(rowIndex,colIndex)">
+
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer></ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+
+    <!-- Popup Footer -->
+    <div class="popup-footer">
+
+    </div>
+  </div>
+</div>

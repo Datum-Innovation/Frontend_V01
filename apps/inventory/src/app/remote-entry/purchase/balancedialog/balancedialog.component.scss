@@ -1,0 +1,94 @@
+/* Styling for the dialog container */
+.mat-dialog-container {
+    padding: 24px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Styling the dialog title */
+  h2.mat-dialog-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Centering the buttons */
+  .mat-dialog-content {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for the Card and Cash buttons */
+  button.mat-raised-button {
+    margin: 0 8px; /* Adds spacing between buttons */
+    padding: 12px 24px;
+    font-size: 16px;
+    min-width: 120px;
+  }
+  
+  /* Style for primary (selected) button */
+  button.mat-raised-button.mat-primary {
+    background-color: #00796b;
+    color: white;
+  }
+  
+  button.mat-raised-button.mat-primary:hover {
+    background-color: #004d40;
+  }
+  
+  /* Style for accent button */
+  button.mat-raised-button.mat-accent {
+    background-color: #ffab00;
+    color: white;
+  }
+  
+  button.mat-raised-button.mat-accent:hover {
+    background-color: #ff6f00;
+  }
+  
+  /* Cancel button styling in dialog actions */
+  .mat-dialog-actions button.mat-button {
+    margin: 0 auto;
+    display: block;
+    color: #1088ab;
+    font-weight: bold;
+  }
+  
+
+  .dialog-close-button {
+    width: 100%;
+    text-align: right;
+  }
+  
+  .dialog-close-button button {
+    background: transparent;
+    border: none;
+    color:#000000cf;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  
+  .dialog-close-button span {
+    font-size: 24px;
+  }
+  .balance-dialogue-content {
+    width: 85%;
+    margin: auto;
+    text-align: center;
+}
+  
+
+
+  .mat-mdc-raised-button{
+    margin-right: 10px;
+  }
+  .mat-accent{
+    background-color: #1088ab !important;
+  }
+  .mat-primary{
+    background-color: #1e3a9e !important;
+  }

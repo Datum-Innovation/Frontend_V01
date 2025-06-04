@@ -1,0 +1,183 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div> 
+        </div>
+
+        <!-- Grid for other account popup  -->
+        <div  *ngIf="popupType == ''" class="item-purchase-table">
+            <ngx-datatable class="material" [rows]="modifiedArray" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="40" [scrollbarV]="true" [scrollbarH]="true" [selected]="selected"
+                [selectionType]="SelectionType.single" (select)="onSelect($event)">
+                <ngx-datatable-column
+                    *ngFor="let col of tablecolumns; let colIndex = index"
+                    [name]="col.name" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex"
+                        ngx-datatable-cell-template>
+
+                        <span
+                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                        id="accountcell-{{rowIndex}}-{{colIndex}}" 
+                        #gridCell
+                        (click)="onClickSpan($event,rowIndex,colIndex)"
+                        *ngIf="col.field === 'id' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'id') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                        (keydown)="onAccountKeyDown($event)"
+                        [attr.data-column-name]="col.field"
+                        (dblclick)="handleDoubleClick($event)"
+                        data-column-key-name="id">{{rowIndex+1}}</span>
+
+                        <!-- Code for Column Account Code -->
+                        <div *ngIf="col.field === 'accountcode'">
+
+                            <span
+                                [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                                id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                                #gridCell
+                                (click)="onClickSpan($event,rowIndex,colIndex)"
+                                *ngIf="col.field === 'accountcode' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'accountcode') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                (keydown)="onAccountKeyDown($event)"
+                                [attr.data-column-name]="col.field"
+                                (dblclick)="handleDoubleClick($event)"
+                                data-column-key-name="accountcode">{{row?.accountCode.alias}}</span>
+
+                            <dfinance-frontend-searchable-dropdown
+                                [options]="accountData"
+                                [updatedOption]="row?.accountCode.alias"
+                                [returnField]="accountCodereturnField"
+                                [dropdownFields]="accountCodeKeys"
+                                (selectedOption)="onAccountCodeSelected($event, rowIndex)"
+                                [isGridCell]="true"
+                                cellid="accountcell-{{rowIndex}}-{{colIndex}}"
+                                (click)="onClickInput($event,rowIndex,colIndex)"
+                                (emitKeyboardEvent)="onColumKeyDown($event)"
+                                *ngIf="enableInlineEditing && currentColumname == 'accountcode' && rowIndex == currentRowIndex"
+                                (keydown)="onAccountKeyDown($event)"
+                                [attr.data-column-name]="col.field">
+                            </dfinance-frontend-searchable-dropdown>
+                        </div>
+
+                        <!-- Code for Column Account Name -->
+                        <span *ngIf="col.field === 'accountname'"
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            tabindex="0"
+                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                            [attr.data-column-name]="col.field"
+                            (keydown)="onAccountKeyDown($event)"
+                            data-column-key-name="accountname">
+                            {{ row?.accountCode.name }}
+                        </span>  
+                        
+                        <!-- for discription -->
+                        <span
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                            #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'description' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'description') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="description">{{row?.description}}</span>
+                            
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'description' && enableInlineEditing && currentColumname == 'description'  && rowIndex == currentRowIndex"
+                            value="{{ row?.description }}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)"
+                            (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeDescription($event, rowIndex)">
+
+                    <!-- for amount -->
+                    <span
+                    [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                    id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                    #gridCell
+                    (click)="onClickSpan($event,rowIndex,colIndex)"
+                    *ngIf="col.field === 'amount' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'amount') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                    (keydown)="onAccountKeyDown($event)"
+                    [attr.data-column-name]="col.field"
+                    (dblclick)="handleDoubleClick($event)"
+                    data-column-key-name="amount">{{row?.amount}}</span>
+                    
+                <input type="text" class="form-control"
+                    *ngIf=" col.field === 'amount' && enableInlineEditing && currentColumname == 'amount'  && rowIndex == currentRowIndex"
+                    value="{{ row?.amount }}"
+                    id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                    (keydown)="onAccountKeyDown($event)"
+                    (click)="onClickInput($event,rowIndex,colIndex)"
+                    [attr.data-column-name]="col.field"  (input)="onChangeAmount($event, rowIndex)" appNumberFormat>
+            </ng-template>
+                </ngx-datatable-column>                    
+
+
+            </ngx-datatable>
+        </div>
+
+        <!-- Grid for tax popup -->
+        <div  *ngIf="popupType == 'tax'">
+            <ngx-datatable class="material" [rows]="accountData" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="70" [scrollbarV]="true" [scrollbarH]="true">
+                <!-- First column with a button to add rows -->
+                <ngx-datatable-column name="Action" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{rowIndex+1}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Account Code" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{row?.accountCode.alias}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Account" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row?.accountCode.name }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Description" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.description }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Amount" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.amount }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+
+
+        
+        <div class="fixed-footer">
+            <div class="row">
+                <hr>
+                        <span class="formatted-amount">{{formattedAmount}}</span>
+                    <hr>
+                <!-- <div class="col-md-10"></div>
+                <div class="col-md-2">
+                    
+                </div> -->
+            </div>
+            <div class="row" style="margin-top:0px">
+                <div class="col-md-10" *ngIf="!showBalanceAmount"></div>
+                <div class="col-md-8" *ngIf="showBalanceAmount"></div>
+                <div class="col-md-2 balanceamount-section" *ngIf="showBalanceAmount">
+                    <p>
+                        Balance
+                        <span [ngClass]="{ 'warning': isNegative() }">
+                            {{ balanceAmount | number: '1.4-4' }}
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-2 flex-wrapper">
+                    <button class="btn btn-secondary ok-button" (click)="save()" (keydown)="handleOkbuttonkeydown($event)" #okbutton>OK</button>
+                    <button class="btn btn-secondary close-button" (click)="cancelItems()" (keydown)="handleCancelbuttonkeydown($event)"#cancelbutton>Close</button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

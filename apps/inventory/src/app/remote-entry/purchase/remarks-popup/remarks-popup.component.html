@@ -1,0 +1,13 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div>
+        </div>
+
+        <h5>Remarks</h5>
+        <div class="remarks-content">
+            {{remarks}}
+        </div>
+
+    </div>
+</div>

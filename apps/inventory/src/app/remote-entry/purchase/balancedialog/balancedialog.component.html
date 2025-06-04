@@ -1,0 +1,30 @@
+<div class="balance-container">
+  <div mat-dialog-actions class="dialog-close-button">
+    <button mat-icon-button (click)="closeDialog()">
+      <span>X</span>
+    </button>
+  </div>
+  <div class="balance-dialogue-content">
+    <h2 mat-dialog-title>Allocate Balance</h2>
+    <div mat-dialog-content>
+      <p>Do you want to allocate the balance amount to the default account?</p>
+      <div>
+        <button mat-raised-button 
+                [color]="selectedAccount === 'Card' ? 'primary' : 'accent'" 
+                (click)="selectedAccount = 'Card'" 
+                (keydown)="onKeydown($event)">
+          Card
+        </button>
+
+        <button mat-raised-button 
+                [color]="selectedAccount === 'Cash' ? 'primary' : 'accent'" 
+                (click)="selectedAccount = 'Cash'" 
+                (keydown)="onKeydown($event)">
+          Cash
+        </button>
+      </div>
+    </div>
+  </div>
+  
+</div>
+  

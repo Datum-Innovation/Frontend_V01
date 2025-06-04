@@ -1,0 +1,109 @@
+
+/* Multilevel Submenu Styles */
+
+/* Reset default margin and padding */
+body, ul, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Main menu styles */
+ul {
+  list-style-type: none;
+  width: 104px;
+  float: left;
+  text-align: center;
+}
+
+ul.menus ul {
+  width: 200px;
+}
+ul.menus {
+  width: 200px;
+}
+
+li {
+  position: relative;
+}
+
+/* Style for menu items with submenus */
+li span, li a {
+  display: block;
+  padding: 7px 1px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 12px;
+}
+
+/* Style for menu items with links */
+li a {
+  cursor: pointer;
+}
+
+/* Style for submenus */
+li ul {
+  display: none;
+  /* position: absolute; */
+  top: 0;
+  left: 100%;
+  background-color: #fff;
+  
+}
+
+ul li:hover ul{
+  display: block;
+  width: 200px;
+}
+
+ul li:hover ul li ul{
+  display: none;
+}
+
+ul li ul li:hover ul{
+  display: block;
+}
+
+ul li ul li:hover ul li ul{
+  display: none;
+}
+
+ul li ul li ul li:hover ul{
+  display: block;
+}
+
+ul li ul li ul li:hover ul li ul{
+  display: none;
+}
+
+/* Hover effect */
+li:hover span, li:hover a {
+  background-color: #fff8f8;
+    color: #073d4c;
+}
+.has-submenu app-menu{
+  position: absolute;
+  left: 100%;
+  top: 0%;
+}
+li.has-submenu span:hover,ul.submenu li a:hover{
+  background-color: #cbcaca;
+}
+.menu-wrapper {
+  display: block;
+  width: 100%;
+  background: #073D4C;
+  height: 34px;
+}
+
+ul li app-menu div{
+  position: absolute;
+  //left: 0%;  
+  z-index: 1000;  
+  box-shadow: 0 8px 8px -4px #073d4cc2;
+}
+span.active {
+  // border-bottom: 2px solid #fff;  
+  // box-shadow: 0 8px 8px -4px #073d4cc2;
+  background: #222222;
+}

@@ -1,0 +1,59 @@
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="container-main row">
+    <div class="container-main--inner">
+        <div class="login-top">
+            <div class="login-top--title">
+                <p>DATUM FINANCIALS</p>
+            </div>
+            <div class="login-top--language-dropdown">
+            <label for="language">Language </label>
+            <select id="language">
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+            </select>
+            </div>
+        </div>
+        <div class="login-container">
+            <div class="login-container--image-parent">
+            <img src="/assets/app-logo.png" alt="Image" class="logo-img">
+            </div>
+            
+            <div class="form-container">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                    
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <select id="company" class="ml-2" formControlName="company" (change)="onCompanySelect()">
+                        <option value="">Select a company</option>
+                        <option *ngFor="let company of companies" [value]="company?.id">{{ company?.name }}</option>
+                    </select>
+                </div>
+              
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="user_login" formControlName="username" autocomplete="off">
+                </div>
+            
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="ml-2" name="user_pass" id="password" formControlName="password" autocomplete="new-password">
+                </div>
+            
+                <div class="form-group">
+                    <label for="branch">Branch</label>
+                    <select id="branch" class="ml-18 branch-sel" formControlName="branch" (change)="onBranchSelect()">
+                      <option value="" disabled selected>Select a branch</option>
+                      <option *ngFor="let branch of branches" [value]="branch?.id">{{ branch?.name }}</option>
+                    </select>
+                </div>
+                <button class="login-btn" type="submit" [disabled]="loginForm.invalid">Login</button>
+                </form>
+            </div>
+        </div>
+        <div class="login-bottom">
+            <p>Contact for Support</p>
+        </div>
+    </div>
+</div>

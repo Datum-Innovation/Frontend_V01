@@ -1,0 +1,120 @@
+@import "../../../mixins.scss";
+
+.container-main {
+  background-image: url('/assets/login-bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: initial;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  &--inner {
+    padding: 25px 32px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 25px);
+  }
+  .login {
+    &-top {
+      display: flex;
+      justify-content: space-between;
+      &--title {
+        p {
+          font-size: 20px;
+          font-weight: 400;
+        }
+      }
+      &--language-dropdown {
+        @include flex-center;
+        label {
+          font-size: 14px;
+          font-weight: 400;
+        }
+        select {
+          margin-left: 14px;
+        }
+      }
+    }
+    &-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      &--image-parent {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        height: 100%;
+        img {
+          width: calc(30% - 40px);
+        }
+      }
+      .form-container {
+        flex-grow: 1;
+        form {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 9px;
+            label {
+              margin-right: 10px;
+              font-size: 14px;
+              font-weight: 400;
+            }
+            select,
+            input {
+              width: 271px;
+              height: 28px;
+              border-radius: 5px;
+              background: #fff;
+              border: none;
+            }
+            input{
+              width: 267px;
+            }
+            .branch-sel{
+              margin-left: 14px;
+            }
+          }
+          .login-btn {
+            text-transform: uppercase;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 400;
+            background: #c50e0e;
+            padding: 12px 38px;
+            border: none;
+            margin: 24px auto 0;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    &-bottom {
+      margin-bottom: 25px;
+      p {
+        font-size: 13px;
+        font-weight: 300;
+        position: relative;
+        width: 100%;
+        @include flex-justify-end;
+        &::after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 0;
+          left: 0;
+          bottom: -11px;
+          border-bottom: 1px solid #000;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+
+.form-labels {
+    font-size: 11px;
+    display: flex; /* Optional: use if you have multiple items to align */
+    align-items: flex-start; /* Corrected value */
+    justify-content: flex-start; /* Aligns content to the start (left) */
+    text-align: left; /* Ensures text is left-aligned */
+}
+
+
+.custname-section {
+  display: flex;
+  padding: var(--2, 4px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--2, 4px);
+  align-self: stretch;
+ 
+
+}
+
+
+
+.project-sectionz {
+    display: flex;
+    height: 33px;
+    padding: var(--2, 4px);
+    justify-content: flex-start; 
+    align-items: center;
+    gap: var(--2, 4px);
+    align-self: stretch;
+}
+
+.project-sectionz label.form-label {
+    width: 9.188rem;
+    color: var(--Tertiary-600, #222);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.project-sectionz input {
+    height: 25px;
+    padding: 5px var(--2, 4px);
+    flex: 0 1 auto; 
+    border-radius: var(--2, 4px);
+    border: 0.5px solid var(--Tertiary-600, #222);
+    max-width: 275px;
+}
+
+
+
+.purchase-partyinvoice-outerz { 
+  display: flex;
+  height: 33px;
+  padding: var(--2, 4px);
+  /* justify-content: flex-end;  */
+  align-items: center;
+  gap: var(--2, 4px);
+  align-self: stretch;
+}
+
+.purchase-partyinvoice-outerz input#narration {
+  display: flex;
+  height: 25px;
+  padding: 5px var(--2, 4px);
+  /* justify-content: flex-end; */
+  align-items: center;
+  gap: var(--3, 8px);
+  flex: 1 0 0;
+  border: 0.5px solid var(--Tertiary-600, #00ff37);
+}
+
+
+

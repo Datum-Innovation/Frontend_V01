@@ -1,0 +1,174 @@
+/* Top container holding left, right, and reference sections */
+.stock-form-top-container {
+  display: flex;
+  align-items: flex-start; /* Align sections to the top */
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+/* Left section styling */
+.stock-form-left {
+  display: flex;
+  width: 18.313rem;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+
+.stock-container {
+  display: flex;
+  gap: 16px; /* Space between sections */
+}
+
+/* Styling for left and right sections */
+.stock-left-section,
+.stock-right-section {
+  flex: 1; /* Distribute space equally between sections */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-right: 40px;
+}
+
+.stock-left-section {
+  flex: 0 0 40%; /* 40% of the container's width */
+}
+
+.stock-right-section {
+  flex: 0 0 40%; /* 60% of the container's width */
+}
+/* Common styles for form fields */
+.voucher-field, .warehouse-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.date-field{
+  display: flex;
+  gap: 4px;
+
+}
+
+/* Label styling */
+.form-label {
+  width: 120px;
+  font-weight: bold;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+/* Input width adjustments */
+.short-input {
+  width: 40px;
+}
+
+.long-input, .form-select, .date-input {
+  flex: 1;
+  width: 100%;
+}
+
+/* Container for Terms field */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Terms sections */
+/* Terms sections */
+.terms-sectionX {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  width: 50%;
+  margin-top: 80px;
+  position: fixed;
+  bottom: 0;
+  left: 50%; 
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: white; 
+}
+
+
+/* Input width increase */
+.form-control.long-input {
+  width: 300px;
+}
+
+/* Right section specific styling */
+.stock-right-section .long-input,
+.stock-right-section .form-select {
+  width: 120px; /* Increase width of all textboxes in right section */
+}
+
+.stock-right-section .date-input{
+  width: 50px;
+}
+
+/* Reference Section */
+.reference-section {
+  display: flex;
+  align-items: center;
+  gap: 55px;
+  width: 300px;
+}
+
+/* #reference {
+  width: calc(100% - 60px); Adjust this value as needed for the desired width */
+  /* You can also set specific width, e.g., width: 300px, if you want a fixed size */
+/* } */
+
+.reference-btn {
+  display: flex;
+  width: 300px;
+}
+
+/* footer */
+
+
+/* Footer fixed at the bottom of the page */
+.table-summaryX {
+  position: fixed;  /* Fixes it at the bottom of the screen */
+  width: 100%;      /* Ensures it stretches across the full width */
+  z-index: 1;       /* Keeps the footer above other content */
+  background-color: white; /* Ensures the footer has a white background */
+  display: block;    /* Uses flexbox to align the items horizontally */
+  justify-content: space-between; /* Positions debitTotal on the left and creditTotal on the right */
+  padding: 10px 20px; /* Adds padding for spacing inside the footer */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); 
+  margin-bottom: 180px;
+  margin-left: 200px;
+  transform: translateX(-50%);
+}
+
+
+.summary-cellx {
+  text-align: center; 
+  margin-left: 100px; 
+}
+
+
+body {
+  padding-bottom: 50px; 
+}
+
+/* Hide the spinner in modern browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+
+

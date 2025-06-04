@@ -1,0 +1,76 @@
+/* Popup overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  /* Popup content box */
+  .popup-content {
+    background-color: #fff;
+    margin: 2% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+  }
+  
+  /* Popup header */
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Close button */
+  .close-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  /* Tabs container */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* Tabs buttons */
+  .tablinks {
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .tablinks:hover {
+    background-color: #ddd;
+  }
+  
+  /* Active tab */
+  .tablinks.active {
+    background-color: #ccc;
+  }
+  
+  /* Tab content */
+  .tabcontent {
+    padding: 10px 0;
+  }
+  
+  /* Display the tab content */
+  .tabcontent.active {
+    display: block;
+  }
+  
+  .form-topbar{
+    margin-left: 6%;
+    margin-bottom: 1%;
+  }

@@ -1,0 +1,240 @@
+<dfinance-frontend-main-header pageName="Account Statement" *ngIf="!isMaximized"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading" *ngIf="!isMaximized"></dfinance-frontend-loader>
+
+<div class="row main-wrapper reports-wrapper">
+    <div class="left-wrapper left-section" [class.hide-left-section]="!showLeftSection || isMaximized">
+
+        <form [formGroup]="filterForm">
+            <div class="filter-header">
+                <div class="filter-title">
+                    <span>Filter</span>
+                </div>
+
+            </div>
+            <div class="filter-inputs">
+                <div class="filter-from">
+                    <div class="span-outer">
+                        <span>DateFrom</span>
+                    </div>
+                    <div class="from-input-div">
+                        <input class="form-control" formControlName="dateFrom" matInput [matDatepicker]="frd">
+
+                        <mat-datepicker-toggle matSuffix [for]="frd"></mat-datepicker-toggle>
+                        <mat-datepicker #frd></mat-datepicker>
+                    </div>
+                </div>
+                <div class="filter-to">
+                    <div class="span-outer">
+                        <span>DateUpTo</span>
+                    </div>
+                    <div class="to-input-div">
+                        <input class="form-control" formControlName="dateUpto" matInput [matDatepicker]="tod">
+
+                        <mat-datepicker-toggle matSuffix [for]="tod"></mat-datepicker-toggle>
+                        <mat-datepicker #tod></mat-datepicker>
+                    </div>
+                </div>
+
+
+                <!-- <div class="filter-input-row">
+                    <div class="row-label">
+                        <span>Voucher Type</span>
+                    </div>
+                    <dfinance-frontend-searchable-dropdown [options]="allAccounts" [updatedOption]="updatedaccount"
+                        [returnField]="accountreturnField" [dropdownFields]="accountKeys"
+                        (selectedOption)="onAccountSelected($event)">
+                    </dfinance-frontend-searchable-dropdown>
+                </div> -->
+                <div class="filter-input-row">
+                    <div class="row-label">
+                        <span>Voucher Type</span>
+                    </div>
+                    <select id="voucher" class="form-select" [disabled]="isInputDisabled" formControlName="voucherType"
+                        (change)="selectVoucher($event)">
+                        <option value="all" selected>ALL</option>
+                        <option *ngFor="let voucher of voucherType" [value]="voucher?.id">
+                            {{ voucher?.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-input-row">
+                    <div class="row-label">
+                        <span>Branch</span>
+                    </div>
+                    <select id="branch" class="form-select" [disabled]="isInputDisabled" formControlName="branch"
+                        (change)="selectBranch($event)">
+                        <option value="" disabled selected>--Select a Branch--</option>
+                        <option *ngFor="let branch of allBranches" [value]="branch?.id"
+                            [selected]="branch?.id === currentBranch">
+                            {{ branch?.company }}
+                        </option>
+                    </select>
+                </div>
+                <div class="filter-input-row">
+                    <div class="row-label">
+                        <span>User</span>
+                    </div>
+                    <dfinance-frontend-searchable-dropdown [options]="users" [updatedOption]="updatedUser"
+                        [returnField]="userreturnField" [dropdownFields]="userKeys"
+                        (selectedOption)="onUserSelected($event)">
+                    </dfinance-frontend-searchable-dropdown>
+                </div>
+                <div class="radio-options">
+                    <div class="radio-option-top">
+                        <div class="radio-option-bottom">
+                            <div class="radio-option-box">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" formControlName="detailed">
+                                    <span>Detailed</span>
+                                    <span class="checkbox-mark"></span>
+                                </label>
+
+                            </div>
+                            <div class="radio-option-box">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" formControlName="posted">
+                                    <span>Posted</span>
+                                    <span class="checkbox-mark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="action-wrapper">
+
+                <div class="button-options">
+                    <div class="button-options-content">
+                        <div class="button-left" (click)="onClickGo()">
+                            <span>Go</span>
+                        </div>
+                        <div class="button-right" (click)="onClickClear()">
+                            <span>Clear</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+    </div>
+    <div class="left-toggle-section" (click)="toggleLeftSection()" *ngIf="!isMaximized">
+        <span>
+            <i *ngIf="showLeftSection" class="large material-icons">chevron_left</i>
+            <i *ngIf="!showLeftSection" class="large material-icons">chevron_right</i>
+        </span>
+    </div>
+    <div class="right-wrapper right-section-container" [class.full-width-right-section]="!showLeftSection"
+        [class.full-width-screen]="isMaximized">
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="Item Master">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickPrint()"
+                [class.top-button-active]="selectedbutton === 'print'" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M3.49996 1.16666H10.5V4.66666H12.8333V10.5H10.5V12.8333H3.49996V10.5H1.16663V4.66666H3.49996V1.16666ZM4.66663 4.66666H9.33329V2.33332H4.66663V4.66666ZM3.49996 9.33332V6.99999H10.5V9.33332H11.6666V5.83332H2.33329V9.33332H3.49996ZM4.66663 8.16666V11.6667H9.33329V8.16666H4.66663Z" />
+                </svg>
+                Print</button>
+
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickPreview()"
+                [class.top-button-active]="selectedbutton === 'preview'" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <mask id="mask0_823_1892" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="14"
+                        height="14">
+                        <rect width="14" height="14" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_823_1892)">
+                        <path
+                            d="M7.00016 9.33325C7.72933 9.33325 8.34912 9.07804 8.85954 8.56763C9.36995 8.05721 9.62516 7.43742 9.62516 6.70825C9.62516 5.97909 9.36995 5.35929 8.85954 4.84888C8.34912 4.33846 7.72933 4.08325 7.00016 4.08325C6.271 4.08325 5.6512 4.33846 5.14079 4.84888C4.63037 5.35929 4.37516 5.97909 4.37516 6.70825C4.37516 7.43742 4.63037 8.05721 5.14079 8.56763C5.6512 9.07804 6.271 9.33325 7.00016 9.33325ZM7.00016 8.28325C6.56266 8.28325 6.19079 8.13013 5.88454 7.82388C5.57829 7.51763 5.42516 7.14575 5.42516 6.70825C5.42516 6.27075 5.57829 5.89888 5.88454 5.59263C6.19079 5.28638 6.56266 5.13325 7.00016 5.13325C7.43766 5.13325 7.80954 5.28638 8.11579 5.59263C8.42204 5.89888 8.57516 6.27075 8.57516 6.70825C8.57516 7.14575 8.42204 7.51763 8.11579 7.82388C7.80954 8.13013 7.43766 8.28325 7.00016 8.28325ZM7.00016 11.0833C5.58072 11.0833 4.28766 10.6871 3.121 9.89471C1.95433 9.10235 1.1085 8.0402 0.583496 6.70825C1.1085 5.37631 1.95433 4.31415 3.121 3.52179C4.28766 2.72943 5.58072 2.33325 7.00016 2.33325C8.41961 2.33325 9.71266 2.72943 10.8793 3.52179C12.046 4.31415 12.8918 5.37631 13.4168 6.70825C12.8918 8.0402 12.046 9.10235 10.8793 9.89471C9.71266 10.6871 8.41961 11.0833 7.00016 11.0833ZM7.00016 9.91658C8.09877 9.91658 9.10745 9.62735 10.0262 9.04888C10.945 8.4704 11.6474 7.6902 12.1335 6.70825C11.6474 5.72631 10.945 4.9461 10.0262 4.36763C9.10745 3.78915 8.09877 3.49992 7.00016 3.49992C5.90155 3.49992 4.89287 3.78915 3.97412 4.36763C3.05537 4.9461 2.35294 5.72631 1.86683 6.70825C2.35294 7.6902 3.05537 8.4704 3.97412 9.04888C4.89287 9.62735 5.90155 9.91658 7.00016 9.91658Z" />
+                    </g>
+                </svg>
+                Preview
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickExcel()"
+                [class.top-button-active]="selectedbutton === 'excel'" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <mask id="mask0_823_1892" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="14"
+                        height="14">
+                        <rect width="14" height="14" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_823_1892)">
+                        <path
+                            d="M7.00016 9.33325C7.72933 9.33325 8.34912 9.07804 8.85954 8.56763C9.36995 8.05721 9.62516 7.43742 9.62516 6.70825C9.62516 5.97909 9.36995 5.35929 8.85954 4.84888C8.34912 4.33846 7.72933 4.08325 7.00016 4.08325C6.271 4.08325 5.6512 4.33846 5.14079 4.84888C4.63037 5.35929 4.37516 5.97909 4.37516 6.70825C4.37516 7.43742 4.63037 8.05721 5.14079 8.56763C5.6512 9.07804 6.271 9.33325 7.00016 9.33325ZM7.00016 8.28325C6.56266 8.28325 6.19079 8.13013 5.88454 7.82388C5.57829 7.51763 5.42516 7.14575 5.42516 6.70825C5.42516 6.27075 5.57829 5.89888 5.88454 5.59263C6.19079 5.28638 6.56266 5.13325 7.00016 5.13325C7.43766 5.13325 7.80954 5.28638 8.11579 5.59263C8.42204 5.89888 8.57516 6.27075 8.57516 6.70825C8.57516 7.14575 8.42204 7.51763 8.11579 7.82388C7.80954 8.13013 7.43766 8.28325 7.00016 8.28325ZM7.00016 11.0833C5.58072 11.0833 4.28766 10.6871 3.121 9.89471C1.95433 9.10235 1.1085 8.0402 0.583496 6.70825C1.1085 5.37631 1.95433 4.31415 3.121 3.52179C4.28766 2.72943 5.58072 2.33325 7.00016 2.33325C8.41961 2.33325 9.71266 2.72943 10.8793 3.52179C12.046 4.31415 12.8918 5.37631 13.4168 6.70825C12.8918 8.0402 12.046 9.10235 10.8793 9.89471C9.71266 10.6871 8.41961 11.0833 7.00016 11.0833ZM7.00016 9.91658C8.09877 9.91658 9.10745 9.62735 10.0262 9.04888C10.945 8.4704 11.6474 7.6902 12.1335 6.70825C11.6474 5.72631 10.945 4.9461 10.0262 4.36763C9.10745 3.78915 8.09877 3.49992 7.00016 3.49992C5.90155 3.49992 4.89287 3.78915 3.97412 4.36763C3.05537 4.9461 2.35294 5.72631 1.86683 6.70825C2.35294 7.6902 3.05537 8.4704 3.97412 9.04888C4.89287 9.62735 5.90155 9.91658 7.00016 9.91658Z" />
+                    </g>
+                </svg>
+                Excel
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEmail()"
+                [class.top-button-active]="selectedbutton === 'email'" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <mask id="mask0_823_1897" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="14"
+                        height="14">
+                        <rect width="14" height="14" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_823_1897)">
+                        <path
+                            d="M2.33317 11.6666C2.01234 11.6666 1.73768 11.5523 1.50921 11.3239C1.28074 11.0954 1.1665 10.8208 1.1665 10.4999V3.49992C1.1665 3.17909 1.28074 2.90443 1.50921 2.67596C1.73768 2.44749 2.01234 2.33325 2.33317 2.33325H11.6665C11.9873 2.33325 12.262 2.44749 12.4905 2.67596C12.7189 2.90443 12.8332 3.17909 12.8332 3.49992V10.4999C12.8332 10.8208 12.7189 11.0954 12.4905 11.3239C12.262 11.5523 11.9873 11.6666 11.6665 11.6666H2.33317ZM6.99984 7.58325L2.33317 4.66659V10.4999H11.6665V4.66659L6.99984 7.58325ZM6.99984 6.41658L11.6665 3.49992H2.33317L6.99984 6.41658ZM2.33317 4.66659V3.49992V10.4999V4.66659Z" />
+                    </g>
+                </svg>
+
+                Email
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary settings-icon" (click)="onClickSettings()" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M5.6875 0.875V2.625L4.8125 3.0625L3.5 1.75L1.75 3.5L3.0625 4.8125L2.625 5.6875H0.875V8.3125H2.625L3.0625 9.1875L1.75 10.5L3.5 12.25L4.8125 10.9375L5.6875 11.375V13.125H8.3125V11.375L9.1875 10.9375L10.5 12.25L12.25 10.5L10.9375 9.1875L11.375 8.3125H13.125V5.6875H11.375L10.9375 4.8125L12.25 3.5L10.5 1.75L9.1875 3.0625L8.3125 2.625V0.875H5.6875Z"
+                        stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                        d="M7 8.75C7.9665 8.75 8.75 7.9665 8.75 7C8.75 6.0335 7.9665 5.25 7 5.25C6.0335 5.25 5.25 6.0335 5.25 7C5.25 7.9665 6.0335 8.75 7 8.75Z"
+                        stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Settings
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickHelp()"
+                [class.top-button-active]="selectedbutton === 'help'" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M1.1665 1.16675H12.8332V12.8334H1.1665V1.16675ZM2.33317 2.33341V11.6667H11.6665V2.33341H2.33317ZM6.99984 4.22925C6.75856 4.22919 6.5232 4.30393 6.32617 4.44319C6.12914 4.58245 5.98014 4.77937 5.89967 5.00683L5.70484 5.55691L4.60525 5.16841L4.7995 4.61833C4.91993 4.27682 5.11818 3.96801 5.37857 3.71634C5.63895 3.46467 5.95432 3.27705 6.29974 3.16831C6.64515 3.05956 7.01113 3.03269 7.36873 3.08981C7.72632 3.14694 8.06572 3.28648 8.36007 3.49742C8.65442 3.70836 8.89564 3.98489 9.06467 4.30516C9.23369 4.62542 9.32587 4.98062 9.33392 5.34266C9.34196 5.70469 9.26565 6.06364 9.11102 6.39109C8.9564 6.71855 8.72769 7.00553 8.443 7.22933C8.19159 7.42766 7.96642 7.61783 7.80367 7.81792C7.64384 8.01508 7.58317 8.17375 7.58317 8.31258V9.04175H6.4165V8.31258C6.4165 7.80683 6.644 7.395 6.89834 7.08175C7.15034 6.77258 7.4665 6.51358 7.72084 6.31291C7.91148 6.16296 8.05065 5.95732 8.11898 5.72459C8.18732 5.49187 8.18142 5.24363 8.1021 5.01441C8.02279 4.7852 7.874 4.5864 7.67645 4.44568C7.47889 4.30495 7.24239 4.2293 6.99984 4.22925ZM6.4165 9.62508H7.5855V10.7941H6.4165V9.62508Z" />
+                </svg>
+                Help
+            </button>
+        </div>
+
+
+        <!-- Dropdown for Column Selection -->
+        <div *ngIf="settingsOpen" class="settings-dropdown">
+            <div *ngFor="let column of columns">
+                <label class="container">
+                    <input type="checkbox" [checked]="column.display" (change)="toggleColumn(column.name)" />
+                    <span class="checkmark"></span>
+                    {{ column.name }}
+                </label>
+            </div>
+        </div>
+
+        <!-- Right Section with Grid -->
+        <div class="right-section">
+            <ngx-datatable #ngxTable class="material" [rows]="reportData" columnMode="flex" [headerHeight]="40"
+                [footerHeight]="0" [rowHeight]="40" [scrollbarV]="true" [scrollbarH]="true">
+
+                <!-- Use ng-container to separate *ngFor and *ngIf -->
+                <ng-container *ngFor="let column of columns">
+                    <ngx-datatable-column *ngIf="column.display" [name]="column.name" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <span *ngIf="column.name === 'vDate'">{{ row[column.name] | date: 'yyyy-MM-dd' }}</span>
+                            <span *ngIf="column.name !== 'vDate'">{{ row[column.name] }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ng-container>
+            </ngx-datatable>
+        </div>
+    </div>
+
+</div>

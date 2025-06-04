@@ -1,0 +1,150 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div> 
+        </div>
+        <form [formGroup]="referenceSearchForm" style="padding: 0px 10px;">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="voucher type">Voucher Type</label>
+                </div>
+                <div class="col-md-2">
+                    <label for="voucher no">Voucher No.</label>
+                </div>
+                <div class="col-md-2">
+                    <label for="voucher date">Voucher Date</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="party">Party</label>
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-select" formControlName="vouchertype">
+                        <option value="all">All</option>
+                        <option *ngFor="let type of voucherTypes" [value]="type?.name">{{ type?.name }}</option>              
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="voucherno" formControlName="voucherno" class="form-control">
+                </div>
+
+                <div class="col-md-2  flex-wrapper">
+                    <input class="form-control" style="margin-top: -7px;" name="voucherdate" formControlName="voucherdate" matInput [matDatepicker]="vdt">
+                    <mat-datepicker-toggle style="margin-top: -8px;" matSuffix [for]="vdt"></mat-datepicker-toggle>
+                    <mat-datepicker #vdt></mat-datepicker>
+                </div>
+
+                <div class="col-md-3">
+                    <dfinance-frontend-searchable-dropdown [options]="partyData"
+                        [updatedOption]="updatedSupplier"
+                        [returnField]="supplierreturnField"
+                        [dropdownFields]="supplierKeys"
+                        [tabIndex]="4"
+                        (selectedOption)="onSupplierSelected($event)">
+                    </dfinance-frontend-searchable-dropdown>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" (click)="setReferenceData()">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div>
+            <ngx-datatable class="material"
+                [rows]="filteredData"
+                columnMode="force"
+                [headerHeight]="50"
+                [footerHeight]="0"
+                [rowHeight]="50"
+                [scrollbarV]="true"
+                [scrollbarH]="false">
+                    <!-- First column with a button to add rows -->
+                    <ngx-datatable-column name="Select" [flexGrow]="1">
+                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template>
+                            <input type="checkbox" [checked]="row?.sel" (change)="onChangeSelection($event,rowIndex,row.id)">
+                        </ng-template>
+                    </ngx-datatable-column>      
+
+                    <ngx-datatable-column name="AddItem" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            <!-- <input type="checkbox" [checked]="row?.addItem" (change)="onChangeAddItem($event,rowIndex,row.id)"> -->
+                            <button class="btn btn-primary" [disabled]="!row?.sel" (click)="onClickAddItem(rowIndex,row.id)">+</button>
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="VNo" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.vNo }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="VDate" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.vDate | date: 'dd/MM/yyyy' }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="ReferenceNo" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.referenceNo }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="AccountName" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.accountName }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="Amount" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.amount }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="PartyInvNo" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.partyInvNo }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="PartyInvDate" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.partyInvDate | date: 'dd/MM/yyyy' }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="ID" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.id }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="VoucherType" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.voucherType }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="MobileNo" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.mobileNo }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+        </div>
+        <div class="row" style="padding: 10px;">
+            <div class="col-md-6"></div>
+            <div class="col-md-4">
+                <input type="checkbox" class="form-check-input" checked="isOverwriteVoucher" (change)="onChangeOverwriteOption($event)">
+                <span>Overwrite voucher info</span>
+            </div>
+            <div class="col-md-2 flex-wrapper">
+                <button class="btn btn-secondary ok-button" (click)="importItems()" (keydown)="handleOkbuttonkeydown($event)" #okbutton>Import</button>
+                <button class="btn btn-secondary close-button" (click)="cancelItems()" (keydown)="handleCancelbuttonkeydown($event)"#cancelbutton>Cancel</button>
+            </div>
+        </div>
+    </div>
+    <dfinance-frontend-reference-item-list
+        *ngIf="showReferenceItemList"
+        [itemList]="referenceItemList"
+        [transId]="transactionId"
+        (saveItems)="saveItemList($event)"
+        (close)="closeImportReference()">
+    </dfinance-frontend-reference-item-list>
+</div>

@@ -1,0 +1,24 @@
+<div class="custom-dialog-div" *ngIf="data.key == 'custom'">
+    <div mat-dialog-actions class="dialog-close-button">
+        <button mat-icon-button (click)="onClose()">
+          <span>X</span>
+        </button>
+      </div>
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+    <div mat-dialog-content>{{ data.message }}</div>    
+</div>
+
+<div class="barcode-dialog-div" *ngIf="data.key == 'barcode'">
+    <div mat-dialog-actions class="dialog-close-button">
+        <button mat-icon-button (click)="closeBarcode()">
+          <span>X</span>
+        </button>
+      </div>
+    <h1 mat-dialog-title>Barcode</h1>
+    <div mat-dialog-content>
+        <input type="text" class="form-control" [(ngModel)]="barcodeInput" (ngModelChange)="onBarcodeInputChange()" autofocus >
+    </div>    
+    <div class="close-section" (click)="closeBarcode()">
+      <span>Close</span>
+    </div>
+</div>

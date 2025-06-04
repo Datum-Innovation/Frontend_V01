@@ -1,0 +1,34 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div>
+        </div>
+
+        <h5>Price Category</h5>
+        <div class="remarks-content">         
+
+            <ngx-datatable class="material" [rows]="priceCatArr" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="50" [selected]="selected" [selectionType]="SelectionType.single"
+                (activate)="onActivate($event)" (select)="onSelect($event)">
+
+                <ngx-datatable-column name="" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{rowIndex+1}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Price Category" [flexGrow]="2" *ngIf="pagetype != 'purchase'">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row?.priceCategory }}</span>
+                    </ng-template>
+                </ngx-datatable-column>       
+                <ngx-datatable-column name="Rate" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row?.price }}</span>
+                    </ng-template>
+                </ngx-datatable-column>                
+            </ngx-datatable>
+        </div>       
+
+
+    </div>
+</div>

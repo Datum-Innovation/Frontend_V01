@@ -1,0 +1,1501 @@
+<dfinance-frontend-main-header pageName="Item Master"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">
+        <div class="itemmaster-left-search" #leftsearch [formGroup]="filterForm">
+            <div class="select-dropdown-group">
+                <div class="left-search-single">
+                    <dfinance-frontend-multi-select-dropdown [allItems]="itemBrandOptions" placeholderName="Brand"
+                        (selectedItems)="onBrandDropdownSelected($event)">
+                    </dfinance-frontend-multi-select-dropdown>
+
+                </div>
+                <div class="left-search-single">
+                    <dfinance-frontend-multi-select-dropdown [allItems]="filteredCategories" placeholderName="Category"
+                        (selectedItems)="onCategoryDropdownSelected($event)">
+                    </dfinance-frontend-multi-select-dropdown>
+                </div>
+            </div>
+
+            <div class="search-btn-group">
+                <button type="submit" class="btn btn-primary" (click)="searchItems()"
+                    style="margin-bottom: 2px;">Search</button>
+            </div>
+        </div>
+
+
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+        </div>
+        <div class="col-md-12 mb-3 fill-item-master">
+            <ngx-datatable class="material container striped" [rows]="allItemMasters" [columnMode]="'flex'"
+                [headerHeight]="50" [footerHeight]="0" [rowHeight]="50" [scrollbarV]="true"
+                (activate)="onClickItemMaster($event)" [limit]="10">
+                <ngx-datatable-column name="Itemcode" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.itemCode }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Itemname" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.itemName }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+
+    <div class="right-wrapper" style="width: 83%;">
+
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="Item Master">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickNewItemmaster()"
+                [disabled]="isNewBtnDisabled" [class.top-button-active]="selectedItemMasterId == 0" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M1.75 12.25V1.75H6.41667V2.91667H2.91667V11.0833H11.0833V7.58333H12.25V12.25H1.75ZM9.33333 6.41667V4.66667H7.58333V3.5H9.33333V1.75H10.5V3.5H12.25V4.66667H10.5V6.41667H9.33333Z" />
+                </svg>New</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveItemMaster()"
+                [disabled]="isSaveBtnDisabled" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M4.08333 11.0833V7.58333H9.91667V11.0833H11.0833V4.56633L9.43367 2.91667H2.91667V11.0833H4.08333ZM2.33333 1.75H9.91667L12.25 4.08333V11.6667C12.25 11.8214 12.1885 11.9697 12.0791 12.0791C11.9697 12.1885 11.8214 12.25 11.6667 12.25H2.33333C2.17862 12.25 2.03025 12.1885 1.92085 12.0791C1.81146 11.9697 1.75 11.8214 1.75 11.6667V2.33333C1.75 2.17862 1.81146 2.03025 1.92085 1.92085C2.03025 1.81146 2.17862 1.75 2.33333 1.75ZM5.25 8.75V11.0833H8.75V8.75H5.25Z" />
+                </svg>
+                Save</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEditItemMaster()"
+                [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedItemMasterId!=0" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M11.375 7C11.375 6.88397 11.4211 6.77269 11.5031 6.69064C11.5852 6.60859 11.6965 6.5625 11.8125 6.5625C11.9285 6.5625 12.0398 6.60859 12.1219 6.69064C12.2039 6.77269 12.25 6.88397 12.25 7V11.8125C12.25 11.9285 12.2039 12.0398 12.1219 12.1219C12.0398 12.2039 11.9285 12.25 11.8125 12.25H2.1875C2.07147 12.25 1.96019 12.2039 1.87814 12.1219C1.79609 12.0398 1.75 11.9285 1.75 11.8125V2.1875C1.75 2.07147 1.79609 1.96019 1.87814 1.87814C1.96019 1.79609 2.07147 1.75 2.1875 1.75H7C7.11603 1.75 7.22731 1.79609 7.30936 1.87814C7.39141 1.96019 7.4375 2.07147 7.4375 2.1875C7.4375 2.30353 7.39141 2.41481 7.30936 2.49686C7.22731 2.57891 7.11603 2.625 7 2.625H2.625V11.375H11.375V7Z" />
+                    <path
+                        d="M6.42511 7.57751L7.14699 7.47425L11.5815 3.04063C11.6233 3.00027 11.6566 2.952 11.6795 2.89862C11.7025 2.84524 11.7145 2.78783 11.715 2.72974C11.7155 2.67165 11.7045 2.61404 11.6825 2.56028C11.6605 2.50651 11.628 2.45766 11.5869 2.41658C11.5458 2.3755 11.497 2.34302 11.4432 2.32102C11.3894 2.29902 11.3318 2.28795 11.2737 2.28846C11.2157 2.28896 11.1582 2.30103 11.1049 2.32396C11.0515 2.34689 11.0032 2.38022 10.9629 2.42201L6.52749 6.85563L6.42424 7.57751H6.42511ZM12.2001 1.80251C12.3221 1.92439 12.4188 2.06912 12.4848 2.22841C12.5509 2.38771 12.5848 2.55845 12.5848 2.73088C12.5848 2.90331 12.5509 3.07405 12.4848 3.23335C12.4188 3.39264 12.3221 3.53737 12.2001 3.65926L7.66324 8.19613C7.59633 8.26328 7.50943 8.30688 7.41561 8.32038L5.97186 8.52688C5.90458 8.53654 5.83597 8.53039 5.77147 8.50892C5.70698 8.48745 5.64837 8.45125 5.60031 8.40318C5.55224 8.35512 5.51604 8.29651 5.49457 8.23202C5.4731 8.16752 5.46695 8.09891 5.47661 8.03163L5.68311 6.58788C5.69637 6.49417 5.73966 6.40728 5.80649 6.34025L10.3442 1.80338C10.5904 1.55732 10.9241 1.4191 11.2722 1.4191C11.6202 1.4191 11.954 1.55732 12.2001 1.80338V1.80251Z" />
+                </svg>Edit</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteItemMaster()"
+                [disabled]="isDeleteBtnDisabled" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M3.76538 11.0833L1.16663 13.125V2.33333C1.16663 2.17862 1.22808 2.03025 1.33748 1.92085C1.44688 1.81146 1.59525 1.75 1.74996 1.75H12.25C12.4047 1.75 12.553 1.81146 12.6624 1.92085C12.7718 2.03025 12.8333 2.17862 12.8333 2.33333V10.5C12.8333 10.6547 12.7718 10.8031 12.6624 10.9125C12.553 11.0219 12.4047 11.0833 12.25 11.0833H3.76538ZM2.33329 10.7246L3.36171 9.91667H11.6666V2.91667H2.33329V10.7246ZM7.82479 6.41667L9.26854 7.86042L8.44371 8.68525L6.99996 7.2415L5.55621 8.68583L4.73138 7.861L6.17513 6.41667L4.73079 4.97292L5.55563 4.14808L6.99996 5.59183L8.44371 4.14808L9.26854 4.97292L7.82479 6.41667Z" />
+                </svg>Delete</button>
+
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M3.49996 1.16666H10.5V4.66666H12.8333V10.5H10.5V12.8333H3.49996V10.5H1.16663V4.66666H3.49996V1.16666ZM4.66663 4.66666H9.33329V2.33332H4.66663V4.66666ZM3.49996 9.33332V6.99999H10.5V9.33332H11.6666V5.83332H2.33329V9.33332H3.49996ZM4.66663 8.16666V11.6667H9.33329V8.16666H4.66663Z" />
+                </svg>Print
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <mask id="mask0_823_1892" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="14"
+                        height="14">
+                        <rect width="14" height="14" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_823_1892)">
+                        <path
+                            d="M7.00016 9.33325C7.72933 9.33325 8.34912 9.07804 8.85954 8.56763C9.36995 8.05721 9.62516 7.43742 9.62516 6.70825C9.62516 5.97909 9.36995 5.35929 8.85954 4.84888C8.34912 4.33846 7.72933 4.08325 7.00016 4.08325C6.271 4.08325 5.6512 4.33846 5.14079 4.84888C4.63037 5.35929 4.37516 5.97909 4.37516 6.70825C4.37516 7.43742 4.63037 8.05721 5.14079 8.56763C5.6512 9.07804 6.271 9.33325 7.00016 9.33325ZM7.00016 8.28325C6.56266 8.28325 6.19079 8.13013 5.88454 7.82388C5.57829 7.51763 5.42516 7.14575 5.42516 6.70825C5.42516 6.27075 5.57829 5.89888 5.88454 5.59263C6.19079 5.28638 6.56266 5.13325 7.00016 5.13325C7.43766 5.13325 7.80954 5.28638 8.11579 5.59263C8.42204 5.89888 8.57516 6.27075 8.57516 6.70825C8.57516 7.14575 8.42204 7.51763 8.11579 7.82388C7.80954 8.13013 7.43766 8.28325 7.00016 8.28325ZM7.00016 11.0833C5.58072 11.0833 4.28766 10.6871 3.121 9.89471C1.95433 9.10235 1.1085 8.0402 0.583496 6.70825C1.1085 5.37631 1.95433 4.31415 3.121 3.52179C4.28766 2.72943 5.58072 2.33325 7.00016 2.33325C8.41961 2.33325 9.71266 2.72943 10.8793 3.52179C12.046 4.31415 12.8918 5.37631 13.4168 6.70825C12.8918 8.0402 12.046 9.10235 10.8793 9.89471C9.71266 10.6871 8.41961 11.0833 7.00016 11.0833ZM7.00016 9.91658C8.09877 9.91658 9.10745 9.62735 10.0262 9.04888C10.945 8.4704 11.6474 7.6902 12.1335 6.70825C11.6474 5.72631 10.945 4.9461 10.0262 4.36763C9.10745 3.78915 8.09877 3.49992 7.00016 3.49992C5.90155 3.49992 4.89287 3.78915 3.97412 4.36763C3.05537 4.9461 2.35294 5.72631 1.86683 6.70825C2.35294 7.6902 3.05537 8.4704 3.97412 9.04888C4.89287 9.62735 5.90155 9.91658 7.00016 9.91658Z" />
+                    </g>
+                </svg>Preview
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <mask id="mask0_823_1927" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="14"
+                        height="14">
+                        <rect width="14" height="14" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_823_1927)">
+                        <path
+                            d="M1.1665 11.9583V7.29158H5.83317V11.9583H1.1665ZM2.33317 10.7916H4.6665V8.45825H2.33317V10.7916ZM3.20817 5.83325L6.4165 0.583252L9.62484 5.83325H3.20817ZM5.279 4.66658H7.554L6.4165 2.82909L5.279 4.66658ZM12.5853 13.3874L11.0394 11.8416C10.8353 11.9777 10.6141 12.0798 10.3759 12.1478C10.1377 12.2159 9.88734 12.2499 9.62484 12.2499C8.89567 12.2499 8.27588 11.9947 7.76546 11.4843C7.25504 10.9739 6.99984 10.3541 6.99984 9.62492C6.99984 8.89575 7.25504 8.27596 7.76546 7.76554C8.27588 7.25513 8.89567 6.99992 9.62484 6.99992C10.354 6.99992 10.9738 7.25513 11.4842 7.76554C11.9946 8.27596 12.2498 8.89575 12.2498 9.62492C12.2498 9.8777 12.2158 10.1232 12.1478 10.3614C12.0797 10.5996 11.9825 10.8208 11.8561 11.0249L13.4019 12.5708L12.5853 13.3874ZM9.62484 11.0833C10.0332 11.0833 10.3783 10.9423 10.6603 10.6603C10.9422 10.3784 11.0832 10.0333 11.0832 9.62492C11.0832 9.21659 10.9422 8.87145 10.6603 8.5895C10.3783 8.30756 10.0332 8.16658 9.62484 8.16658C9.2165 8.16658 8.87136 8.30756 8.58942 8.5895C8.30748 8.87145 8.1665 9.21659 8.1665 9.62492C8.1665 10.0333 8.30748 10.3784 8.58942 10.6603C8.87136 10.9423 9.2165 11.0833 9.62484 11.0833Z" />
+                    </g>
+                </svg>Import
+            </button>
+            <button type="button" class="btn btn-outline-secondary settings-icon" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M5.6875 0.875V2.625L4.8125 3.0625L3.5 1.75L1.75 3.5L3.0625 4.8125L2.625 5.6875H0.875V8.3125H2.625L3.0625 9.1875L1.75 10.5L3.5 12.25L4.8125 10.9375L5.6875 11.375V13.125H8.3125V11.375L9.1875 10.9375L10.5 12.25L12.25 10.5L10.9375 9.1875L11.375 8.3125H13.125V5.6875H11.375L10.9375 4.8125L12.25 3.5L10.5 1.75L9.1875 3.0625L8.3125 2.625V0.875H5.6875Z"
+                        stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                        d="M7 8.75C7.9665 8.75 8.75 7.9665 8.75 7C8.75 6.0335 7.9665 5.25 7 5.25C6.0335 5.25 5.25 6.0335 5.25 7C5.25 7.9665 6.0335 8.75 7 8.75Z"
+                        stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>Settings
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path
+                        d="M1.1665 1.16675H12.8332V12.8334H1.1665V1.16675ZM2.33317 2.33341V11.6667H11.6665V2.33341H2.33317ZM6.99984 4.22925C6.75856 4.22919 6.5232 4.30393 6.32617 4.44319C6.12914 4.58245 5.98014 4.77937 5.89967 5.00683L5.70484 5.55691L4.60525 5.16841L4.7995 4.61833C4.91993 4.27682 5.11818 3.96801 5.37857 3.71634C5.63895 3.46467 5.95432 3.27705 6.29974 3.16831C6.64515 3.05956 7.01113 3.03269 7.36873 3.08981C7.72632 3.14694 8.06572 3.28648 8.36007 3.49742C8.65442 3.70836 8.89564 3.98489 9.06467 4.30516C9.23369 4.62542 9.32587 4.98062 9.33392 5.34266C9.34196 5.70469 9.26565 6.06364 9.11102 6.39109C8.9564 6.71855 8.72769 7.00553 8.443 7.22933C8.19159 7.42766 7.96642 7.61783 7.80367 7.81792C7.64384 8.01508 7.58317 8.17375 7.58317 8.31258V9.04175H6.4165V8.31258C6.4165 7.80683 6.644 7.395 6.89834 7.08175C7.15034 6.77258 7.4665 6.51358 7.72084 6.31291C7.91148 6.16296 8.05065 5.95732 8.11898 5.72459C8.18732 5.49187 8.18142 5.24363 8.1021 5.01441C8.02279 4.7852 7.874 4.5864 7.67645 4.44568C7.47889 4.30495 7.24239 4.2293 6.99984 4.22925ZM6.4165 9.62508H7.5855V10.7941H6.4165V9.62508Z" />
+                </svg>Help
+            </button>
+        </div>
+
+
+
+        <div class="row right-section tab-right-section" style="margin-left: 0px;">
+            <form [formGroup]="ItemMasterForm">
+                <div class="outline-container">
+                    <div #stickybuttoncontainer class="sticky-button-container">
+                        <button id="tab1" (click)="onClickTab(1)" class="btn"
+                            [ngClass]="{'disabled-tab': isInputDisabled,'active':selectedTab == 1}">Item
+                            Details</button>
+                        <button id="tab2" (click)="onClickTab(2)" class="btn"
+                            [ngClass]="{'disabled-tab': isInputDisabled,'active':selectedTab == 2}">History
+                            Details</button>
+                        <button id="tab3" (click)="onClickTab(3)" class="btn"
+                            [ngClass]="{'disabled-tab': isInputDisabled,'active':selectedTab == 3}">Other
+                            Details</button>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="scrollable-content">
+                                <div class="section-content itemdetails-wrapper"
+                                    [style.display]="showItemDetails ? 'block' : 'none'">
+                                    <div class="row">
+                                        <div class="col-md-9" style="border-right: 1px solid #A3A3A3;">
+                                            <div class="item-master-row">
+                                                <div class="branch-select-group">
+                                                    <div class="branch-field-label">
+                                                        <label>Branches</label>
+                                                    </div>
+                                                    <div class="branch-dropdown-section">
+                                                        <select id="branch" [disabled]="isInputDisabled"
+                                                            class="form-select" (change)="selectBranch($event)">
+                                                            <option *ngFor="let branch of allBranches"
+                                                                [value]="branch?.id"
+                                                                [selected]="branch?.id === currentBranch">
+                                                                {{branch?.company }}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="copy-btn-group">
+                                                        <button type="button" class="btn btn-primary"
+                                                            (click)="onClickCopyItemmaster()"
+                                                            [disabled]="isEditBtnDisabled || isInputDisabled" translate>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                height="14" viewBox="0 0 14 14" fill="none">
+                                                                <mask id="mask0_823_1912" style="mask-type:alpha"
+                                                                    maskUnits="userSpaceOnUse" x="0" y="0" width="14"
+                                                                    height="14">
+                                                                    <rect width="14" height="14" fill="#D9D9D9" />
+                                                                </mask>
+                                                                <g mask="url(#mask0_823_1912)">
+                                                                    <path
+                                                                        d="M5.25 10.5001C4.92917 10.5001 4.65451 10.3858 4.42604 10.1574C4.19757 9.9289 4.08333 9.65425 4.08333 9.33342V2.33341C4.08333 2.01258 4.19757 1.73793 4.42604 1.50946C4.65451 1.28098 4.92917 1.16675 5.25 1.16675H10.5C10.8208 1.16675 11.0955 1.28098 11.324 1.50946C11.5524 1.73793 11.6667 2.01258 11.6667 2.33341V9.33342C11.6667 9.65425 11.5524 9.9289 11.324 10.1574C11.0955 10.3858 10.8208 10.5001 10.5 10.5001H5.25ZM5.25 9.33342H10.5V2.33341H5.25V9.33342ZM2.91667 12.8334C2.59583 12.8334 2.32118 12.7192 2.09271 12.4907C1.86424 12.2622 1.75 11.9876 1.75 11.6667V3.50008H2.91667V11.6667H9.33333V12.8334H2.91667Z" />
+                                                                </g>
+                                                            </svg>
+                                                            Copy
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="branch-head-line"></div>
+
+                                            <div class="item-master-row">
+                                                <div class="item-master-row-left">
+                                                    <div class="item-code-section">
+                                                        <label for="itemcode" class="form-label">Item Code<span
+                                                                class="required-asterisk">*</span></label>
+                                                        <input type="text" class="form-control" id="itemcode"
+                                                            formControlName="itemcode">
+                                                    </div>
+                                                    <div class="bharcode-section">
+                                                        <label for="barcodeno" class="form-label">Barcode No</label>
+                                                        <input type="text" class="form-control" id="barcodeno"
+                                                            formControlName="barcodeno">
+                                                        <div class="barcode-btn-group">
+                                                            <button type="button" class="btn btn-outline-bg"
+                                                                [disabled]="isInputDisabled"
+                                                                (click)="generateBarCode(0)">G</button>
+                                                            <button type="button" [disabled]="isInputDisabled"
+                                                                class="btn btn-outline-bg">IB</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-master-row-right">
+                                                    <div class="item-master-checkbox-single">
+                                                        <label for="active" class="form-label" translate>Active</label>
+                                                        <label class="custom-checkbox">
+                                                            <input type="checkbox" class="form-check-input" id="active"
+                                                                formControlName="active" [checked]="active"
+                                                                (change)="onActiveChange($event)">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="item-master-checkbox-single">
+                                                        <label for="unique" class="form-label" translate>Unique</label>
+                                                        <label class="custom-checkbox">
+                                                            <input type="checkbox" class="form-check-input" id="unique"
+                                                                formControlName="unique" [checked]="unique">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="item-master-checkbox-single">
+                                                        <label for="stockitem" class="form-label" translate>Stock
+                                                            Item</label>
+                                                        <label class="custom-checkbox">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="stockitem" formControlName="stockitem"
+                                                                [checked]="stockitem"
+                                                                (change)="onStockItemChange($event)">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="item-master-name-row">
+                                                <div class="item-name">
+                                                    <label for="itemname" class="form-label ">Item Name<span
+                                                            class="required-asterisk">*</span></label>
+                                                    <input type="text" class="form-control" id="itemname"
+                                                        formControlName="itemname">
+                                                </div>
+                                                <div class="item-name-arabic">
+                                                    <label for="arabicname" class="form-label ">Arabic Name</label>
+                                                    <input type="text" class="form-control rtl-textbox" id="arabicname"
+                                                        formControlName="arabicname">
+                                                </div>
+                                            </div>
+
+                                            <div class="item-master-row">
+                                                <div class="item-master-basicunit">
+                                                    <label for="basicunit" class="form-label col-md-2">Basic Unit<span
+                                                            class="required-asterisk">*</span></label>
+                                                    <dfinance-frontend-searchable-dropdown [options]="allBasicUnits"
+                                                        [isdisabled]="isInputDisabled"
+                                                        [updatedOption]="updatedBasicUnit"
+                                                        [returnField]="basicUnitreturnField"
+                                                        [dropdownFields]="basicUnitKeys"
+                                                        (selectedOption)="onBasicUnitSelected($event,0)"></dfinance-frontend-searchable-dropdown>
+                                                </div>
+                                                <div class="item-master-category">
+                                                    <label for="category" class="form-label col-md-2">Category<span
+                                                            class="required-asterisk">*</span></label>
+                                                    <dfinance-frontend-searchable-dropdown [options]="categoryOptions"
+                                                        [isdisabled]="isInputDisabled"
+                                                        [updatedOption]="selectedCategory"
+                                                        [returnField]="categoryreturnField"
+                                                        [dropdownFields]="categoryKeys"
+                                                        (selectedOption)="onCategorySelected($event)"
+                                                        setwidth="600"></dfinance-frontend-searchable-dropdown>
+                                                    <div class="itemmaster-category">
+                                                        <span>{{selectedCategoryObj?.category}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <h5 class="form-heading price-details-heading">Price Details</h5>
+                                            <div class="price-head-line-bottom"></div>
+
+                                            <div class="checkbox-row">
+                                                <div class="checkbox-one">
+                                                    <div class="input-label-box">
+                                                        <label>
+                                                            Cost Price<span class="required-asterisk">*</span>
+                                                        </label>
+
+                                                    </div>
+                                                    <input type="number" class="form-control" id="costprice"
+                                                        formControlName="costprice" (change)="onCostPriceChange()"
+                                                        appNumberFormat>
+                                                </div>
+
+                                                <div class="checkbox-one">
+                                                    <div class="input-label-box">
+                                                        <label>
+                                                            Margin(%)
+                                                        </label>
+
+                                                    </div>
+                                                    <input type="number" class="form-control" id="margin"
+                                                        formControlName="margin" (change)="onMarginPercentageChange()"
+                                                        appNumberFormat>
+                                                </div>
+
+                                                <div class="checkbox-one">
+                                                    <div class="input-label-box">
+                                                        <label>
+                                                            Margin Value
+                                                        </label>
+
+                                                    </div>
+                                                    <input type="number" class="form-control" id="marginvalue"
+                                                        formControlName="marginvalue" (change)="onMarginValueChange()"
+                                                        appNumberFormat>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="checkbox-row">
+                                                <div class="checkbox-one">
+                                                    <div class="input-label-box">
+                                                        <label>
+                                                            Selling Price
+                                                            <span class="required-asterisk">*</span>
+                                                        </label>
+
+                                                    </div>
+                                                    <input type="number" class="form-control" id="sellingprice"
+                                                        formControlName="sellingprice"
+                                                        (ngModelChange)="onFormSellingPriceChange()" appNumberFormat>
+                                                </div>
+
+                                                <div class="checkbox-one">
+                                                    <div class="input-label-box">
+                                                        <label>
+                                                            MRP<span class="required-asterisk">*</span>
+                                                        </label>
+
+                                                    </div>
+                                                    <input type="number" class="form-control" id="mrp"
+                                                        formControlName="mrp" (ngModelChange)="onItemMrpChange()"
+                                                        appNumberFormat>
+                                                </div>
+
+                                                <div class="checkbox-one">
+                                                    <div class="input-label-box">
+                                                        <label>
+                                                            Tax Type
+                                                        </label>
+
+                                                    </div>
+                                                    <select id="taxtype" class="form-select" formControlName="taxtype"
+                                                        (change)="onChangeTaxType()">
+                                                        <option *ngFor="let taxType of allTaxTypes"
+                                                            [value]="taxType?.id">{{
+                                                            taxType?.name }}</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-3" *ngIf="selectedTab == 1">
+                                            <div class="image-upload">
+                                                <div class="image-upload-container" [class.disabled]="isInputDisabled">
+                                                    <!-- <label *ngIf="!imageData" for="fileInput" class="upload-label">Upload Image</label>
+                                                    <input type="file" id="fileInput" (change)="onImageSelected($event)"> -->
+                                                    <div *ngIf="imageData" class="image-preview">
+                                                        <img [src]="imageData" alt="Uploaded Image">
+                                                        <!-- <button class="remove-button" (click)="removeImage()">Remove Image</button> -->
+                                                    </div>
+                                                </div>
+                                                <div class="img-upload-action">
+                                                    <button class="btn btn-outline-bg">
+                                                        <label for="fileInput" class="upload-label">
+                                                            <i class="large material-icons" style="cursor: pointer;"
+                                                                (click)="triggerFileInput()">add_to_photos</i>
+                                                            <input type="file" id="fileInput"
+                                                                (change)="onImageSelected($event)">
+                                                        </label>
+                                                    </button>
+
+                                                    <button class="btn btn-outline-bg remove-img"
+                                                        (click)="removeImage()">
+                                                        <i class="large material-icons">close</i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="isNewBtnDisabled" class="stock-map-section">
+                                                <div class="block-single">Stock</div> :
+                                                <div class="block-single">{{ stockToDisplay }}</div>
+                                            </div>
+                                            <div *ngIf="ItemMasterForm.get('mrp')?.value" class="stock-map-section">
+                                                <div class="block-single">MRP</div> :
+                                                <div class="block-single">{{ ItemMasterForm.get('mrp')?.value }}</div>
+                                            </div>
+                                            <div [class.disabled]="isInputDisabled" class="print-barcode-section">
+                                                <button style="width:100%" class="btn "
+                                                    [disabled]="isInputDisabled">Print Barcode</button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-content item-purchase-table item-master-history"
+                                [style.display]="showHistory ? 'block' : 'none'">
+                                <ngx-datatable class="material" [rows]="allItemHistoryDetails" columnMode="force"
+                                    [headerHeight]="40" [footerHeight]="0" [rowHeight]="40" [scrollbarV]="true"
+                                    [scrollbarH]="true">
+                                    <!-- First column with a button to add rows -->
+                                    <ngx-datatable-column name="Sl.No" [flexGrow]="1">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            <span>{{rowIndex+1}}</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="VType" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.vType}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="VNo" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.vNo}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="VDate" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.vDate | date: 'dd/MM/yyyy' }}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="VNo" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.vNo}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="AccountCode" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.accountCode}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="AccountName" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.accountName}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Unit" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.unit}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Qty" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.qty}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Rate" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.rate}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Amount" [flexGrow]="2">
+                                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                            {{ row?.amount}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                </ngx-datatable>
+                            </div>
+
+                            <div class="section-content item-master-other itemdetails-wrapper"
+                                [style.display]="showOtherDetails ? 'block' : 'none'">
+                                <!--- Other details -->
+                                <div class="row">
+                                    <div class="other-details-section">
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-row-single">
+                                                <label>ExpiryItem</label>
+                                                <label class="custom-checkbox">
+                                                    <input type="checkbox" class="form-check-input" id="expiryitem"
+                                                        formControlName="expiryitem" [checked]="expiryitem"
+                                                        (change)="onActiveChange($event)">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox-row-single">
+                                                <label>Finished Goods</label>
+                                                <label class="custom-checkbox">
+                                                    <input type="checkbox" class="form-check-input" id="finishedgoods"
+                                                        formControlName="finishedgoods" [checked]="finishedgoods"
+                                                        (change)="onActiveChange($event)">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox-row-single">
+                                                <label>Raw Materials</label>
+                                                <label class="custom-checkbox">
+                                                    <input type="checkbox" class="form-check-input" id="rawmaterials"
+                                                        formControlName="rawmaterials" [checked]="rawmaterials"
+                                                        (change)="onActiveChange($event)">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Expiry
+                                                        Days
+                                                    </label>
+                                                </div>
+                                                <input type="text" class="form-control" id="expirydays"
+                                                    formControlName="expirydays">
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Rack
+                                                        Location
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="racklocation"
+                                                    formControlName="racklocation">
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Discount
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="discount"
+                                                    formControlName="discount">
+                                            </div>
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>HSN
+                                                        Code
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="hsncode"
+                                                    formControlName="hsncode">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Parent
+                                                        Item
+                                                    </label>
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="parentItemOptions"
+                                                    [isdisabled]="isInputDisabled"
+                                                    [updatedOption]="selectedParentItemName"
+                                                    [returnField]="parentItemreturnField"
+                                                    [dropdownFields]="ParentItemKeys"
+                                                    (selectedOption)="onParentItemSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Quality
+                                                    </label>
+
+                                                </div>
+                                                <select id="quality" class="form-select" formControlName="quality"
+                                                    (change)="onChangeQuality()">
+                                                    <option *ngFor="let quality of allQualities" [value]="quality?.id">
+                                                        {{ quality?.value }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Model
+                                                        No.
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="modelno"
+                                                    formControlName="modelno">
+                                            </div>
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>HSN
+                                                        Color
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="itemColorOptions"
+                                                    [isdisabled]="isInputDisabled"
+                                                    [updatedOption]="selectedItemColorName"
+                                                    [returnField]="colorreturnField" [dropdownFields]="colorKeys"
+                                                    (selectedOption)="onItemColorSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Brand
+                                                        Name
+                                                    </label>
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="itemBrandOptions"
+                                                    [isdisabled]="isInputDisabled"
+                                                    [updatedOption]="selectedItemBrandName"
+                                                    [returnField]="brandreturnField" [dropdownFields]="brandKeys"
+                                                    (selectedOption)="onItemBrandSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Country
+                                                        of Origin
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown
+                                                    [options]="countryOfOriginOptions" [isdisabled]="isInputDisabled"
+                                                    [updatedOption]="selectedCountryOfOriginName"
+                                                    [returnField]="countryreturnField" [dropdownFields]="countryKeys"
+                                                    (selectedOption)="onItemOriginSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Manufacturer
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="manufacturer"
+                                                    formControlName="manufacturer">
+                                            </div>
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>ROL
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="rol" formControlName="rol">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>ROQ
+                                                    </label>
+                                                </div>
+                                                <input type="text" class="form-control" id="countryoforigin"
+                                                    formControlName="countryoforigin">
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Ship
+                                                        Mark
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="shipmark"
+                                                    formControlName="shipmark">
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Paint
+                                                        Mark
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="paintmark"
+                                                    formControlName="paintmark">
+                                            </div>
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Stock
+                                                        Code
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="stockcode"
+                                                    formControlName="stockcode">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Weight
+                                                    </label>
+                                                </div>
+                                                <input type="text" class="form-control" id="weight"
+                                                    formControlName="weight">
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Purchase
+                                                        Unit
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="purchaseUnitOptions"
+                                                    [isdisabled]="isInputDisabled" [updatedOption]="updatedPurchaseUnit"
+                                                    [returnField]="purchaseUnitreturnField"
+                                                    [dropdownFields]="purchaseUnitKeys"
+                                                    (selectedOption)="onPurchaseUnitSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Selling
+                                                        Unit
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="sellingUnitOptions"
+                                                    [isdisabled]="isInputDisabled" [updatedOption]="updatedSellingUnit"
+                                                    [returnField]="sellingUnitreturnField"
+                                                    [dropdownFields]="sellingUnitKeys"
+                                                    (selectedOption)="onSellingUnitSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Stock
+                                                        OEM No
+                                                    </label>
+
+                                                </div>
+                                                <input type="text" class="form-control" id="oemno"
+                                                    formControlName="oemno">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row group-item-container">
+                                            <div class="checkbox-row-single">
+                                                <label translate>Group
+                                                    Item
+                                                </label>
+                                                <label class="custom-checkbox">
+                                                    <input type="checkbox" class="form-check-input" id="groupitem"
+                                                        formControlName="groupitem">
+                                                    <span class="checkmark"></span>
+                                                </label>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>InvAccount
+                                                    </label>
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="allInvAccounts"
+                                                    [isdisabled]="isInputDisabled || isStockItem"
+                                                    [updatedOption]="selectedInvAccountName"
+                                                    [returnField]="invAccountreturnField"
+                                                    [dropdownFields]="invAccountKeys"
+                                                    (selectedOption)="onInvAccountSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Sales
+                                                        Account
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="allSalesAccounts"
+                                                    [isdisabled]="isInputDisabled || isStockItem"
+                                                    [updatedOption]="selectedSalesAccountName"
+                                                    [returnField]="salesAccountreturnField"
+                                                    [dropdownFields]="salesAccountKeys"
+                                                    (selectedOption)="onSalesAccountSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Cost
+                                                        Account
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="allCostAccounts"
+                                                    [returnField]="costAccountreturnField"
+                                                    [dropdownFields]="costAccountKeys"
+                                                    [isdisabled]="isInputDisabled || isStockItem"
+                                                    [updatedOption]="selectedCostAccountName"
+                                                    (selectedOption)="onCostAccountSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Purchase
+                                                        Account
+                                                    </label>
+
+                                                </div>
+                                                <dfinance-frontend-searchable-dropdown [options]="allPurchaseAccounts"
+                                                    [isdisabled]="isInputDisabled || isStockItem"
+                                                    [updatedOption]="selectedPurchaseAccountName"
+                                                    [returnField]="purchaseAccountreturnField"
+                                                    [dropdownFields]="purchaseAccountKeys"
+                                                    (selectedOption)="onPurchaseAccountSelected($event)"></dfinance-frontend-searchable-dropdown>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="checkbox-row">
+                                            <div class="checkbox-one">
+                                                <div class="input-label-box">
+                                                    <label translate>Remarks
+                                                    </label>
+                                                </div>
+                                                <textarea type="text" class="form-control" id="remarks"
+                                                    formControlName="remarks"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="outline-container" [style.display]="showItemDetails || showOtherDetails ? 'block' : 'none'">
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="scrollable-content">
+                                <div class="section-content itemdetails-wrapper">
+                                    <div class="row">
+                                        <!--- Unit details -->
+                                        <h5 class="form-heading price-details-heading">Unit Details</h5>
+                                            <div class="price-head-line-bottom"></div>
+                                        <div class="row">                                            
+                                            <div class="item-units-table item-purchase-table">
+
+                                                <ngx-datatable #ngxTable class="material" [rows]="itemUnitDetails"
+                                                    columnMode="force" [headerHeight]="40" [footerHeight]="40"
+                                                    [rowHeight]="40" [selected]="selected">
+
+                                                    <ngx-datatable-column
+                                                        *ngFor="let col of tablecolumns; let colIndex = index"
+                                                        [name]="col.name" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <!-- Code for Column ID -->
+                                                            <span *ngIf="col.field === 'id' && rowIndex != itemUnitDetails.length -1"
+                                                                [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                tabindex="0"
+                                                                (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                [attr.data-column-name]="col.field"
+                                                                (keydown)="onKeyDown($event)" data-column-key-name="id">
+                                                                {{ rowIndex+1 }}
+                                                            </span>
+
+                                                            <!-- Code for Column Unit -->
+                                                            <span
+                                                                *ngIf="col.field === 'unit' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'unit')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                tabindex="0" [attr.data-column-name]="col.field"
+                                                                (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                (keydown)="onKeyDown($event)"
+                                                                (dblclick)="handleDoubleClick($event)"
+                                                                data-column-key-name="unit">
+                                                                {{ itemUnitDetails[rowIndex].unit.unit }}
+                                                            </span>
+
+                                                            <dfinance-frontend-searchable-dropdown
+                                                                fieldName="cell-{{rowIndex}}-{{colIndex}}unit"
+                                                                [options]="allBasicUnits" [isdisabled]="isInputDisabled"
+                                                                [updatedOption]="itemUnitDetails[rowIndex].unit.unit"
+                                                                [returnField]="basicUnitreturnField"
+                                                                [dropdownFields]="basicUnitKeys"
+                                                                (selectedOption)="onBasicUnitSelected($event, rowIndex)"
+                                                                [isGridCell]="true"
+                                                                cellid="cell-{{rowIndex}}-{{colIndex}}"
+                                                                (click)="onClickInput($event,rowIndex,colIndex)"
+                                                                (emitKeyboardEvent)="onColumKeyDown($event)"
+                                                                *ngIf="col.field === 'unit' && enableInlineEditing && currentColumname == 'unit'  && rowIndex == currentRowIndex"
+                                                                (keydown)="onKeyDown($event)"
+                                                                [attr.data-column-name]="col.field">
+                                                            </dfinance-frontend-searchable-dropdown>
+
+
+                                                            <!-- Code for Column Basic Unit -->
+                                                            <span *ngIf="col.field === 'basicunit'"
+                                                                [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                tabindex="0"
+                                                                (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                [attr.data-column-name]="col.field"
+                                                                (keydown)="onKeyDown($event)"
+                                                                data-column-key-name="basicUnit">
+                                                                {{ row?.basicUnit }}
+                                                            </span>
+
+                                                            <!-- Code for Column Factor -->
+                                                            <span
+                                                            *ngIf="col.field === 'factor' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'factor')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                            [attr.data-column-name]="col.field"
+                                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                            data-column-key-name="factor">
+                                                            {{ row?.factor }}
+                                                        </span>
+
+                                                        <input type="text" class="form-control"
+                                                            *ngIf=" col.field === 'factor' && enableInlineEditing && currentColumname == 'factor'  && rowIndex == currentRowIndex"
+                                                            value="{{ row?.factor }}" [disabled]="isInputDisabled"
+                                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                                            [attr.data-column-name]="col.field"
+                                                            (input)="onPurchaseRateChange($event, rowIndex)" appNumberFormat>
+                                                            
+
+
+                                                            <!-- Code for Column Purchase Rate -->
+                                                            <span
+                                                            *ngIf="col.field === 'purchaserate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'purchaserate')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                            [attr.data-column-name]="col.field"
+                                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                            data-column-key-name="purchaseRate">
+                                                            {{ row?.purchaseRate }}
+                                                        </span>
+
+                                                        <input type="text" class="form-control"
+                                                            *ngIf=" col.field === 'purchaserate' && enableInlineEditing && currentColumname == 'purchaserate'  && rowIndex == currentRowIndex"
+                                                            value="{{ row?.purchaseRate }}" [disabled]="isInputDisabled"
+                                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                                            [attr.data-column-name]="col.field"
+                                                            (input)="onUnitFactorChange($event, rowIndex)" appNumberFormat>
+                                                            
+
+                                                              <!-- Code for Column Selling Price -->
+                                                              <span
+                                                              *ngIf="col.field === 'sellingprice' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'sellingprice')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                              [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                              [attr.data-column-name]="col.field"
+                                                              (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                              (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                              data-column-key-name="sellingPrice">
+                                                              {{ row?.sellingPrice }}
+                                                          </span>
+  
+                                                          <input type="text" class="form-control"
+                                                              *ngIf=" col.field === 'sellingprice' && enableInlineEditing && currentColumname == 'sellingprice'  && rowIndex == currentRowIndex"
+                                                              value="{{ row?.sellingPrice }}" [disabled]="isInputDisabled"
+                                                              id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                              (click)="onClickInput($event,rowIndex,colIndex)"
+                                                              [attr.data-column-name]="col.field"
+                                                              (input)="onSellingPriceChange($event, rowIndex)" appNumberFormat>
+                                                              
+
+                                                               <!-- Code for Column MRP -->
+                                                               <span
+                                                               *ngIf="col.field === 'mrp' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'mrp')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                               [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                               [attr.data-column-name]="col.field"
+                                                               (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                               (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                               data-column-key-name="mrp">
+                                                               {{ row?.mrp }}
+                                                           </span>
+   
+                                                           <input type="text" class="form-control"
+                                                               *ngIf=" col.field === 'mrp' && enableInlineEditing && currentColumname == 'mrp'  && rowIndex == currentRowIndex"
+                                                               value="{{ row?.mrp }}" [disabled]="isInputDisabled"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                               (click)="onClickInput($event,rowIndex,colIndex)"
+                                                               [attr.data-column-name]="col.field"
+                                                               (input)="onMrpChange($event, rowIndex)" appNumberFormat>
+                                                               
+
+                                                               <!-- Code for Wholesale Price -->
+                                                               <span
+                                                               *ngIf="col.field === 'wholesaleprice' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'wholesaleprice')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                               [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                               [attr.data-column-name]="col.field"
+                                                               (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                               (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                               data-column-key-name="wholeSalePrice">
+                                                               {{ row?.wholeSalePrice }}
+                                                           </span>
+   
+                                                           <input type="text" class="form-control"
+                                                               *ngIf=" col.field === 'wholesaleprice' && enableInlineEditing && currentColumname == 'wholesaleprice'  && rowIndex == currentRowIndex"
+                                                               value="{{ row?.wholeSalePrice }}" [disabled]="isInputDisabled"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                               (click)="onClickInput($event,rowIndex,colIndex)"
+                                                               [attr.data-column-name]="col.field"
+                                                               (input)="onWholeSalePriceChange($event, rowIndex)" appNumberFormat>
+                                                               
+
+                                                               <!-- Code for Retail Price -->
+                                                               <span
+                                                               *ngIf="col.field === 'retailprice' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'retailprice')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                               [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                               [attr.data-column-name]="col.field"
+                                                               (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                               (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                               data-column-key-name="retailPrice">
+                                                               {{ row?.retailPrice }}
+                                                           </span>
+   
+                                                           <input type="text" class="form-control"
+                                                               *ngIf=" col.field === 'retailprice' && enableInlineEditing && currentColumname == 'retailprice'  && rowIndex == currentRowIndex"
+                                                               value="{{ row?.retailPrice }}" [disabled]="isInputDisabled"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                               (click)="onClickInput($event,rowIndex,colIndex)"
+                                                               [attr.data-column-name]="col.field"
+                                                               (input)="onRetailPriceChange($event, rowIndex)" appNumberFormat>
+                                                               
+
+
+                                                               <!-- Code for Wholesale Price -->
+                                                               <span
+                                                               *ngIf="col.field === 'wholesaleprice2' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'wholesaleprice2')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                               [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                               [attr.data-column-name]="col.field"
+                                                               (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                               (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                               data-column-key-name="wholeSalePrice2">
+                                                               {{ row?.wholeSalePrice2 }}
+                                                           </span>
+   
+                                                           <input type="text" class="form-control"
+                                                               *ngIf=" col.field === 'wholesaleprice2' && enableInlineEditing && currentColumname == 'wholesaleprice2'  && rowIndex == currentRowIndex"
+                                                               value="{{ row?.wholeSalePrice2 }}" [disabled]="isInputDisabled"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                               (click)="onClickInput($event,rowIndex,colIndex)"
+                                                               [attr.data-column-name]="col.field"
+                                                               (input)="onDiscountPriceChange($event, rowIndex)" appNumberFormat>
+                                                               
+
+                                                               <!-- Code for Retail Price -->
+                                                               <span
+                                                               *ngIf="col.field === 'retailprice2' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'retailprice2')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                               [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                               [attr.data-column-name]="col.field"
+                                                               (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                               (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                               data-column-key-name="retailPrice2">
+                                                               {{ row?.retailPrice2 }}
+                                                           </span>
+   
+                                                           <input type="text" class="form-control"
+                                                               *ngIf=" col.field === 'retailprice2' && enableInlineEditing && currentColumname == 'retailprice2'  && rowIndex == currentRowIndex"
+                                                               value="{{ row?.retailPrice2 }}" [disabled]="isInputDisabled"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                               (click)="onClickInput($event,rowIndex,colIndex)"
+                                                               [attr.data-column-name]="col.field"
+                                                               (input)="onOtherPriceChange($event, rowIndex)" appNumberFormat>
+                                                               
+
+                                                               <!-- Code for Lowest Rate -->
+                                                               <span
+                                                               *ngIf="col.field === 'lowestrate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'lowestrate')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                               [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                               [attr.data-column-name]="col.field"
+                                                               (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                               (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                               data-column-key-name="lowestRate">
+                                                               {{ row?.lowestRate }}
+                                                           </span>
+   
+                                                           <input type="text" class="form-control"
+                                                               *ngIf=" col.field === 'lowestrate' && enableInlineEditing && currentColumname == 'lowestrate'  && rowIndex == currentRowIndex"
+                                                               value="{{ row?.lowestRate }}" [disabled]="isInputDisabled"
+                                                               id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                               (click)="onClickInput($event,rowIndex,colIndex)"
+                                                               [attr.data-column-name]="col.field"
+                                                               (input)="onLowestRateChange($event, rowIndex)" appNumberFormat>
+                                                               
+
+                                                                <!-- Code for Barcode -->
+                                                                <span
+                                                                *ngIf="col.field === 'barcode' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'barcode')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                                                [attr.data-column-name]="col.field"
+                                                                (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                                                data-column-key-name="barcode">
+                                                                {{ row?.barcode }}
+                                                            </span>
+    
+                                                            <input type="text" class="form-control"
+                                                                *ngIf=" col.field === 'barcode' && enableInlineEditing && currentColumname == 'barcode'  && rowIndex == currentRowIndex"
+                                                                value="{{ row?.barcode }}" [disabled]="isInputDisabled"
+                                                                id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                                                (click)="onClickInput($event,rowIndex,colIndex)"
+                                                                [attr.data-column-name]="col.field"
+                                                                (input)="onBarcodeChange($event, rowIndex)" appNumberFormat>
+
+
+                                                                <!-- Code for Column Generate -->
+                                                            <span *ngIf="col.field === 'generate'"
+                                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                            tabindex="0"
+                                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                            [attr.data-column-name]="col.field"
+                                                            (keydown)="onKeyDown($event)"
+                                                            data-column-key-name="generate">
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                [disabled]="isInputDisabled"
+                                                                (click)="generateBarCode(rowIndex)">Generate</button>
+                                                        </span>
+
+                                                         <!-- Code for Column Print -->
+                                                         <span *ngIf="col.field === 'print'"
+                                                         [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                         id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                         tabindex="0"
+                                                         (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                         [attr.data-column-name]="col.field"
+                                                         (keydown)="onKeyDown($event)"
+                                                         data-column-key-name="print">
+                                                         <button type="button" class="btn btn-primary btn-sm"
+                                                         [disabled]="isInputDisabled">Print</button>
+                                                     </span>
+
+                                                     <!-- Code for Column Active -->
+                                                     <span *ngIf="col.field === 'active'"
+                                                     [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                     id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                     tabindex="0"
+                                                     (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                     [attr.data-column-name]="col.field"
+                                                     (keydown)="onKeyDown($event)"
+                                                     data-column-key-name="active">
+                                                     <input type="checkbox" class="form-check-input"
+                                                                [checked]="row.active"
+                                                                (change)="onUnitActiveChange($event, rowIndex)">
+                                                 </span>
+
+
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+                                                </ngx-datatable>
+                                                <!-- <ngx-datatable class="material" [rows]="itemUnitDetails"
+                                                    columnMode="force" [headerHeight]="50" [footerHeight]="0"
+                                                    [rowHeight]="70" [scrollbarV]="true" [scrollbarH]="true">
+                                                    <ngx-datatable-column name="Sl.No" [flexGrow]="1">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <span>{{rowIndex+1}}</span>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Unit" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+
+                                                            <dfinance-frontend-searchable-dropdown
+                                                                [options]="allBasicUnits" [isdisabled]="isInputDisabled"
+                                                                [updatedOption]="itemUnitDetails[rowIndex].unit.unit"
+                                                                [returnField]="basicUnitreturnField"
+                                                                [dropdownFields]="basicUnitKeys"
+                                                                (selectedOption)="onBasicUnitSelected($event,rowIndex)">
+                                                            </dfinance-frontend-searchable-dropdown>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Basic Unit" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            {{ row?.basicUnit }}
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Factor" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control" [value]="row.factor"
+                                                                (change)="onUnitFactorChange($event, rowIndex)">
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Purchase Rate" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.purchaseRate"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onPurchaseRateChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Selling Price" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.sellingPrice"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onSellingPriceChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="MRP" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control" [value]="row.mrp"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onMrpChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="WholeSale Price" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.wholeSalePrice"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onWholeSalePriceChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+                                                    <ngx-datatable-column name="Retail Price" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.retailPrice"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onRetailPriceChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+                                                    <ngx-datatable-column name="WholeSale Price2" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.wholeSalePrice2"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onDiscountPriceChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Retail Price2" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.retailPrice2"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onOtherPriceChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Lowest Rate" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.lowestRate"
+                                                                (input)="validateInputNumber($event)"
+                                                                (change)="onLowestRateChange($event, rowIndex)"
+                                                                appNumberFormat>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Barcode" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="text" class="form-control"
+                                                                [value]="row.barcode"
+                                                                (change)="onBarcodeChange($event, rowIndex)">
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+                                                    <ngx-datatable-column name="Generate" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                [disabled]="isInputDisabled"
+                                                                (click)="generateBarCode(rowIndex)">Generate</button>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Print" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                [disabled]="isInputDisabled">Print</button>
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                    <ngx-datatable-column name="Active" [flexGrow]="2">
+                                                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                            ngx-datatable-cell-template>
+                                                            <input type="checkbox" class="form-check-input"
+                                                                [checked]="row.active"
+                                                                (change)="onUnitActiveChange($event, rowIndex)">
+                                                        </ng-template>
+                                                    </ngx-datatable-column>
+
+                                                </ngx-datatable> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="popup-container copy-popup" *ngIf="showCopyPopup">
+        <div class="popup-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><b>Branches </b></p>
+                    <div *ngFor="let branch of allBranches">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" class="form-check-input" [value]="branch.id"
+                                (click)="onClickBranch($event,branch.id)">
+                            <span class="checkmark"></span>
+                            {{branch.company}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6 item-master-field-wrapper">
+                    <p><b>Fields </b></p>
+                    <div class="">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" class="form-check-input" [checked]="isChecked('rol')"
+                                (click)="onClickField($event,'rol')">
+                            <span class="checkmark"></span>
+                            ROL
+                        </label>
+
+                        <div class="">
+                            <span *ngIf="!showRateGroup" class="toggle-plus-button" (click)="toggleRateGroup()">+</span>
+                            <span *ngIf="showRateGroup" class="toggle-plus-button" (click)="toggleRateGroup()">-</span>
+                            <label class="custom-checkbox">
+                                <input type="checkbox" class="form-check-input" [checked]="isChecked('rate')"
+                                    (click)="onClickField($event,'rate')">
+                                <span class="checkmark"></span>
+                                Rate
+                            </label>
+                            <div class="rate-group" *ngIf="showRateGroup">
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('costprice')"
+                                            (click)="onClickField($event,'costprice')">
+                                        <span class="checkmark"></span>
+                                        Cost Price
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('purchaseRate')"
+                                            (click)="onClickField($event,'purchaseRate')">
+                                        <span class="checkmark"></span>
+                                        Purchase Price
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('sellingPrice')"
+                                            (click)="onClickField($event,'sellingPrice')">
+                                        <span class="checkmark"></span>
+                                        Selling Price
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input" [checked]="isChecked('mrp')"
+                                            (click)="onClickField($event,'mrp')">
+                                        <span class="checkmark"></span>
+                                        MRP
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('wholeSalePrice')"
+                                            (click)="onClickField($event,'wholeSalePrice')">
+                                        <span class="checkmark"></span>
+                                        Wholesale Price
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('retailPrice')"
+                                            (click)="onClickField($event,'retailPrice')">
+                                        <span class="checkmark"></span>
+                                        Retail Price
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('wholeSalePrice2')"
+                                            (click)="onClickField($event,'wholeSalePrice2')">
+                                        <span class="checkmark"></span>
+                                        Wholesale Price2
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('retailPrice2')"
+                                            (click)="onClickField($event,'retailPrice2')">
+                                        <span class="checkmark"></span>
+                                        Retail Price2
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" class="form-check-input"
+                                            [checked]="isChecked('lowestRate')"
+                                            (click)="onClickField($event,'lowestRate')">
+                                        <span class="checkmark"></span>
+                                        Lowest Rate
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+
+                            <label class="custom-checkbox">
+                                <input type="checkbox" class="form-check-input" [checked]="isChecked('tax')"
+                                    (click)="onClickField($event,'tax')">
+                                <span class="checkmark"></span>
+                                Tax
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-wrapper">
+                    <button class="btn btn-secondary cancel-btn" style="margin-right: 10px;"
+                        (click)="cancelCopy()">Cancel</button>
+                    <button class="btn btn-primary" (click)="copyItemDetailsToBranch()">Copy to Branches</button>
+                </div>
+            </div>
+        </div>

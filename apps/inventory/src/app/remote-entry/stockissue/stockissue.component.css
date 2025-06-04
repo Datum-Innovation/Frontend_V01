@@ -1,0 +1,115 @@
+/* Top container holding left, right, and reference sections */
+.stock-form-top-container {
+    display: flex;
+    align-items: flex-start; /* Align sections to the top */
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+/* Left section styling */
+.stock-form-left {
+    display: flex;
+    width: 18.313rem;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+
+.stock-container {
+    display: flex;
+    gap: 16px; /* Space between sections */
+}
+
+/* Styling for left and right sections */
+.stock-left-section,
+.stock-right-section {
+    flex: 1; /* Distribute space equally between sections */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-right: 40px;
+}
+
+.stock-left-section {
+    flex: 0 0 40%; /* 40% of the container's width */
+}
+
+.stock-right-section {
+    flex: 0 0 40%; /* 60% of the container's width */
+}
+/* Common styles for form fields */
+.voucher-field, .branch-field, .warehouse-field, .date-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Label styling */
+.form-label {
+    width: 120px;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+/* Input width adjustments */
+.short-input {
+    width: 40px;
+}
+
+.long-input, .form-select, .date-input {
+    flex: 1;
+    width: 100%;
+}
+
+/* Container for Terms and Description fields */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Terms and Description sections */
+.terms-section, .description-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 220%;
+    margin-top: -8px;
+}
+
+/* Input width increase */
+.form-control.long-input {
+    width: 120%;
+}
+
+/* Right section specific styling */
+.stock-right-section .long-input,
+.stock-right-section .form-select,
+.stock-right-section .date-input {
+    width: 120%; /* Increase width of all textboxes in right section */
+}
+
+
+/* Reference Section */
+.reference-section {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-top: 0; /* Align with top of right section */
+    width: 300%;
+  }
+  
+  #reference {
+    width: calc(100% - 60px); /* Adjust this value as needed for the desired width */
+    /* You can also set specific width, e.g., width: 300px, if you want a fixed size */
+  }
+  
+  .reference-btn {
+    display: flex;
+    width: 300%;
+  }

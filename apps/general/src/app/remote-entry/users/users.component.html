@@ -1,0 +1,371 @@
+<dfinance-frontend-main-header pageName="Users"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+  <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">
+    <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+      <p translate>Disabled</p>
+    </div>
+    <div class="col-md-12 mb-3">
+      <ngx-datatable class="material container striped" [rows]="allUsers" [columnMode]="'flex'" [headerHeight]="50"
+        [footerHeight]="50" [rowHeight]="50" [scrollbarV]="true" (activate)="onClickUser($event)" [limit]="10">
+        <ngx-datatable-column name="FullName" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.fullName }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Role" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.role }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Active" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.active ? 'Active' : 'Inactive' }}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+  <div class="right-wrapper">
+    <div #btngroup class="btn-group form-topbar" id="btn-group-top" role="group" aria-label="Users">
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickNewUser()" [disabled]="isNewBtnDisabled"
+        [class.top-button-active]="selectedUserId == 0" translate><i
+          class="large material-icons">add_to_photos</i>New</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveuser()" [disabled]="isSaveBtnDisabled"
+        translate><i class="large material-icons">save</i>Save</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickEditUser()" [disabled]="isEditBtnDisabled"
+        [class.top-button-active]="selectedUserId!=0" translate><i class="large material-icons">edit</i>Edit</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteUser()"
+        [disabled]="isDeleteBtnDisabled" translate><i class="large material-icons">delete_forever</i>Delete</button>
+
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">print</i>Print
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">pageview</i>Preview
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">settings</i>Settings
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">help</i>Help
+      </button>
+    </div>
+    <div class="right-section">
+      <div class="row">
+        <div class="col-md-9">
+          <form [formGroup]="usersForm" (ngSubmit)="onClickSaveuser()">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="section-container">
+                  <h5 class="section-heading">Employee Details</h5>
+                  <div class="section-content">
+                    <div class="row">
+                      <label for="firstName" class="form-label col-md-2" translate>First Name<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="firstName" formControlName="firstName" appTextOnly>
+                        <div *ngIf="usersForm.get('firstName')?.hasError('required')">
+                          <small class="text-danger">First Name is required.</small>
+                        </div>
+                        <div *ngIf="usersForm.get('firstName')?.hasError('specialCharacters')">
+                          <small class="text-danger">First Name cannot contain special characters.</small>
+                        </div>
+                      </div>
+                      <label for="mobileNumber" class="form-label col-md-2">Mobile Number<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="mobileNumber" formControlName="mobileNumber" appTelephoneInput>
+                        <div *ngIf="usersForm.get('mobileNumber')?.hasError('required')">
+                          <small class="text-danger">Mobile Number is required.</small>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <label for="middleName" class="form-label col-md-2">Middle Name</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="middleName" formControlName="middleName" appTextOnly>                       
+                        <div *ngIf="usersForm.get('middleName')?.hasError('specialCharacters')">
+                          <small class="text-danger">Middle Name cannot contain special characters.</small>
+                        </div>
+                      </div>
+                      <label for="emailId" class="form-label col-md-2">Email ID<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="email" class="form-control" id="emailId" formControlName="emailId" appEmailInput>
+                        <div *ngIf="usersForm.get('emailId')?.hasError('required')">
+                          <small class="text-danger">Email ID is required.</small>
+                        </div>
+                        <div *ngIf="usersForm.get('emailId')?.hasError('email')">
+                          <small class="text-danger">Please provide valid Email ID</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <label for="lastName" class="form-label col-md-2" translate>Last Name<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="lastName" formControlName="lastName" appTextOnly>
+                        <div *ngIf="usersForm.get('lastName')?.hasError('required')">
+                          <small class="text-danger">Last Name is required.</small>
+                        </div>
+                        <div *ngIf="usersForm.get('lastName')?.hasError('specialCharacters')">
+                          <small class="text-danger">Last Name cannot contain special characters.</small>
+                        </div>
+                      </div>
+                      <label for="residenceNumber" class="form-label col-md-2">Residence Number</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="residenceNumber" formControlName="residenceNumber" appTelephoneInput>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <label for="address" class="form-label col-md-2">Address<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" id="address" formControlName="address">
+                        <div *ngIf="usersForm.get('address')?.hasError('required')">
+                          <small class="text-danger">Address is required.</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="section-container">
+                  <h5 class="section-heading">Official Details</h5>
+                  <div class="section-content">
+                    <div class="row">
+                      <label for="employeeType" class="form-label col-md-2">Employee Type<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <select id="employeeType" class="form-select" formControlName="employeeType">
+                          <option value="0">Select</option>
+                          <option *ngFor="let type of employeeType" [value]="type?.value">{{ type?.name }}</option>
+                        </select>
+                        <div *ngIf="usersForm.get('employeeType')?.hasError('required')">
+                          <small class="text-danger">Employee Type is required.</small>
+                        </div>
+                      </div>
+                      <label for="isLocationRestrictedUser" class="form-label col-md-3">IsLocationRestrictedUser</label>
+                      <div class="col-md-3">
+                        <input type="checkbox" class="form-check-input" id="isLocationRestrictedUser"
+                          formControlName="isLocationRestrictedUser" [checked]="isLocationRestrictedUser"
+                          (change)="onLocationRestrictedUserChange($event)">
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <label for="designationId" class="form-label col-md-2">Designation<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+
+                        <select id="designationId" class="form-select" formControlName="designationId">
+                          <option value="0">Select</option>
+                          <option *ngFor="let designation of allDesignations" [value]="designation?.id">{{
+                            designation?.name
+                            }}</option>
+                        </select>
+                        <div *ngIf="usersForm.get('designationId')?.hasError('required')">
+                          <small class="text-danger">Designation is required.</small>
+                        </div>
+                      </div>
+                      <label for="officeNumber" class="form-label col-md-2">Office Number<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="officeNumber" formControlName="officeNumber" appTelephoneInput>
+                        <div *ngIf="usersForm.get('officeNumber')?.hasError('required')">
+                          <small class="text-danger">Office Number is required.</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="section-container">
+                  <h5 class="section-heading">Login Details</h5>
+                  <div class="section-content">
+                    <div class="row">
+                      <label for="username" class="form-label col-md-2">Username<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" id="username" formControlName="username">
+                        <div *ngIf="usersForm.get('username')?.hasError('required')">
+                          <small class="text-danger">Username is required.</small>
+                        </div>
+                      </div>
+                      <label for="gmailId" class="form-label col-md-2">Gmail ID<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="email" class="form-control" id="gmailId" formControlName="gmailId" appEmailInput>
+                        <div *ngIf="usersForm.get('gmailId')?.hasError('required')">
+                          <small class="text-danger">Gmail ID is required.</small>
+                        </div>
+                        <div *ngIf="usersForm.get('emailId')?.hasError('email')">
+                          <small class="text-danger">Please provide valid Email ID</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <label for="password" class="form-label col-md-2">Password<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="password" class="form-control" id="password" formControlName="password">
+                        <div *ngIf="usersForm.get('password')?.hasError('required')">
+                          <small class="text-danger">Password is required.</small>
+                        </div>
+                      </div>
+                      <label for="active" class="form-label col-md-2">Active<span
+                          class="required-asterisk">*</span></label>
+                      <div class="col-md-4">
+                        <input type="checkbox" class="form-check-input" id="active" formControlName="active">
+                        <div *ngIf="usersForm.get('active')?.hasError('required')">
+                          <small class="text-danger">Active is required.</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <label for="pettycash" class="form-label col-md-2">PettyCash</label>
+                      <div class="col-md-4">
+                        <select id="pettycash" class="form-select" formControlName="pettycash">
+                          <option *ngFor="let pettycash of pettycashData" [value]="pettycash?.accountID">{{
+                            pettycash?.name }}</option>
+                        </select>
+                      </div>
+
+                      <label for="warehouse" class="form-label col-md-2">Warehouse</label>
+                      <div class="col-md-4">
+                        <select id="warehouse" class="form-select" formControlName="warehouse">
+                          <option *ngFor="let warehouse of warehouseData" [value]="warehouse?.id">{{ warehouse?.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <label for="accountId" class="form-label col-md-2">Account</label>
+                      <div class="col-md-10">
+                        <dfinance-frontend-searchable-dropdown [options]="allAccounts" [isdisabled]="isInputDisabled"
+                          [updatedOption]="selectedAccountName" [returnField]="accountreturnField"
+                          [dropdownFields]="accountKeys"
+                          (selectedOption)="onAccountSelected($event)"></dfinance-frontend-searchable-dropdown>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="section-container">
+                  <h5 class="section-heading">Branch Details</h5>
+                  <div class="section-content">
+                    <div class="row">
+
+                      <div class="branch-details-table">
+                        <ngx-datatable class="material container user-branch-table" [rows]="allBranchDetails"
+                          [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [limit]="10">
+                          <!-- First column with a button to add rows -->
+                          <ngx-datatable-column name="Action" [flexGrow]="1">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <button class="btn" [disabled]="isInputDisabled"
+                                *ngIf="rowIndex == currentBranchTableIndex" (click)="addRow(true)">+</button>
+                              <span *ngIf="rowIndex != currentBranchTableIndex">{{rowIndex+1}}</span>
+                            </ng-template>
+                          </ngx-datatable-column>
+
+
+
+
+                          <ngx-datatable-column name="ActiveFlag" [flexGrow]="2">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <input type="checkbox" [disabled]="isInputDisabled"
+                                [checked]=allBranchDetails[rowIndex].activeFlag
+                                (click)="onClickActiveFlag($event, row, rowIndex)">
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="IsMainBranch" [flexGrow]="2">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <input type="checkbox" [disabled]="isInputDisabled"
+                                [checked]=allBranchDetails[rowIndex].isMainBranch
+                                (click)="onClickMainBranch($event, row, rowIndex)">
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Department Name" [flexGrow]="2">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <dfinance-frontend-searchable-dropdown [options]="departmentData"
+                                [isdisabled]="isInputDisabled"
+                                [updatedOption]="allBranchDetails[rowIndex].departmentName"
+                                [returnField]="departmentreturnField" [dropdownFields]="departmentKeys"
+                                (selectedOption)="onDepartmentSelected($event,rowIndex)" setwidth="700"></dfinance-frontend-searchable-dropdown>
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="Branch Name" [flexGrow]="2">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <dfinance-frontend-searchable-dropdown [options]="branchOptions"
+                                [isdisabled]="isInputDisabled" [updatedOption]="allBranchDetails[rowIndex].branchName"
+                                [returnField]="branchreturnField" [dropdownFields]="branchKeys"
+                                (selectedOption)="onBranchSelected($event,rowIndex)" setwidth="700"></dfinance-frontend-searchable-dropdown>
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="Supervisor" [flexGrow]="2">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <dfinance-frontend-searchable-dropdown [options]="supervisorOptions"
+                                [isdisabled]="isInputDisabled" [updatedOption]="allBranchDetails[rowIndex].employeeName"
+                                [returnField]="supervisorreturnField" [dropdownFields]="supervisorKeys"
+                                (selectedOption)="onSupervisorSelected($event,rowIndex)"
+                                setwidth="600"></dfinance-frontend-searchable-dropdown>
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                          <ngx-datatable-column name="Roles" [flexGrow]="2">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                              <input type="text" class="form-control" readonly [disabled]="isInputDisabled"
+                                (click)="openUserRolePopup(rowIndex)">
+
+                            </ng-template>
+                          </ngx-datatable-column>
+
+                        </ngx-datatable>
+                      </div>
+                      <!--  user role popup -->
+                      <dfinance-frontend-userrolepopup *ngIf="showUserRolePopup" [maRoleId]="currentMaRoleID"
+                        [userRights]="allUserRights"
+                        (selectedUserRights)="onUserRoleSelected($event)"></dfinance-frontend-userrolepopup>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-md-3" *ngIf="showImageContainer">
+          <div class="image-upload">
+            <div class="image-upload-container" [class.disabled]="isInputDisabled">
+              <label *ngIf="!imageData" for="fileInput" class="upload-label">Upload Image</label>
+              <input type="file" id="fileInput" (change)="onImageSelected($event)">
+              <div *ngIf="imageData" class="image-preview">
+                <img [src]="imageData" alt="Uploaded Image">
+                <button class="remove-button" (click)="removeImage()">Remove Image</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

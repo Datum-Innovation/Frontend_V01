@@ -1,0 +1,39 @@
+<div class="main-header-wrapper" #header>
+<div class="row main-header-info">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8 main-header-title">
+        <h3>{{pageName}}</h3>
+        <div class="user-avatar-container" (click)="toggleUserDropdown()">
+            <img src="/assets/images/user-avatar.png" alt="User Avatar" class="user-avatar" />
+            </div>
+            
+            <div class="dropdown-menu" *ngIf="isDropdownOpen">
+            <div class="user-name-container">
+                <p>{{ username }}</p>
+            </div>
+            <div class="logout-container">
+                <a (click)="logout()" class="logout-button">Logout</a>
+            </div>                
+        </div>
+
+
+        <div class="seconday-menu-media-screen" [ngClass]="{ parentactive: isSubmenuActive }">
+            <div class="burger-menu" id="burgerMenu" (click)="toggleSubmenu()">&#9776;</div>
+            <div class="submenu-secondary" [ngClass]="{ active: isSubmenuActive }" id="submenu">
+                <div class="secondary-menu-item" *ngFor="let menu of secodaryMenu">
+                <a [routerLink]="['/' + menu.url.toLowerCase()]" [queryParams]="{ pageId: menu.id, voucherNo: menu.voucherId }">
+                    {{ menu.menuText }}
+                </a>
+                </div>
+            </div>
+        </div>     
+            
+
+
+    </div>
+</div>
+<app-menu [parentStyle]="true" ></app-menu>
+<dfinance-frontend-secondary-menu></dfinance-frontend-secondary-menu>
+<!-- <dfinance-frontend-language-localization></dfinance-frontend-language-localization> -->
+</div>

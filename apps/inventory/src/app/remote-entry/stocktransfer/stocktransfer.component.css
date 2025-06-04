@@ -1,0 +1,142 @@
+.stock-form-top-container {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.stock-form-left {
+  display: flex;
+  width: 18.313rem;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.stock-voucher-outer {
+  display: flex;
+  height: 33px;
+  padding: var(--2, 4px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--2, 4px);
+  align-self: stretch;
+}
+
+
+/* Container to hold both left and right sections */
+/* Container to hold both left and right sections */
+.stock-container {
+  display: flex;
+  gap: 16px; /* Space between left and right sections */
+}
+
+
+/* .stock-left-section {
+  margin-right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 75%;
+}
+
+
+.stock-right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 95%;
+  margin-right: 40px;
+} */
+
+.stock-left-section,
+.stock-right-section {
+  flex: 1; /* Distribute the space equally between both sections */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-right: 40px;
+}
+
+/* Common styles for form fields */
+.voucher-field, .branch-field, .warehouse-field, .date-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Label styling */
+.form-label {
+  width: 120px; /* Adjust width as needed */
+  font-weight: bold;
+  white-space: nowrap; /* Prevents text from breaking into multiple lines */
+  margin-right: 10px;
+}
+
+/* Input width adjustments */
+.short-input {
+  width: 40px;
+}
+
+.long-input, .form-select, .date-input {
+  flex: 1;
+  width: 100%;
+}
+
+/* Container for the Terms and Description fields */
+.form-container {
+  display: flex;
+  flex-direction: column;  /* Stack the sections vertically */
+  gap: 16px;  /* Space between sections */
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* General layout for the form section (Terms and Description) */
+.form-section {
+  display: flex;
+  flex-direction: row;  /* Align label and input horizontally */
+  align-items: center;  /* Vertically align label and input */
+  gap: 16px; /* Space between label and input */
+}
+
+/* Input fields for Terms and Description with increased width */
+.form-control.long-input {
+  width: 120%;  /* Increase input width */
+}
+
+.terms-section {
+  display: flex;
+  flex-direction: row;  /* Align label and input horizontally */
+  align-items: center;  /* Vertically align label and input */
+  gap: 8px; /* Space between label and input */
+  width:205%;
+  margin-top: -8px;
+}
+
+.description-section {
+  display: flex;
+  flex-direction: row;  /* Align label and input horizontally */
+  align-items: center;  /* Vertically align label and input */
+  gap: 8px; /* Space between label and input */
+  width:205%;
+  margin-top: -8px;
+}
+
+.reference-section {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 0; /* Align with top of right section */
+  width: 300%;
+}
+
+#reference {
+  width: calc(100% - 60px); /* Adjust this value as needed for the desired width */
+  /* You can also set specific width, e.g., width: 300px, if you want a fixed size */
+}
+
+.reference-btn {
+  display: flex;
+  width: 300%;
+}

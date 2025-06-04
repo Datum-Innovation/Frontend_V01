@@ -1,0 +1,259 @@
+<dfinance-frontend-main-header pageName="Tax Type"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">     
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+          </div>
+        <div class="col-md-12 mb-2 fill-item-master" >
+                <ngx-datatable 
+                class="material container striped"
+                [rows]="allTaxTypeMaster"
+                [columnMode]="'flex'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="50" 
+                [scrollbarV]="true"
+                (activate)="onClickTaxTypeMaster($event)"
+                [limit]="10">
+                
+                <ngx-datatable-column name="Name" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.Name }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Type" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.Type }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    
+    <div class="right-wrapper">
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="TaxType master">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickNewTaxTypeMaster()"
+              [disabled]="isNewBtnDisabled" [class.top-button-active]="!selectedTaxTypeMasterId" translate>
+              <i class="large material-icons">add_to_photos</i>New</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveTaxTypemaster()"
+              [disabled]="isSaveBtnDisabled" translate>
+              <i class="large material-icons">save</i>Save</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEditTaxTypeMaster()"
+              [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedTaxTypeMasterId" translate>
+              <i class="large material-icons">edit</i>Edit</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteTaxTypeMaster()" 
+              [disabled]="isDeleteBtnDisabled" translate>
+              <i class="large material-icons">delete_forever</i>Delete
+            </button> 
+            
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">settings</i>Settings
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">help</i>Help
+            </button>
+          </div>
+        <div class="right-section">
+
+            <form [formGroup]="taxTypeForm" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="section-content">
+                                <div class="row">
+                                    <label for="type" class="form-label col-md-2">Name<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="name"
+                                            formControlName="name">
+                                        <div *ngIf="taxTypeForm.get('name')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                            </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <label for="name" class="form-label col-md-2">Type<span
+                                        class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <select id="type" class="form-select" formControlName="type" (change)="onTypeSelected()">
+                                            <!---(change)="onCostCategorySelect()">--> 
+                                                <option value="">Select</option>
+                                                <option *ngFor="let type of allType" [value]="type?.Id">{{ type?.Value }}</option>
+                                            </select> 
+                                    </div>  
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4 flex-wrapper">
+                                                <label for="active" class="form-label">Active</label>
+                                                <input type="checkbox" id="active" class="form-check-input" formControlName="active">
+                                            </div>
+                                            <div class="col-md-4 flex-wrapper">
+                                                <label for="default" class="form-label">IsDefault</label>
+                                                <input type="checkbox" id="default" class="form-check-input" formControlName="default">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                           
+
+                                <div class="row">
+                                    
+                                    <label for="purchasePerc" class="form-label col-md-2">Purchase%</label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="purchasePerc"
+                                        formControlName="purchasePerc" appNumberFormat>
+                                  
+                                    </div>
+                                        <label for="salesPerc" class="form-label col-md-2">sales%</label>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="salesPerc"
+                                            formControlName="salesPerc" appNumberFormat>
+                                        <div *ngIf="taxTypeForm.get('salesPerc')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                            </div>                                          
+                                        </div>
+                                    
+                                    
+                                </div>
+                                <div class="row">
+                                    <label for="receivableAccount" class="form-label col-md-2">Receivable Account</label>
+                                    <div class="col-md-4">
+                                        <select id="receivableAccount" class="form-select" tabindex="5" (change)="onreceivableAccountSelected()"
+                                        formControlName="receivableAccount" >
+                                        <option *ngFor="let receivableAccount of allreceivableAccount" 
+                                            [value]="receivableAccount?.ID">{{ receivableAccount?.Name }}</option>
+                                    </select>
+                                     
+                                    </div>
+                                        <label for="payableAccount" class="form-label col-md-2">Payable Account</label>
+                                        <div class="col-md-4">
+                                            <select id="payableAccount" class="form-select" tabindex="5" (change)="onpayableAccountSelected()"
+                                        formControlName="payableAccount" >
+                                        <option *ngFor="let payableAccount of allpayableAccount" 
+                                            [value]="payableAccount?.ID">{{ payableAccount?.Name }}</option>
+                                    </select>
+                                     
+                                        </div>
+                                    
+                                   
+                                </div>
+                                <div class="row">
+                                    <label for="salePurcMode" class="form-label col-md-2">Sales/Pur.Mode</label>
+                                    <div class="col-md-4">
+                                        <select id="salePurcMode" class="form-select" tabindex="5" 
+        (change)="onsalePurcModeSelected()"
+        formControlName="salePurcMode">
+  <option *ngFor="let salePurcMode of allsalePurMode" 
+          [value]="salePurcMode.ID">{{ salePurcMode.Value }}</option>
+</select>
+                                       
+                                    </div>
+                                        <label for="taxType" class="form-label col-md-2">TaxType</label>
+                                        <div class="col-md-4">
+                                            <select id="taxType" class="form-select" tabindex="5" (change)="ontaxTypeSelected()"
+                                                    formControlName="taxType" >
+                                                    <option *ngFor="let taxType of allTaxType" 
+                                                        [value]="taxType?.ID">{{ taxType?.Value }}</option>
+                                                </select>
+                                          
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <label for="sgstReceivable" class="form-label col-md-2">SGST Receivable</label>
+                                    <div class="col-md-4">
+                                        <select id="sgstReceivable" class="form-select" tabindex="5" (change)="onsgstReceivableSelected()"
+                                        formControlName="sgstReceivable" >
+                                        <option *ngFor="let sgstReceivable of allsgstReceivable" 
+                                            [value]="sgstReceivable?.ID">{{ sgstReceivable?.Name }}</option>
+                                    </select>
+                                       
+                                    </div>
+                                        <label for="sgstPayable" class="form-label col-md-2">SGST Payable</label>
+                                        <div class="col-md-4">
+                                            <select id="sgstPayable" class="form-select" tabindex="5" (change)="onsgstPayableSelected()"
+                                        formControlName="sgstPayable" >
+                                        <option *ngFor="let sgstPayable of allsgstPayable" 
+                                            [value]="sgstPayable?.ID">{{ sgstPayable?.Name }}</option>
+                                    </select>
+                                     
+                                          
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <label for="cgstReceivable" class="form-label col-md-2">CGST Receivable</label>
+                                    <div class="col-md-4">
+                                        <select id="cgstReceivable" class="form-select" tabindex="5" (change)="oncgstReceivableSelected()"
+                                        formControlName="cgstReceivable" >
+                                        <option *ngFor="let cgstReceivable of allcgstReceivable" 
+                                            [value]="cgstReceivable?.ID">{{ cgstReceivable?.Name }}</option>
+                                    </select>
+                                     
+                                    </div>
+                                        <label for="cgstPayable" class="form-label col-md-2">CGST Payable</label>
+                                        <div class="col-md-4">
+                                            <select id="cgstPayable" class="form-select" tabindex="5" (change)="oncgstPayableSelected()"
+                                            formControlName="cgstPayable" >
+                                            <option *ngFor="let cgstPayable of allcgstPayable" 
+                                                [value]="cgstPayable?.ID">{{ cgstPayable?.Name }}</option>
+                                        </select>
+                                         
+                                          
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <label for="cessPayables" class="form-label col-md-2">Cess Payable</label>
+                                    <div class="col-md-4">
+                                        <select id="cessPayables" class="form-select" tabindex="5" (change)="oncessPayablesSelected()"
+                                        formControlName="cessPayables" >
+                                        <option *ngFor="let cessPayables of allcessPayables" 
+                                            [value]="cessPayables?.ID">{{ cessPayables?.Name }}</option>
+                                    </select>
+                                     
+                                    </div>
+                                        <label for="cessReceivable" class="form-label col-md-2">Cess Receivable</label>
+                                        <div class="col-md-4">
+                                            <select id="cessReceivable" class="form-select" tabindex="5" (change)="oncessReceivableSelected()"
+                                            formControlName="cessReceivable" >
+                                            <option *ngFor="let cessReceivable of allcessReceivable" 
+                                                [value]="cessReceivable?.ID">{{ cessReceivable?.Name }}</option>
+                                        </select>
+                                         
+                                          
+                                        </div>
+                                  
+                                </div>
+                                <div class="row">
+                                    <label for="cess" class="form-label col-md-2">Cess %<span
+                                            class="required-asterisk">*</span></label>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" id="cess"
+                                                formControlName="cess" appNumberFormat>
+                                            <div *ngIf="taxTypeForm.get('cess')">
+                                                </div>
+                                             
+                                              
+                                            </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <label for="description" class="form-label col-md-2">Description<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="description"
+                                            formControlName="description">
+                                        <div *ngIf="taxTypeForm.get('description')">
+                                           
+                                            </div>
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

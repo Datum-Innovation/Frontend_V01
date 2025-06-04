@@ -1,0 +1,53 @@
+<div ngbDropdown #dropdown="ngbDropdown" container="body">
+  <input 
+    type="text" 
+    class="form-control"
+    ngbDropdownToggle 
+    (input)="onInput($event)" 
+    (keydown)="onKeyDown($event)"
+    [formControl]="control" 
+    [tabindex]="tabIndex"
+    autocomplete="off"
+    *ngIf="!isGridCell"
+    #searchInputEle
+  />
+  <!-- input box for grid cell  -->
+
+  <input 
+    type="text" 
+    class="form-control"
+    ngbDropdownToggle 
+    (input)="onInput($event)" 
+    (keydown)="onKeyDown($event)"
+    [formControl]="control"  
+    [tabindex]="tabIndex"
+    id="{{cellid}}"
+    #gridCell
+    autocomplete="off"
+    *ngIf="isGridCell"
+  />
+
+  <div 
+  ngbDropdownMenu 
+  class="custom-dropdown-wrapper" 
+  [ngClass]="{'d-none': filteredOptions.length === 0}"
+  [ngStyle]="{'width.px': setwidth || 1050}">
+    <div class="row dropdown-header-keys">
+      <div class="col" *ngFor="let key of dropdownFields">{{ key }}</div>
+    </div>
+    <a 
+      ngbDropdownItem 
+      #dropdownItem
+      class="dropdown-item flex-wrapper" 
+      href="#" 
+      *ngFor="let option of filteredOptions; let i = index"
+      [class.selected]="selectedIndex === i" 
+      (click)="selectOption($event, option)"
+      (keydown)="onKeyDownOptions($event)"
+    >
+    <div class="span-wrapper" *ngFor="let field of getFields(option)">  
+    <span>{{ field }}</span>
+    </div>
+    </a>
+  </div>
+</div>

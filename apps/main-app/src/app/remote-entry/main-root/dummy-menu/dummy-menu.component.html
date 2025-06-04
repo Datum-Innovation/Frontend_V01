@@ -1,0 +1,13 @@
+<p>Dummy Menu</p>
+<ul>
+    <li *ngFor="let menu of menuData" [ngClass]="{ 'has-children': hasChildren(menu.id) }">
+      <a *ngIf="menu.isPage" [routerLink]="menu.url">{{ menu.menutext }}</a>
+      <span *ngIf="!menu.isPage">{{ menu.menutext }}</span>
+      <ul *ngIf="hasChildren(menu.id)">
+        <li *ngFor="let child of getChildren(menu.id)">
+          <a *ngIf="child.isPage" [routerLink]="child.url">{{ child.menutext }}</a>
+          <span *ngIf="!child.isPage">{{ child.menutext }}</span>
+        </li>
+      </ul>
+    </li>
+  </ul>

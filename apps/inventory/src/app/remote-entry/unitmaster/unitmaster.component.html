@@ -1,0 +1,153 @@
+<dfinance-frontend-main-header pageName="Unit Master"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">     
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+          </div>
+        <div class="col-md-12 mb-3 fill-item-master" >
+                <ngx-datatable 
+                class="material container striped"
+                [rows]="allUnitMaster"
+                [columnMode]="'flex'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="50" 
+                [scrollbarV]="true"
+                (activate)="onClickUnitMaster($event)"
+                [limit]="10">
+
+                <ngx-datatable-column name="Unit" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.unit }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Description" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.description }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    
+    <div class="right-wrapper">
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="Unit master">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickNewUnitMaster()"
+              [disabled]="isNewBtnDisabled" [class.top-button-active]="!selectedUnitMasterUnit" translate>
+              <i class="large material-icons">add_to_photos</i>New</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveUnitmaster()"
+              [disabled]="isSaveBtnDisabled" translate>
+              <i class="large material-icons">save</i>Save</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEditUnitMaster()"
+              [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedUnitMasterUnit" translate>
+              <i class="large material-icons">edit</i>Edit</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteUnitMaster()"
+              [disabled]="isDeleteBtnDisabled" translate><i class="large material-icons">delete_forever</i>Delete
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">print</i>Print
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">pageview</i>Preview
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">settings</i>Settings
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">help</i>Help
+            </button>
+          </div>
+        <div class="right-section">
+
+            <form [formGroup]="unitMasterForm" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="section-content">
+                               
+                                <div class="row">
+                                    <label for="type" class="form-label col-md-2">Unit<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="unit"
+                                            formControlName="unit">
+                                        <div *ngIf="unitMasterForm.get('unit')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                            </div>
+                                    </div>
+
+                                    <label for="active" class="form-label col-md-2" style="margin-right: 3px;">Active</label>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" id="active" class="form-check-input "
+                                            formControlName="active">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="basic unit" class="form-label col-md-2">Basic Unit</label>
+                                    <div class="col-md-4">
+                                        <select class="form-select" id="basicunit"
+                                            formControlName="basicunit">
+                                            <option value="-Select-">-Select-</option>
+                                            <option *ngFor="let basicunit of baiscUnitData" [value]="basicunit?.unit">{{ basicunit?.unit }}</option>
+                                        </select>
+                                    </div>    
+                                    <label for="factor" class="form-label col-md-2">Factor<span
+                                        class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <input type="number" class="form-control" id="factor"
+                                            formControlName="factor">
+                                        <div *ngIf="unitMasterForm.get('factor')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>                            
+                                </div>                           
+
+                                <div class="row">
+                                    <label for="precision" class="form-label col-md-2">Precision<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <input type="number" class="form-control" id="precision"
+                                            formControlName="precision">                                        
+                                    </div>
+                                    
+                                    <div class="col-md-3 flex-wrapper">
+                                        <label for="iscomplex" class="form-label col-md-2" style="width: 70%;">IsComplex</label>
+                                        <input type="checkbox" id="iscomplex" class="form-check-input "
+                                            formControlName="iscomplex">
+                                    </div>
+                                </div>
+                                <div style="margin-left: 17%;" *ngIf="unitMasterForm.get('precision')?.hasError('required')">
+                                    <small class="text-danger">This field is required.</small>&nbsp;
+                                    <small *ngIf="unitMasterForm.get('precision')?.hasError('notInteger')" class="text-danger">Precision must be an integer.</small>                                        
+                                </div>
+                                <div class="row">
+                                    <label for="description" class="form-label col-md-2">Description<span
+                                        class="required-asterisk">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="description"
+                                            formControlName="description">
+                                        <div *ngIf="unitMasterForm.get('description')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="row">
+                                    <label for="arabic name" class="form-label col-md-2">Arabic Name</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control rtl-textbox" id="arabicname"
+                                            formControlName="arabicname">
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

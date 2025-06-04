@@ -1,0 +1,122 @@
+<dfinance-frontend-main-header pageName="SubMasters"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-3 left-section" #scrollableDivLeft [class.overlay-disabled]="!isInputDisabled">
+      <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+        <p translate>Disabled</p>
+      </div>
+        <div class="col-md-12 mb-3">
+            <ngx-datatable 
+            class="material container striped"
+            [rows]="fillsubmasters"
+            [columnMode]="'flex'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="50" 
+            [scrollbarV]="true"
+            (activate)="onClickSubmaster($event)"
+            [limit]="10">
+
+             <ngx-datatable-column name="Key" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.Key }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Value" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{row?.Value | titlecase}}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+        </div>
+    </div>
+
+    <div class="right-wrapper">
+
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="SubMaster">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickNewSubMaster()"
+            [disabled]="isNewBtnDisabled" [class.top-button-active]="selectedSubmaserId == 0" translate>
+                <i class="large material-icons">add_to_photos</i>New</button>
+            <button type="button" class="btn btn-outline-secondary"  (click)="onClickSaveSubmaster()"
+            [disabled]="isSaveBtnDisabled" translate> <i class="large material-icons">save</i>Save</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEditSubMaster()"
+            [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedSubmaserId!=0" translate>
+                <i class="large material-icons">edit</i>Edit</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteSubmaster()"
+            [disabled]="isDeleteBtnDisabled" translate><i class="large material-icons">delete_forever</i>Delete
+            </button>
+
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">print</i>Print
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">pageview</i>Preview
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">settings</i>Settings
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">help</i>Help
+            </button>
+        </div>
+        <div class="right-section">
+
+            <form [formGroup]="submasterForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="outline-box">
+
+                            <div class="row">
+                                <label for="key" class="form-label col-md-2" translate="">Key<span
+                                        class="required-asterisk">*</span></label>
+                                <div class="col-md-8">
+                                    <select id="key" class="form-select" formControlName="key" (change)="onKeySelect()">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let k of allkeys" [value]="k?.Key">{{k?.Key }}</option>
+                                    </select>
+                                    <div *ngIf="submasterForm.get('key')?.hasError('required')">
+                                        <small class="text-danger">This field is required.</small>
+                                      </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="code" class="form-label col-md-2" translate="">Code </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" id="code" formControlName="code">
+                                    <!-- <div *ngIf="submasterForm.get('value')?.hasError('required')">
+                                        <small class="text-danger">This field is required.</small>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="value" class="form-label col-md-2" translate="">Value</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" id="value" formControlName="value">
+                                    <!-- <div *ngIf="submasterForm.get('value')?.hasError('required')">
+                                        <small class="text-danger">This field is required.</small>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="description" class="form-label col-md-2">Description</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" id="description"
+                                        formControlName="description"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

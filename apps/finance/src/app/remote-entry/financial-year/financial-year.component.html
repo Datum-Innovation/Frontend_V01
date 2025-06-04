@@ -1,0 +1,139 @@
+<dfinance-frontend-main-header pageName="Financial Year"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-4 left-section" [class.overlay-disabled]="!isInputDisabled">     
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+          </div>
+        <div class="col-md-12 mb-3 fill-item-master" >
+                <ngx-datatable 
+                class="material container striped"
+                [rows]="allFinancialYear"
+                [columnMode]="'flex'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="50" 
+                [scrollbarV]="true"
+                (activate)="onClickFinancialYear($event)"
+                [limit]="10">
+
+                <ngx-datatable-column name="Financial Year" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.finYearCode }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="StartDate" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.startDate | date: 'dd/MM/yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="EndDate" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.endDate | date: 'dd/MM/yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Status" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.status }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    
+    <div class="col-md-8 ">
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="Financial Year">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickNewFinancialYear()"
+              [disabled]="isNewBtnDisabled" [class.top-button-active]="!selectedFinancialYearId" translate>
+              <i class="large material-icons">add_to_photos</i>New</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveFinancialYear()"
+              [disabled]="isSaveBtnDisabled" translate>
+              <i class="large material-icons">save</i>Save</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEditFinancialYear()"
+              [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedFinancialYearId" translate>
+              <i class="large material-icons">edit</i>Edit</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteFinancialYear()"
+              [disabled]="isDeleteBtnDisabled" translate>
+              <i class="large material-icons">delete_forever</i>Delete
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">print</i>Print
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">pageview</i>Preview
+            </button>
+          </div>
+        <div class="right-section">
+
+            <form [formGroup]="financialYearForm" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="section-content">
+                                <div class="row">
+                                    <label for="financeyear" class="form-label col-md-2">Financial Year<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="financeyear"
+                                            formControlName="financeyear">
+                                        <div *ngIf="financialYearForm.get('financeyear')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <label for="startdate" class="form-label col-md-2">Start Date<span
+                                        class="required-asterisk">*</span></label>                                    
+                                    
+                                    <div class="col-md-4  flex-wrapper">
+                                        <input placeholder="yyyy-mm-dd" class="form-control" formControlName="startdate" matInput [matDatepicker]="std">
+                                        <mat-datepicker-toggle matSuffix [for]="std"></mat-datepicker-toggle>
+                                        <mat-datepicker #std></mat-datepicker>
+                                    </div>
+                                </div>                           
+
+                                <div class="row">
+                                    <label for="enddate" class="form-label col-md-2">End Date<span
+                                        class="required-asterisk">*</span></label>
+                                    <div class="col-md-4  flex-wrapper">
+                                        <input placeholder="yyyy-mm-dd" class="form-control" formControlName="enddate" matInput [matDatepicker]="end">
+                                        <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                                        <mat-datepicker #end></mat-datepicker>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label for="locktilldate" class="form-label col-md-2">Lock Till Date<span
+                                        class="required-asterisk">*</span></label>
+
+                                    <div class="col-md-4  flex-wrapper">
+                                        <input placeholder="yyyy-mm-dd" class="form-control" formControlName="locktilldate" matInput [matDatepicker]="ltd">
+                                        <mat-datepicker-toggle matSuffix [for]="ltd"></mat-datepicker-toggle>
+                                        <mat-datepicker #ltd></mat-datepicker>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label for="status" class="form-label col-md-2">Status<span
+                                        class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <select id="status" class="form-select" formControlName="status">
+                                        <!---(change)="onCostCategorySelect()">--> 
+                                            <option value="">Select</option>
+                                            <option *ngFor="let status of statusList" [value]="status?.value">{{ status?.name }}</option>
+                                        </select> 
+                                    </div>                                             
+                                </div>  
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>   
+        </div>
+    </div>
+
+    
+      
+      

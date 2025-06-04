@@ -1,0 +1,76 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div>
+        </div>
+
+        <h5>Related Item Search</h5>
+        <div class="remarks-content">
+            <div class="search-section">
+                <dfinance-frontend-searchable-dropdown [options]="fillItemDataOptions" [updatedOption]="itemname"
+                    [returnField]="itemCodereturnField" [dropdownFields]="itemCodeKeys"
+                    (selectedOption)="onItemCodeSelected($event)">
+                </dfinance-frontend-searchable-dropdown>
+                <button class="btn btn-secondary ok-button" (click)="searchItems()">Search</button>
+            </div>
+
+            <ngx-datatable class="material" [rows]="itemSearchArr" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="50" [selected]="selected" [selectionType]="SelectionType.single"
+                (activate)="onActivate($event)" (select)="onSelect($event)">
+
+                <ngx-datatable-column name="Item Code" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{row?.itemCode}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Item Name" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row?.itemName }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Commodity" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.commodity }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Stock" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.stock }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Purchase Rate" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.purchaseRate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="PartNo" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.partNo }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Manufacturer" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.manufacturer }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Selling Price" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.sellingPrice }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Barcode" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.barcode }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="ModelNo" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.modelNo }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>       
+
+
+    </div>
+</div>

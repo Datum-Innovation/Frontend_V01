@@ -1,0 +1,10 @@
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon/bytesize:settingsungroup">
+<mask id="mask0_779_2515" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="14" height="14">
+<rect id="Bounding box" width="14" height="14" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_779_2515)">
+<path id="ungroup" d="M5.075 9.74167L4.25833 8.925L6.76667 6.41667H4.66667V5.25H8.75V9.33333H7.58333V7.23333L5.075 9.74167ZM11.0833 7V2.91667H7V1.75H12.25V7H11.0833ZM2.91667 12.25C2.59583 12.25 2.32118 12.1358 2.09271 11.9073C1.86424 11.6788 1.75 11.4042 1.75 11.0833V1.75H2.91667V11.0833H12.25V12.25H2.91667Z" fill="#0A566C"/>
+</g>
+</g>
+</svg>

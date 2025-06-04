@@ -1,0 +1,56 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div> 
+        </div>
+        <form [formGroup]="referenceSearchForm" style="padding: 0px 10px;">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="voucher type">Voucher Type</label>
+                </div>
+                <div class="col-md-2">
+                    <label for="voucher no">Voucher No.</label>
+                </div>
+                <div class="col-md-2">
+                    <label for="voucher date">Voucher Date</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="party">Party</label>
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-select" formControlName="vouchertype">
+                        <option value="">All</option>
+                        <option *ngFor="let type of voucherTypes" [value]="type?.name">{{ type?.name }}</option>              
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="voucherno" formControlName="voucherno" class="form-control">
+                </div>
+                <div class="col-md-2  flex-wrapper">
+                    <input class="form-control" style="margin-top: -7px;" name="voucherdate" formControlName="voucherdate" matInput [matDatepicker]="vdt">
+                    <mat-datepicker-toggle style="margin-top: -8px;" matSuffix [for]="vdt"></mat-datepicker-toggle>
+                    <mat-datepicker #vdt></mat-datepicker>
+                </div>
+                <div class="col-md-3">
+                    <dfinance-frontend-searchable-dropdown [options]="partyData"
+                        [updatedOption]="updatedSupplier"
+                        [returnField]="supplierreturnField"
+                        [dropdownFields]="supplierKeys"
+                        [tabIndex]="4"
+                        (selectedOption)="onSupplierSelected($event)">
+                    </dfinance-frontend-searchable-dropdown>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" (click)="setReferenceData()">Search</button>
+                </div>
+                
+
+            </div>
+        </form>
+    </div>
+</div>

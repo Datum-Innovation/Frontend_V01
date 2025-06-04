@@ -1,0 +1,132 @@
+<dfinance-frontend-main-header pageName="Price Category"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+  <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">
+    <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+      <p translate>Disabled</p>
+    </div>
+
+    <div class="col-md-12 mb-3 fill-item-master">
+      <ngx-datatable
+        class="material container striped"
+        [rows]="allPriceCategory"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="50"
+        [scrollbarV]="true"
+        (activate)="onClickPriceCategory($event)"
+        [limit]="10">
+        <ngx-datatable-column name="Name" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.Name }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Perc" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.Perc }}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+
+  <div class="right-wrapper">
+    <div #btngroup class="btn-group form-topbar" role="group" aria-label="Price Category">
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickNewPriceCategory()"
+        [disabled]="isNewBtnDisabled" [class.top-button-active]="!selectedPriceCategory" translate>
+        <i class="large material-icons">add_to_photos</i>New
+      </button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickSavePriceCategory()"
+        [disabled]="isSaveBtnDisabled" translate>
+        <i class="large material-icons">save</i>Save
+      </button>
+       <button type="button" class="btn btn-outline-secondary" (click)="onClickEditPriceCategory()"
+              [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedPriceCategory" translate>
+              <i class="large material-icons">edit</i>Edit</button>
+       <button type="button" class="btn btn-outline-secondary" (click)="onClickDeletePriceCategory()"
+          [disabled]="isDeleteBtnDisabled" translate><i class="large material-icons">delete_forever</i>Delete
+          </button> 
+          <button type="button" class="btn btn-outline-secondary" translate>
+            <i class="large material-icons">print</i>Print
+        </button>
+        <button type="button" class="btn btn-outline-secondary" translate>
+            <i class="large material-icons">pageview</i>Preview
+        </button>
+        <button type="button" class="btn btn-outline-secondary" translate>
+            <i class="large material-icons">settings</i>Settings
+        </button>
+        <button type="button" class="btn btn-outline-secondary" translate>
+            <i class="large material-icons">help</i>Help
+        </button>
+    </div>
+
+    <div class="right-section">
+      <form [formGroup]="PriceCategoryForm">
+        <div class="section-container">
+          <div class="section-content">
+            <div class="row">
+              <label for="categoryname" class="form-label col-md-2">Category Name<span class="required-asterisk">*</span></label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="categoryname" formControlName="categoryname">
+                <div *ngIf="PriceCategoryForm.get('categoryname')?.hasError('required')">
+                  <small class="text-danger">This field is required.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="ofsellingprice" class="form-label col-md-2">% of Selling Price<span class="required-asterisk">*</span></label>
+              <div class="col-md-4">
+                <div class="d-flex align-items-start">
+                  <!-- Dropdown for selecting sign  -->
+                   <select id="ofsellingprice" class="form-select"
+                       formControlName="ofsellingpriceSign"  style="width: 100px; height: 30px;">  
+                    <option *ngFor="let sellingprice of signList"
+                      [value]="sellingprice?.value">
+                      {{ sellingprice?.value }}
+                    </option>
+                  </select> 
+
+                  <!-- Input field for decimal value -->
+                  <input type="number" class="form-control" id="sellingprice" formControlName="ofsellingpriceValue" >
+            </div>
+
+            
+              <div class="row mt-2">
+                <div class="col-md-12">
+                  <div *ngIf="PriceCategoryForm.get('ofsellingpriceValue')?.hasError('required')">
+                    <small class="text-danger">This field is required.</small>
+                  </div> 
+                  <div *ngIf="PriceCategoryForm.get('ofsellingpriceValue')?.hasError('notInteger')">
+                    <small class="text-danger">Value must be an integer.</small>                                        
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+            
+            <div class="row">
+              <label for="description" class="form-label col-md-2">Description</label>
+              <div class="col-md-10">
+                <input type="text" class="form-control" id="description" formControlName="description">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="active" class="form-label col-md-2" style="margin-right: 3px;">Active</label>
+              <div class="col-md-3">
+                <input type="checkbox" class="form-check-input" id="active" formControlName="active">
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+  

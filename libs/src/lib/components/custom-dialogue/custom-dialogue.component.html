@@ -1,0 +1,47 @@
+<div class="custom-dialog-div" *ngIf="data.key == 'custom'">
+  <div class="custom-dialogue-header">
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+    <div mat-dialog-actions class="dialog-close-button">
+        <button mat-icon-button (click)="onClose()">
+          <span>X</span>
+        </button>
+    </div>
+  </div>    
+    <div mat-dialog-content>{{ data.message }}</div> 
+    <div #okButton class="close-section" (click)="onClose()">
+      <span>OK</span>
+    </div>   
+</div>
+
+<div class="barcode-dialog-div" *ngIf="data.key == 'barcode'" (click)="focusBarcodeInput($event)">
+  <div mat-dialog-actions class="dialog-close-button">
+      <button mat-icon-button (click)="closeBarcode()">
+        <span>X</span>
+      </button>
+  </div>
+  <h1 mat-dialog-title>Barcode</h1>
+  <div mat-dialog-content>
+      <input #barcodeInputRef type="text" class="form-control" [(ngModel)]="barcodeInput"
+       (keydown.enter)="onBarcodeInputChange()" >
+  </div>    
+  <div class="close-section" (click)="closeBarcode()">
+    <span>Close</span>
+  </div>
+</div>
+
+
+
+<div class="custom-dialog-div" *ngIf="data.key === 'confirm'">
+  <div class="custom-dialogue-header">
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+    <button mat-icon-button (click)="onCancel()" class="dialog-close-button">X</button>
+  </div>
+
+  <div mat-dialog-content>{{ data.message }}</div>
+
+  <div class="dialogue-action-btns">
+    <button mat-button color="primary" class="cancel-section" (click)="onConfirm()">OK</button>
+    <button mat-button color="warn" (click)="onCancel()">Cancel</button>
+  </div>
+</div>
+

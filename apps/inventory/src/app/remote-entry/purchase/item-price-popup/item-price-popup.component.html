@@ -1,0 +1,130 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div>
+        </div>
+        <div class="item-purchase-table">
+            <ngx-datatable class="material" [rows]="itemUnitData" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="50" [selected]="selected"
+                [selectionType]="SelectionType.single" (select)="onSelect($event)">                
+
+
+                <ngx-datatable-column *ngFor="let col of tablecolumns; let colIndex = index" [name]="col.name"
+                    [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'id' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'id') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)" data-column-key-name="id">{{rowIndex+1}}</span>
+
+                        <!-- for unit -->
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)" *ngIf="col.field === 'unit'"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)" data-column-key-name="unit">{{row?.unit}}</span>
+
+                        <!-- for Purchase rate -->
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'purchaserate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'purchaserate') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="purchaserate">{{row?.purchaseRate}}</span>
+
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'purchaserate' && enableInlineEditing && currentColumname == 'purchaserate'  && rowIndex == currentRowIndex"
+                            value="{{ row?.purchaseRate }}" id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)" (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field"
+                            (input)="onChangeField($event, rowIndex, 'purchaseRate')" appNumberFormat>
+
+
+                        <!-- for Selling price -->
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'sellingprice' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'sellingprice') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="sellingprice">{{row?.sellingPrice}}</span>
+
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'sellingprice' && enableInlineEditing && currentColumname == 'sellingprice'  && rowIndex == currentRowIndex"
+                            value="{{ row?.sellingPrice }}" id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)" (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeField($event,rowIndex, 'sellingPrice')"
+                            appNumberFormat>
+
+                        <!-- for MRP -->
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'mrp' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'mrp') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)" data-column-key-name="mrp">{{row?.mrp}}</span>
+
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'mrp' && enableInlineEditing && currentColumname == 'mrp'  && rowIndex == currentRowIndex"
+                            value="{{ row?.mrp }}" id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)" (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeField($event, rowIndex, 'mrp')"
+                            appNumberFormat>
+
+
+                        <!-- for MRP -->
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'mrp' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'mrp') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)" data-column-key-name="mrp">{{row?.mrp}}</span>
+
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'mrp' && enableInlineEditing && currentColumname == 'mrp'  && rowIndex == currentRowIndex"
+                            value="{{ row?.mrp }}" id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)" (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeField($event, rowIndex, 'mrp')"
+                            appNumberFormat>
+
+                        <!-- for Branchid -->
+                        <span [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0" #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'branchid' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'branchid') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)" [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="branchid">{{row?.branchID}}</span>
+
+                        <input type="text" class="form-control"
+                            *ngIf=" col.field === 'branchid' && enableInlineEditing && currentColumname == 'branchid'  && rowIndex == currentRowIndex"
+                            value="{{ row?.branchID }}" id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)" (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeField($event,rowIndex, 'branchID')"
+                            appNumberFormat>
+
+
+
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+
+        <div class="fixed-footer">
+            <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2 flex-wrapper">
+                    <button class="btn btn-secondary ok-button" (click)="save()"
+                        (keydown)="handleOkbuttonkeydown($event)" #okbutton>Update</button>
+                    <button class="btn btn-secondary close-button" (click)="cancelItems()"
+                        (keydown)="handleCancelbuttonkeydown($event)" #cancelbutton>Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

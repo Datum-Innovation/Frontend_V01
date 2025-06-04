@@ -1,0 +1,524 @@
+<dfinance-frontend-main-header pageName="Opening Stock" *ngIf="!isMaximized"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading" *ngIf="!isMaximized"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="left-section" #scrollableDivLeft [class.overlay-disabled]="!isInputDisabled"
+        [class.hide-left-section]="!showLeftSection || isMaximized">
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+        </div>
+        <div class="col-md-12 mb-3">
+            <input #leftsearch type="text" placeholder="Search Here" class="form-control" (keyup)="filterStock($event)"
+                style="width:100%;margin-bottom: 3px;" />
+        </div>
+        <ngx-datatable class="material container striped" [rows]="stockMasterList" [columnMode]="'flex'"
+            [headerHeight]="40" [rowHeight]="40" [scrollbarV]="true" (activate)="onClickStock($event)" [limit]="10"
+            [selected]="selectedleftrow" [selectionType]="SelectionType.single" (select)='onSelectLeftTable($event)'
+            [footerHeight]="0">
+            <ngx-datatable-column name="VNo" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.TransactionNo }}
+                    <div class="toggle-list-data" *ngIf="istoggleActive">{{row?.AccountName}}</div>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="VDate" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.Date | date: 'dd/MM/yyyy' }}
+                    <div class="toggle-list-data" *ngIf="istoggleActive">{{row?.Amount}}</div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+
+    </div>
+
+    <div class="right-section-container" [class.full-width-right-section]="!showLeftSection"
+        [class.full-width-screen]="isMaximized">
+        <div class="top-control-bar flex-wrapper">
+            <div #btngroup class="btn-group form-topbar" role="group" aria-label="Opening Stock">
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickNewStock()"
+                    [disabled]="isNewBtnDisabled" [class.top-button-active]="selectedStockId == 0" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M1.75 12.25V1.75H6.41667V2.91667H2.91667V11.0833H11.0833V7.58333H12.25V12.25H1.75ZM9.33333 6.41667V4.66667H7.58333V3.5H9.33333V1.75H10.5V3.5H12.25V4.66667H10.5V6.41667H9.33333Z" />
+                    </svg>
+                    New</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveStock()"
+                    [disabled]="isSaveBtnDisabled || isStockCancelled" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M4.08333 11.0833V7.58333H9.91667V11.0833H11.0833V4.56633L9.43367 2.91667H2.91667V11.0833H4.08333ZM2.33333 1.75H9.91667L12.25 4.08333V11.6667C12.25 11.8214 12.1885 11.9697 12.0791 12.0791C11.9697 12.1885 11.8214 12.25 11.6667 12.25H2.33333C2.17862 12.25 2.03025 12.1885 1.92085 12.0791C1.81146 11.9697 1.75 11.8214 1.75 11.6667V2.33333C1.75 2.17862 1.81146 2.03025 1.92085 1.92085C2.03025 1.81146 2.17862 1.75 2.33333 1.75ZM5.25 8.75V11.0833H8.75V8.75H5.25Z" />
+                    </svg>Save</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickEditStock()"
+                    [disabled]="isEditBtnDisabled || isStockCancelled"
+                    [class.top-button-active]="selectedStockId!=0 && !isStockCancelled && !isInputDisabled" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M11.375 7C11.375 6.88397 11.4211 6.77269 11.5031 6.69064C11.5852 6.60859 11.6965 6.5625 11.8125 6.5625C11.9285 6.5625 12.0398 6.60859 12.1219 6.69064C12.2039 6.77269 12.25 6.88397 12.25 7V11.8125C12.25 11.9285 12.2039 12.0398 12.1219 12.1219C12.0398 12.2039 11.9285 12.25 11.8125 12.25H2.1875C2.07147 12.25 1.96019 12.2039 1.87814 12.1219C1.79609 12.0398 1.75 11.9285 1.75 11.8125V2.1875C1.75 2.07147 1.79609 1.96019 1.87814 1.87814C1.96019 1.79609 2.07147 1.75 2.1875 1.75H7C7.11603 1.75 7.22731 1.79609 7.30936 1.87814C7.39141 1.96019 7.4375 2.07147 7.4375 2.1875C7.4375 2.30353 7.39141 2.41481 7.30936 2.49686C7.22731 2.57891 7.11603 2.625 7 2.625H2.625V11.375H11.375V7Z" />
+                        <path
+                            d="M6.42511 7.57751L7.14699 7.47425L11.5815 3.04063C11.6233 3.00027 11.6566 2.952 11.6795 2.89862C11.7025 2.84524 11.7145 2.78783 11.715 2.72974C11.7155 2.67165 11.7045 2.61404 11.6825 2.56028C11.6605 2.50651 11.628 2.45766 11.5869 2.41658C11.5458 2.3755 11.497 2.34302 11.4432 2.32102C11.3894 2.29902 11.3318 2.28795 11.2737 2.28846C11.2157 2.28896 11.1582 2.30103 11.1049 2.32396C11.0515 2.34689 11.0032 2.38022 10.9629 2.42201L6.52749 6.85563L6.42424 7.57751H6.42511ZM12.2001 1.80251C12.3221 1.92439 12.4188 2.06912 12.4848 2.22841C12.5509 2.38771 12.5848 2.55845 12.5848 2.73088C12.5848 2.90331 12.5509 3.07405 12.4848 3.23335C12.4188 3.39264 12.3221 3.53737 12.2001 3.65926L7.66324 8.19613C7.59633 8.26328 7.50943 8.30688 7.41561 8.32038L5.97186 8.52688C5.90458 8.53654 5.83597 8.53039 5.77147 8.50892C5.70698 8.48745 5.64837 8.45125 5.60031 8.40318C5.55224 8.35512 5.51604 8.29651 5.49457 8.23202C5.4731 8.16752 5.46695 8.09891 5.47661 8.03163L5.68311 6.58788C5.69637 6.49417 5.73966 6.40728 5.80649 6.34025L10.3442 1.80338C10.5904 1.55732 10.9241 1.4191 11.2722 1.4191C11.6202 1.4191 11.954 1.55732 12.2001 1.80338V1.80251Z" />
+                    </svg>Edit</button>
+                <div class="delete-btn-container">
+                    <button type="button" class="btn btn-outline-secondary" (click)="toggleDeleteOptions()"
+                        [disabled]="isDeleteBtnDisabled || isStockCancelled"
+                        [class.top-button-active]="selectedStockId!=0 && showDeleteOptions">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                            <path
+                                d="M3.76538 11.0833L1.16663 13.125V2.33333C1.16663 2.17862 1.22808 2.03025 1.33748 1.92085C1.44688 1.81146 1.59525 1.75 1.74996 1.75H12.25C12.4047 1.75 12.553 1.81146 12.6624 1.92085C12.7718 2.03025 12.8333 2.17862 12.8333 2.33333V10.5C12.8333 10.6547 12.7718 10.8031 12.6624 10.9125C12.553 11.0219 12.4047 11.0833 12.25 11.0833H3.76538ZM2.33329 10.7246L3.36171 9.91667H11.6666V2.91667H2.33329V10.7246ZM7.82479 6.41667L9.26854 7.86042L8.44371 8.68525L6.99996 7.2415L5.55621 8.68583L4.73138 7.861L6.17513 6.41667L4.73079 4.97292L5.55563 4.14808L6.99996 5.59183L8.44371 4.14808L9.26854 4.97292L7.82479 6.41667Z" />
+                        </svg>
+                        Delete
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none">
+                            <path
+                                d="M3.5 5.15822L0 1.65822L0.816667 0.841553L3.5 3.52489L6.18333 0.841553L7 1.65822L3.5 5.15822Z" />
+                        </svg>
+                    </button>
+                    <ul *ngIf="showDeleteOptions" class="btn-dropdown-menu">
+                        <li><a href="#" (click)="onClickDeleteStock($event)">Delete</a></li>
+                        <li><a href="#" (click)="onClickCancelStock($event)">Cancel</a></li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickPrint()"
+                    [class.top-button-active]="selectedStockId!=0 && isEditBtnDisabled" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M3.49996 1.16666H10.5V4.66666H12.8333V10.5H10.5V12.8333H3.49996V10.5H1.16663V4.66666H3.49996V1.16666ZM4.66663 4.66666H9.33329V2.33332H4.66663V4.66666ZM3.49996 9.33332V6.99999H10.5V9.33332H11.6666V5.83332H2.33329V9.33332H3.49996ZM4.66663 8.16666V11.6667H9.33329V8.16666H4.66663Z" />
+                    </svg>
+                    Print</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickPreview()"
+                    [class.top-button-active]="selectedStockId!=0 && isEditBtnDisabled" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <mask id="mask0_823_1892" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
+                            width="14" height="14">
+                            <rect width="14" height="14" fill="#D9D9D9" />
+                        </mask>
+                        <g mask="url(#mask0_823_1892)">
+                            <path
+                                d="M7.00016 9.33325C7.72933 9.33325 8.34912 9.07804 8.85954 8.56763C9.36995 8.05721 9.62516 7.43742 9.62516 6.70825C9.62516 5.97909 9.36995 5.35929 8.85954 4.84888C8.34912 4.33846 7.72933 4.08325 7.00016 4.08325C6.271 4.08325 5.6512 4.33846 5.14079 4.84888C4.63037 5.35929 4.37516 5.97909 4.37516 6.70825C4.37516 7.43742 4.63037 8.05721 5.14079 8.56763C5.6512 9.07804 6.271 9.33325 7.00016 9.33325ZM7.00016 8.28325C6.56266 8.28325 6.19079 8.13013 5.88454 7.82388C5.57829 7.51763 5.42516 7.14575 5.42516 6.70825C5.42516 6.27075 5.57829 5.89888 5.88454 5.59263C6.19079 5.28638 6.56266 5.13325 7.00016 5.13325C7.43766 5.13325 7.80954 5.28638 8.11579 5.59263C8.42204 5.89888 8.57516 6.27075 8.57516 6.70825C8.57516 7.14575 8.42204 7.51763 8.11579 7.82388C7.80954 8.13013 7.43766 8.28325 7.00016 8.28325ZM7.00016 11.0833C5.58072 11.0833 4.28766 10.6871 3.121 9.89471C1.95433 9.10235 1.1085 8.0402 0.583496 6.70825C1.1085 5.37631 1.95433 4.31415 3.121 3.52179C4.28766 2.72943 5.58072 2.33325 7.00016 2.33325C8.41961 2.33325 9.71266 2.72943 10.8793 3.52179C12.046 4.31415 12.8918 5.37631 13.4168 6.70825C12.8918 8.0402 12.046 9.10235 10.8793 9.89471C9.71266 10.6871 8.41961 11.0833 7.00016 11.0833ZM7.00016 9.91658C8.09877 9.91658 9.10745 9.62735 10.0262 9.04888C10.945 8.4704 11.6474 7.6902 12.1335 6.70825C11.6474 5.72631 10.945 4.9461 10.0262 4.36763C9.10745 3.78915 8.09877 3.49992 7.00016 3.49992C5.90155 3.49992 4.89287 3.78915 3.97412 4.36763C3.05537 4.9461 2.35294 5.72631 1.86683 6.70825C2.35294 7.6902 3.05537 8.4704 3.97412 9.04888C4.89287 9.62735 5.90155 9.91658 7.00016 9.91658Z" />
+                        </g>
+                    </svg>
+                    Preview
+                </button>
+
+            </div>
+            <div class="currency-section flex-wrapper">
+                <div class="currency-box" *ngIf="multiCurrencySupport" translate>Currency</div>
+
+                <select [disabled]="isInputDisabled" class="form-select" tabIndex="3"
+                    (change)="onChangeCurrency($event)" [(ngModel)]="selectedCurrencyId">
+                    <option *ngFor="let currency of currencyDropdown" [value]="currency?.currencyID">{{
+                        currency?.abbreviation }}</option>
+                </select>
+                <input type="text" class="form-control" [(ngModel)]="currentCurrencyRate">
+                <div class="flex-wrapper"><button class="btn" (click)="saveCurrencyRate()">
+                        <img src="../../../assets/img/ri_save-line.svg" alt="icon">
+                    </button></div>
+
+            </div>
+        </div>
+        <div #scrollContainer class="right-section" (scroll)="onScroll($event)">
+            <form [formGroup]="stockForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="section-content">
+                                <div class="stock-form-top-container">
+
+                                    <div class="stock-form-left">
+                                        <div class="stock-container">
+                                            <div class="stock-left-section">
+
+                                                <div class="voucher-field">
+                                                    <label for="voucherno" class="form-label">Voucher No<span
+                                                            class="required-asterisk">*</span></label>
+                                                    <input type="text" class="form-control short-input" id="vouchername"
+                                                        formControlName="vouchername" tabindex="1">
+                                                    <input type="text" class="form-control long-input" id="voucherno"
+                                                        formControlName="voucherno" tabindex="2">
+                                                </div>
+
+                                                <!--  Warehouse -->
+                                                <div class="warehouse-field">
+                                                    <label for="warehouse" class="form-label"> Warehouse</label>
+                                                    <select id="warehouse" class="form-select" tabindex="5"
+                                                        formControlName="warehouse" (change)="onChangeWarehouse()"
+                                                        (keydown)="onFormKeyDown($event,6)">
+                                                        <option *ngFor="let warehouse of warehouseData"
+                                                            [value]="warehouse?.id">
+                                                            {{ warehouse?.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="stock-right-section">
+
+                                        <div class="date-field">
+                                            <label for="date" class="form-label">Date<span
+                                                    class="required-asterisk">*</span></label>
+                                            <input type="date" class="form-control date-input" id="date"
+                                                formControlName="date">
+                                        </div>
+
+
+                                        <!-- Reference Section -->
+                                        <div class="reference-section">
+                                            <label for="reference" class="form-label">Reference</label>
+                                            <div class="reference-btn">
+                                                <input type="text" class="form-control" id="reference"
+                                                    formControlName="reference" (keydown)="onFormKeyDown($event,5)">
+                                                <button type="button" class="btn btn-secondary" ngbTooltip="Import"
+                                                    placement="top" [disabled]="isInputDisabled"
+                                                    (click)="openImportReferencePopup()">
+                                                    ...
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-mat-tab-container">
+                                <mat-tab-group animationDuration="0ms" class="tab-item-additional-details"
+                                    (selectedTabChange)="onPurchaseTabChange($event)">
+                                    <mat-tab label="Item Details">
+                                        <div class="table-container">
+                                            <div class="table-wrapper" #tableWrapper>
+                                                <div class="item-purchase-table item-main-table">
+                                                    <div class="datatable-container">
+                                                        <ngx-datatable #ngxTable class="material"
+                                                            [rows]="tempItemFillDetails" columnMode="flex"
+                                                            [headerHeight]="30" [footerHeight]="40" [rowHeight]="30"
+                                                            [selected]="selected" [style.min-height.px]="tableHeight">
+
+
+                                                            <ngx-datatable-column
+                                                                *ngFor="let col of tablecolumns; let colIndex = index"
+                                                                [name]="col.name"
+                                                                [flexGrow]="col.field === 'id' ? 1 : 4">
+                                                                <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                                    ngx-datatable-cell-template>
+
+                                                                    <!-- Code for Column ID -->
+                                                                    <span *ngIf="col.field === 'id'"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        data-column-key-name="id">
+                                                                        {{ rowIndex+1 }}
+                                                                    </span>
+
+                                                                    <!--  Item Code  -->
+                                                                    <div (click)="validateItemGridEntry()"
+                                                                        *ngIf="col.field === 'itemcode'">
+
+                                                                        <span
+                                                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                                                                            id="cell-{{rowIndex}}-{{colIndex}}"
+                                                                            tabindex="0" #gridCell
+                                                                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                                                                            *ngIf="col.field === 'itemcode' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'itemcode') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                            (keydown)="onKeyDown($event)"
+                                                                            [attr.data-column-name]="col.field"
+                                                                            (dblclick)="handleDoubleClick($event)"
+                                                                            data-column-key-name="itemCode">{{row?.itemCode}}</span>
+                                                                        <dfinance-frontend-searchable-dropdown
+                                                                            fieldName="cell-{{rowIndex}}-{{colIndex}}itemcode"
+                                                                            [options]="fillItemDataOptions"
+                                                                            [isdisabled]="isInputDisabled"
+                                                                            [updatedOption]="row?.itemCode"
+                                                                            [returnField]="itemCodereturnField"
+                                                                            [dropdownFields]="itemCodeKeys"
+                                                                            [tabIndex]="10"
+                                                                            [excludedKeys]="itemCodeExcludekeys"
+                                                                            (selectedOption)="onItemCodeSelected($event, rowIndex)"
+                                                                            [isEmitEvent]="true"
+                                                                            (focusEvent)="validateItemGridEntry()"
+                                                                            [isGridCell]="true"
+                                                                            cellid="cell-{{rowIndex}}-{{colIndex}}"
+                                                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                                                            (emitKeyboardEvent)="onColumKeyDown($event)"
+                                                                            *ngIf="enableInlineEditing && currentColumname == 'itemcode' && rowIndex == currentRowIndex"
+                                                                            (keydown)="onKeyDown($event)"
+                                                                            [attr.data-column-name]="col.field">
+                                                                        </dfinance-frontend-searchable-dropdown>
+                                                                    </div>
+
+                                                                    <!-- Code for Column Item Name -->
+                                                                    <span *ngIf="col.field === 'itemname'"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        data-column-key-name="itemName">
+                                                                        {{ row?.itemName }}
+                                                                    </span>
+
+                                                                    <!-- Code for Column Unit -->
+                                                                    <span
+                                                                        *ngIf="col.field === 'unit' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'unit')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        [attr.data-column-name]="col.field" tabindex="0"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="unit">
+                                                                        {{ row?.unit?.unit }}
+                                                                    </span>
+
+                                                                    <dfinance-frontend-searchable-dropdown
+                                                                        [options]="row?.unitsPopup"
+                                                                        [isdisabled]="isInputDisabled "
+                                                                        [updatedOption]="row?.unit?.unit"
+                                                                        [returnField]="itemUnitreturnField"
+                                                                        [dropdownFields]="itemUnitKeys" [tabIndex]="11"
+                                                                        (selectedOption)="onItemUnitSelected($event,rowIndex)"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        [isGridCell]="true"
+                                                                        cellid="cell-{{rowIndex}}-{{colIndex}}"
+                                                                        (click)="onClickInput($event,rowIndex,colIndex)"
+                                                                        (emitKeyboardEvent)="onColumKeyDown($event)"
+                                                                        *ngIf="col.field === 'unit' && enableInlineEditing && currentColumname == 'unit'  && rowIndex == currentRowIndex"
+                                                                        (keydown)="onKeyDown($event)"></dfinance-frontend-searchable-dropdown>
+
+                                                                    <!-- Code for Column Qty -->
+                                                                    <span
+                                                                        *ngIf="col.field === 'qty' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'qty')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0" [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="qty">
+                                                                        {{ row?.qty }}
+                                                                    </span>
+
+                                                                    <input
+                                                                        *ngIf=" col.field === 'qty' && enableInlineEditing && currentColumname == 'qty' && rowIndex == currentRowIndex"
+                                                                        type="text" class="form-control"
+                                                                        [ngbTooltip]="tipContent" placement="bottom"
+                                                                        [disabled]="isInputDisabled"
+                                                                        value="{{ row?.qty }}" name="qty"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        (input)="onChangeQuantity(rowIndex, $event)"
+                                                                        appNumberFormat (keydown)="onKeyDown($event)"
+                                                                        (click)="onClickInput($event,rowIndex,colIndex)">
+
+                                                                    <!-- Code for Column rate -->
+                                                                    <span
+                                                                        *ngIf="col.field === 'rate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'rate')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0" [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="rate">
+                                                                        {{ row?.rate }}
+                                                                    </span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        [disabled]="isInputDisabled "
+                                                                        value="{{ row?.rate }}" name="rate"
+                                                                        (input)="onChangeRate(rowIndex, $event)"
+                                                                        *ngIf=" col.field === 'rate' && enableInlineEditing && currentColumname == 'rate'  && rowIndex == currentRowIndex"
+                                                                        (blur)="onRateBlur(rowIndex,$event)"
+                                                                        appNumberFormat (keydown)="onKeyDown($event)"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0"
+                                                                        (click)="onClickInput($event,rowIndex, colIndex)">
+
+                                                                    <!-- Code for Column amount -->
+                                                                    <span
+                                                                        *ngIf="col.field === 'amount' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'amount')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0" [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="amount">
+                                                                        {{ (row?.qty && row?.rate) ? (row?.qty *
+                                                                        row?.rate) : '' }}
+                                                                    </span>
+
+                                                                    <input type="text" class="form-control"
+                                                                        [disabled]="isInputDisabled "
+                                                                        value="{{ row?.amount }}" name="amount"
+                                                                        (input)="calculateItemAmount(rowIndex)"
+                                                                        *ngIf=" col.field === 'amount' && enableInlineEditing && currentColumname == 'amount'  && rowIndex == currentRowIndex"
+                                                                        (blur)="onRateBlur(rowIndex,$event)"
+                                                                        appNumberFormat (keydown)="onKeyDown($event)"
+                                                                        [attr.data-column-name]="col.field"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0"
+                                                                        (click)="onClickInput($event,rowIndex, colIndex)">
+
+                                                                    <!-- Code for Column taxperc -->
+                                                                    <span
+                                                                        *ngIf="col.field === 'taxPerc' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'taxPerc')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0" [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (change)="onChangeTaxPercent(rowIndex, $event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="taxPerc">
+                                                                        {{ row?.taxPerc }}
+                                                                    </span>
+
+
+
+                                                                    <!-- Code for Column taxvalue -->
+                                                                    <span
+                                                                        *ngIf="col.field === 'taxValue' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'taxValue')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0" [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="taxValue">
+                                                                        {{ row?.taxValue }}
+                                                                    </span>
+
+                                                                    <!-- Code for Column expirydate -->
+
+                                                                    <span
+                                                                        *ngIf="col.field === 'ExpiryDate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'ExpiryDate') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                                                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0" [attr.data-column-name]="col.field"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        (dblclick)="handleDoubleClick($event)"
+                                                                        data-column-key-name="ExpiryDate">
+                                                                        <!--change this field any error present -->
+                                                                        {{ row?.expiryDate | date: 'dd/MM/yyyy' }}
+                                                                    </span>
+                                                                    <input
+                                                                        *ngIf="col.field === 'ExpiryDate' && enableInlineEditing && currentColumname == 'ExpiryDate' && rowIndex == currentRowIndex"
+                                                                        type="date" class="form-control"
+                                                                        [disabled]="isInputDisabled"
+                                                                        [ngModel]="convertToDateInputFormat(row.expiryDate)"
+                                                                        [ngModelOptions]="{ standalone: true }"
+                                                                        (ngModelChange)="updateDueDate($event, row)"
+                                                                        (keydown)="onKeyDown($event)"
+                                                                        id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
+                                                                        tabindex="0"
+                                                                        (input)="onChangeDate(rowIndex, $event)"
+                                                                        (click)="onClickInput($event, rowIndex, colIndex)">
+                                                                </ng-template>
+                                                            </ngx-datatable-column>
+                                                            <ngx-datatable-footer></ngx-datatable-footer>
+                                                        </ngx-datatable>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                        
+                                           
+                                        </div>
+                                       
+                                    </mat-tab>
+                                </mat-tab-group>
+                               
+                               
+                            </div>
+                           
+                        </div>
+                       
+                    </div>
+                   
+                </div>
+                
+            </form>
+        </div>
+        <div class="table-summary" #tableSummary>
+            <div class="summary-cell" 
+                *ngFor="let col of tablecolumns" #summaryCell>
+                <ng-container *ngIf="col.field === 'itemcode'">
+                    <input type="text" placeholder="Search Here" class="form-control"
+                        (keyup)="updateFilter($event)" style="width: 100%" />
+                </ng-container>
+                <ng-container *ngIf="(col.field == 'id') || (col.field == 'itemname') || (col.field == 'unit') 
+                || (col.field == 'rate') || (col.field == 'taxperc')
+                || (col.field == 'expirydate')">
+                </ng-container>
+                
+                <ng-container *ngIf="col.field == 'qty'">
+                    <div style="display: flex; margin-left: 330px; align-items: center">
+                        <!-- <input  type="number" class="form-control" name="qtyTotal"> -->
+                        <input type="text" name="qtyTotal" class="form-control" readonly
+                                    value="{{qtyTotal}}">
+                        <!-- <span>{{qtyTotal}}</span> -->
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="col.field == 'amount'">
+                    <div style="display: flex; margin-left: 160px; align-items: center">
+                        <input type="text" name="amountTotal" class="form-control" readonly
+                        value="{{amountTotal}}">
+                        <!-- <span>{{amountTotal}}</span> -->
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="col.field == 'taxValue'">
+                    <div style="display: flex; margin-left: 160px; align-items: center">
+                        <input type="text" name="taxTotal" class="form-control" readonly
+                        value="{{taxTotal}}">
+                        <!-- <span>{{taxTotal}}</span> -->
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="terms-sectionX">
+            <label for="terms" class="form-label">Terms</label>
+            <input type="text" class="form-control long-input" 
+                   id="terms" formControlName="terms">
+        </div>
+
+    </div>
+
+    <dfinance-frontend-import-reference-popup *ngIf="showImportReferencePopup" [referenceData]="referenceFillData"
+        [voucherTypes]="voucherTypeData" (savereference)="saveReferenceData($event)"
+        (close)="closeImportReferencePopup()"></dfinance-frontend-import-reference-popup>
+
+    <div *ngIf="showDeletePopup" class="deletepopup">
+        <div class="popup-content">
+            <span class="close" (click)="closeDeletePopup()">&times;</span>
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this entry?</p>
+            <input type="text" class="form-control" id="deleteReason" placeholder="Reason for deletion" #reasonInput>
+            <div class="popup-actions">
+                <button class="btn btn-primary" (click)="confirmDelete()">OK</button>
+                <button class="btn btn-secondary" (click)="closeDeletePopup()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showCancelPopup" class="deletepopup">
+        <div class="popup-content">
+            <span class="close" (click)="closeCancelPopup()">&times;</span>
+            <h2>Confirm Cancel</h2>
+            <p>Are you sure you want to cancel this entry?</p>
+            <input type="text" class="form-control" id="deleteReason" placeholder="Reason for cancel"
+                [(ngModel)]="cancelReason">
+            <div class="popup-actions">
+                <button class="btn btn-primary" (click)="confirmCancel()">OK</button>
+                <button class="btn btn-secondary" (click)="closeCancelPopup()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</div>

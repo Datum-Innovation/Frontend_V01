@@ -1,0 +1,286 @@
+<dfinance-frontend-main-header pageName="Branches"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+  <div class="col-md-3 left-section" #scrollableDivLeft [class.overlay-disabled]="!isInputDisabled">
+    <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+      <p translate>Disabled</p>
+    </div>
+    <div class="col-md-12 mb-3">
+      <ngx-datatable class="material container striped" [rows]="allBranches" [columnMode]="'flex'" [headerHeight]="50"
+        [footerHeight]="50" [rowHeight]="50" [scrollbarV]="true" (activate)="onClickBranch($event)" [limit]="10">
+
+        <ngx-datatable-column name="Nature" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.nature }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Company" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{row?.company | titlecase}}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+  <div class="right-wrapper">
+    <div #btngroup class="btn-group form-topbar" role="group" aria-label="Branches">
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickNewBranch()" [disabled]="isNewBtnDisabled"
+        [class.top-button-active]="selectedBranchId == 0" translate>
+        <i class="large material-icons">add_to_photos</i>New</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveBranch()"
+        [disabled]="isSaveBtnDisabled" translate><i class="large material-icons">save</i>Save</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickEditBranch()"
+        [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedBranchId!=0" translate>
+        <i class="large material-icons">edit</i>Edit</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteBranch()"
+        [disabled]="isDeleteBtnDisabled" translate><i class="large material-icons">delete_forever</i>Delete
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">print</i>Print
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">pageview</i>Preview
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">settings</i>Settings
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">help</i>Help
+      </button>
+    </div>
+    <div class="right-section">
+      <div class="row">
+        <div class="col-md-9">
+          <form [formGroup]="branchForm" (ngSubmit)="onClickSaveBranch()">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <label for="hocompanyname" class="form-label col-md-2" translate="">Company Name<span
+                      class="required-asterisk">*</span></label>
+                  <div class="col-md-10">
+                    <input type="text" class="form-control" id="hocompanyname" formControlName="hocompanyname">
+                    <div *ngIf="branchForm.get('hocompanyname')?.hasError('required')">
+                      <small class="text-danger">This field is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <label for="hoarabicname" class="form-label col-md-2" translate>Arabic Name</label>
+                  <div class="col-md-10">
+                    <input type="text" class="form-control rtl-textbox" id="hoarabicname"
+                      formControlName="hoarabicname">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label for="branchtype" class="form-label col-md-2" translate>Branch Type<span
+                  class="required-asterisk">*</span></label>
+              <div class="col-md-4">
+                <select id="branchtype" class="form-select" formControlName="branchtype"
+                  (change)="onBranchTypeSelect()">
+                  <option value="">Select</option>
+                  <option *ngFor="let type of branchType" [value]="type?.value">{{ type?.name }}</option>
+                </select>
+                <div *ngIf="branchForm.get('branchtype')?.hasError('required')">
+                  <small class="text-danger">This field is required.</small>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-4 flex-wrapper">
+                <label for="isactive" class="form-label col-md-2" translate>Active</label>
+                <input type="checkbox" style="margin-left:10px" class="form-check-input" id="isactive"
+                  formControlName="isactive" [checked]="isActive" (change)="onActiveChange($event)">
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <label for="companyname" class="form-label col-md-2" translate>Branch Name<span
+                    class="required-asterisk">*</span></label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" id="companyname" formControlName="companyname">
+                  <div *ngIf="branchForm.get('companyname')?.hasError('required')">
+                    <small class="text-danger">This field is required.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <label for="arabicname" class="form-label col-md-2" translate>Arabic Name</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control rtl-textbox" id="arabicname" formControlName="arabicname">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label for="telephone" class="form-label col-md-2" translate>Telephone</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="telephone" formControlName="telephone" appTelephoneInput>
+              </div>
+              <label for="mobile" class="form-label col-md-2" translate>Mobile</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="mobile" formControlName="mobile" appTelephoneInput>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="faxno" class="form-label col-md-2" translate>Fax</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="faxno" formControlName="faxno">
+              </div>
+              <label for="country" class="form-label col-md-2" translate>Country<span
+                  class="required-asterisk">*</span></label>
+              <div class="col-md-4">
+                <select id="country" class="form-select" formControlName="country" (change)="onCountrySelect()">
+                  <option value="">Select</option>
+                  <option *ngFor="let country of countries" [value]="country?.value">{{ country?.value }}</option>
+                </select>
+                <div *ngIf="branchForm.get('country')?.hasError('required')">
+                  <small class="text-danger">This field is required.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <label for="addresslineone" class="form-label col-md-2" translate>AddressLine 1<span
+                    class="required-asterisk">*</span></label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" id="addresslineone" formControlName="addresslineone">
+                  <div *ngIf="branchForm.get('addresslineone')?.hasError('required')">
+                    <small class="text-danger">This field is required.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <label for="addresslinetwo" class="form-label col-md-2" translate>AddressLine 2</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" id="addresslinetwo" formControlName="addresslinetwo">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="city" class="form-label col-md-2" translate>City</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="city" formControlName="city">
+              </div>
+              <label for="emailaddress" class="form-label col-md-2" translate>Email Address</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="emailaddress" formControlName="emailaddress" appEmailInput> 
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="pobox" class="form-label col-md-2" translate>PO Box</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="pobox" formControlName="pobox">
+              </div>
+              <label for="district" class="form-label col-md-2" translate>District</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="district" formControlName="district">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="buildingno" class="form-label col-md-2" translate>BuildingNo</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="buildingno" formControlName="buildingno">
+              </div>
+              <label for="countrycode" class="form-label col-md-2" translate>CountryCode</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="countrycode" formControlName="countrycode">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="province" class="form-label col-md-2" translate>Province</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="province" formControlName="province">
+              </div>
+              <label for="vatno" class="form-label col-md-2" translate>VAT No</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="vatno" formControlName="vatno">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="centralsalestaxno" class="form-label col-md-2" translate>Central Sales TaxNo</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="centralsalestaxno" formControlName="centralsalestaxno">
+              </div>
+              <label for="contactperson" class="form-label col-md-2" translate>Contact Person<span
+                  class="required-asterisk">*</span></label>
+              <div class="col-md-4">
+                <select id="contactperson" class="form-select" formControlName="contactperson"
+                  (change)="onContactPersonSelect()">
+                  <option value="">Select</option>
+                  <option *ngFor="let contact of contactPerson" [value]="contact?.id">{{ contact?.name }}</option>
+                </select>
+                <div *ngIf="branchForm.get('contactperson')?.hasError('required')">
+                  <small class="text-danger">This field is required.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="remarks" class="form-label col-md-2" translate>Remarks</label>
+              <div class="col-md-10">
+                <textarea class="form-control" id="remarks" rows="3" formControlName="remarks"></textarea>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="dl1" class="form-label col-md-2" translate>DL1</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="dl1" formControlName="dl1">
+              </div>
+              <label for="dl2" class="form-label col-md-2" translate>DL2</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="dl2" formControlName="dl2">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="uniqueid" class="form-label col-md-2" translate>UniqueID</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="uniqueid" formControlName="uniqueid">
+              </div>
+              <label for="reference" class="form-label col-md-2" translate>Reference</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="reference" formControlName="reference">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="bankcode" class="form-label col-md-2" translate>Bank Code</label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="bankcode" formControlName="bankcode">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-3" *ngIf="showImageContainer">
+          <div class="image-upload">
+            <div class="image-upload-container" [class.disabled]="isInputDisabled">
+              <!-- <label *ngIf="!imageData" for="fileInput" class="upload-label">Upload Image</label> -->
+              <input type="file" id="fileInput" (change)="onImageSelected($event)">
+              <div *ngIf="imageData" class="image-preview">
+                <img [src]="imageData" alt="Uploaded Image">
+                <button class="remove-button" (click)="removeImage()">Remove Image</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

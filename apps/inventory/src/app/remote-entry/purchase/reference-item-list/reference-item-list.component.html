@@ -1,0 +1,60 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div> 
+        </div>
+        <div class="row">            
+            <label for="selectall" class="form-label" style="margin-left: 5px;">
+                <input type="checkbox" (change)="onClickSelectAll($event)"><span>  Select All</span>
+            </label>
+        </div>
+        <div>
+            <ngx-datatable class="material"
+                [rows]="savedList"
+                columnMode="force"
+                [headerHeight]="50"
+                [footerHeight]="0"
+                [rowHeight]="70"
+                [scrollbarV]="true"
+                [scrollbarH]="true">
+                    <!-- First column with a button to add rows -->
+                    <ngx-datatable-column name="Select" [flexGrow]="1">
+                        <ng-template let-row="row" let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template>
+                            <input type="checkbox" [checked]="row?.selected" (change)="onChangeSelection($event,rowIndex,row.itemID)">
+                        </ng-template>
+                    </ngx-datatable-column>      
+
+                    <ngx-datatable-column name="ItemCode" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{row?.ItemCode}}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="ItemName" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.ItemName }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="Unit" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.Unit }}
+                        </ng-template>
+                    </ngx-datatable-column> 
+                    <ngx-datatable-column name="Qty" [flexGrow]="2">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                            {{ row?.Qty }}
+                        </ng-template>
+                    </ngx-datatable-column>                     
+                </ngx-datatable>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-10"></div>
+            
+            <div class="col-md-2 flex-wrapper">
+                <button class="btn btn-secondary ok-button" (click)="saveItemsList()" #okbutton>Save</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>

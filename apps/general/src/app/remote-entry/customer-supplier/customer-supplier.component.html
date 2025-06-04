@@ -1,0 +1,1266 @@
+<dfinance-frontend-main-header pageName="Customer Supplier"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-3 left-section" #scrollableDivLeft [class.overlay-disabled]="!isInputDisabled"
+        [class.hide-left-section]="!showLeftSection || isMaximized">
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+        </div>
+        <div class="col-md-12 mb-3 fill-item-master">
+            <input type="text" placeholder="Search Here" class="form-control" (keyup)="filterCustomerSupplier($event)"
+                style="width:100%;margin-bottom: 3px;" />
+            <ngx-datatable class="material container striped" [rows]="allCustomerSupplier" [columnMode]="'flex'"
+                [headerHeight]="30" [footerHeight]="0" [rowHeight]="30" [scrollbarV]="true"
+                (activate)="onClickCustomerSupplier($event)" [limit]="10">
+
+                <ngx-datatable-column name="Code" [flexGrow]="1">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.code }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Name" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.name }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Nature" [flexGrow]="1">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.nature }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="left-toggle-section" (click)="toggleLeftSection()" *ngIf="!isMaximized">
+        <span>
+            <i *ngIf="showLeftSection" class="large material-icons">chevron_left</i>
+            <i *ngIf="!showLeftSection" class="large material-icons">chevron_right</i>
+        </span>
+    </div>
+
+    <div class="right-wrapper" [class.full-width-right-section]="!showLeftSection">
+        <div class="flex-wrapper">
+            <div #btngroup class="btn-group form-topbar" role="group" aria-label="Customer Supplier">
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickNewCustomerSupplier()"
+                    [disabled]="isNewBtnDisabled" [class.top-button-active]="selectedCustomerSupplierId == 0" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M1.75 12.25V1.75H6.41667V2.91667H2.91667V11.0833H11.0833V7.58333H12.25V12.25H1.75ZM9.33333 6.41667V4.66667H7.58333V3.5H9.33333V1.75H10.5V3.5H12.25V4.66667H10.5V6.41667H9.33333Z" />
+                    </svg>New</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveCustomerSupplier()"
+                    [disabled]="isSaveBtnDisabled" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M4.08333 11.0833V7.58333H9.91667V11.0833H11.0833V4.56633L9.43367 2.91667H2.91667V11.0833H4.08333ZM2.33333 1.75H9.91667L12.25 4.08333V11.6667C12.25 11.8214 12.1885 11.9697 12.0791 12.0791C11.9697 12.1885 11.8214 12.25 11.6667 12.25H2.33333C2.17862 12.25 2.03025 12.1885 1.92085 12.0791C1.81146 11.9697 1.75 11.8214 1.75 11.6667V2.33333C1.75 2.17862 1.81146 2.03025 1.92085 1.92085C2.03025 1.81146 2.17862 1.75 2.33333 1.75ZM5.25 8.75V11.0833H8.75V8.75H5.25Z" />
+                    </svg>
+                    Save</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickEditCustomerSupplier()"
+                    [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedCustomerSupplierId!=0" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M11.375 7C11.375 6.88397 11.4211 6.77269 11.5031 6.69064C11.5852 6.60859 11.6965 6.5625 11.8125 6.5625C11.9285 6.5625 12.0398 6.60859 12.1219 6.69064C12.2039 6.77269 12.25 6.88397 12.25 7V11.8125C12.25 11.9285 12.2039 12.0398 12.1219 12.1219C12.0398 12.2039 11.9285 12.25 11.8125 12.25H2.1875C2.07147 12.25 1.96019 12.2039 1.87814 12.1219C1.79609 12.0398 1.75 11.9285 1.75 11.8125V2.1875C1.75 2.07147 1.79609 1.96019 1.87814 1.87814C1.96019 1.79609 2.07147 1.75 2.1875 1.75H7C7.11603 1.75 7.22731 1.79609 7.30936 1.87814C7.39141 1.96019 7.4375 2.07147 7.4375 2.1875C7.4375 2.30353 7.39141 2.41481 7.30936 2.49686C7.22731 2.57891 7.11603 2.625 7 2.625H2.625V11.375H11.375V7Z" />
+                        <path
+                            d="M6.42511 7.57751L7.14699 7.47425L11.5815 3.04063C11.6233 3.00027 11.6566 2.952 11.6795 2.89862C11.7025 2.84524 11.7145 2.78783 11.715 2.72974C11.7155 2.67165 11.7045 2.61404 11.6825 2.56028C11.6605 2.50651 11.628 2.45766 11.5869 2.41658C11.5458 2.3755 11.497 2.34302 11.4432 2.32102C11.3894 2.29902 11.3318 2.28795 11.2737 2.28846C11.2157 2.28896 11.1582 2.30103 11.1049 2.32396C11.0515 2.34689 11.0032 2.38022 10.9629 2.42201L6.52749 6.85563L6.42424 7.57751H6.42511ZM12.2001 1.80251C12.3221 1.92439 12.4188 2.06912 12.4848 2.22841C12.5509 2.38771 12.5848 2.55845 12.5848 2.73088C12.5848 2.90331 12.5509 3.07405 12.4848 3.23335C12.4188 3.39264 12.3221 3.53737 12.2001 3.65926L7.66324 8.19613C7.59633 8.26328 7.50943 8.30688 7.41561 8.32038L5.97186 8.52688C5.90458 8.53654 5.83597 8.53039 5.77147 8.50892C5.70698 8.48745 5.64837 8.45125 5.60031 8.40318C5.55224 8.35512 5.51604 8.29651 5.49457 8.23202C5.4731 8.16752 5.46695 8.09891 5.47661 8.03163L5.68311 6.58788C5.69637 6.49417 5.73966 6.40728 5.80649 6.34025L10.3442 1.80338C10.5904 1.55732 10.9241 1.4191 11.2722 1.4191C11.6202 1.4191 11.954 1.55732 12.2001 1.80338V1.80251Z" />
+                    </svg>
+                    Edit</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteCustomerSupplier()"
+                    [disabled]="isDeleteBtnDisabled" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M3.76538 11.0833L1.16663 13.125V2.33333C1.16663 2.17862 1.22808 2.03025 1.33748 1.92085C1.44688 1.81146 1.59525 1.75 1.74996 1.75H12.25C12.4047 1.75 12.553 1.81146 12.6624 1.92085C12.7718 2.03025 12.8333 2.17862 12.8333 2.33333V10.5C12.8333 10.6547 12.7718 10.8031 12.6624 10.9125C12.553 11.0219 12.4047 11.0833 12.25 11.0833H3.76538ZM2.33329 10.7246L3.36171 9.91667H11.6666V2.91667H2.33329V10.7246ZM7.82479 6.41667L9.26854 7.86042L8.44371 8.68525L6.99996 7.2415L5.55621 8.68583L4.73138 7.861L6.17513 6.41667L4.73079 4.97292L5.55563 4.14808L6.99996 5.59183L8.44371 4.14808L9.26854 4.97292L7.82479 6.41667Z" />
+                    </svg>
+                    Delete</button>
+                <button type="button" class="btn btn-outline-secondary" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M3.49996 1.16666H10.5V4.66666H12.8333V10.5H10.5V12.8333H3.49996V10.5H1.16663V4.66666H3.49996V1.16666ZM4.66663 4.66666H9.33329V2.33332H4.66663V4.66666ZM3.49996 9.33332V6.99999H10.5V9.33332H11.6666V5.83332H2.33329V9.33332H3.49996ZM4.66663 8.16666V11.6667H9.33329V8.16666H4.66663Z" />
+                    </svg>
+                    Print
+                </button>
+                <button type="button" class="btn btn-outline-secondary" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <mask id="mask0_823_1892" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
+                            width="14" height="14">
+                            <rect width="14" height="14" fill="#D9D9D9" />
+                        </mask>
+                        <g mask="url(#mask0_823_1892)">
+                            <path
+                                d="M7.00016 9.33325C7.72933 9.33325 8.34912 9.07804 8.85954 8.56763C9.36995 8.05721 9.62516 7.43742 9.62516 6.70825C9.62516 5.97909 9.36995 5.35929 8.85954 4.84888C8.34912 4.33846 7.72933 4.08325 7.00016 4.08325C6.271 4.08325 5.6512 4.33846 5.14079 4.84888C4.63037 5.35929 4.37516 5.97909 4.37516 6.70825C4.37516 7.43742 4.63037 8.05721 5.14079 8.56763C5.6512 9.07804 6.271 9.33325 7.00016 9.33325ZM7.00016 8.28325C6.56266 8.28325 6.19079 8.13013 5.88454 7.82388C5.57829 7.51763 5.42516 7.14575 5.42516 6.70825C5.42516 6.27075 5.57829 5.89888 5.88454 5.59263C6.19079 5.28638 6.56266 5.13325 7.00016 5.13325C7.43766 5.13325 7.80954 5.28638 8.11579 5.59263C8.42204 5.89888 8.57516 6.27075 8.57516 6.70825C8.57516 7.14575 8.42204 7.51763 8.11579 7.82388C7.80954 8.13013 7.43766 8.28325 7.00016 8.28325ZM7.00016 11.0833C5.58072 11.0833 4.28766 10.6871 3.121 9.89471C1.95433 9.10235 1.1085 8.0402 0.583496 6.70825C1.1085 5.37631 1.95433 4.31415 3.121 3.52179C4.28766 2.72943 5.58072 2.33325 7.00016 2.33325C8.41961 2.33325 9.71266 2.72943 10.8793 3.52179C12.046 4.31415 12.8918 5.37631 13.4168 6.70825C12.8918 8.0402 12.046 9.10235 10.8793 9.89471C9.71266 10.6871 8.41961 11.0833 7.00016 11.0833ZM7.00016 9.91658C8.09877 9.91658 9.10745 9.62735 10.0262 9.04888C10.945 8.4704 11.6474 7.6902 12.1335 6.70825C11.6474 5.72631 10.945 4.9461 10.0262 4.36763C9.10745 3.78915 8.09877 3.49992 7.00016 3.49992C5.90155 3.49992 4.89287 3.78915 3.97412 4.36763C3.05537 4.9461 2.35294 5.72631 1.86683 6.70825C2.35294 7.6902 3.05537 8.4704 3.97412 9.04888C4.89287 9.62735 5.90155 9.91658 7.00016 9.91658Z" />
+                        </g>
+                    </svg>
+                    Preview
+                </button>
+                <button type="button" class="btn btn-outline-secondary settings-icon" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M5.6875 0.875V2.625L4.8125 3.0625L3.5 1.75L1.75 3.5L3.0625 4.8125L2.625 5.6875H0.875V8.3125H2.625L3.0625 9.1875L1.75 10.5L3.5 12.25L4.8125 10.9375L5.6875 11.375V13.125H8.3125V11.375L9.1875 10.9375L10.5 12.25L12.25 10.5L10.9375 9.1875L11.375 8.3125H13.125V5.6875H11.375L10.9375 4.8125L12.25 3.5L10.5 1.75L9.1875 3.0625L8.3125 2.625V0.875H5.6875Z"
+                            stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M7 8.75C7.9665 8.75 8.75 7.9665 8.75 7C8.75 6.0335 7.9665 5.25 7 5.25C6.0335 5.25 5.25 6.0335 5.25 7C5.25 7.9665 6.0335 8.75 7 8.75Z"
+                            stroke="#0A566C" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Settings
+                </button>
+                <button type="button" class="btn btn-outline-secondary" translate>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <path
+                            d="M1.1665 1.16675H12.8332V12.8334H1.1665V1.16675ZM2.33317 2.33341V11.6667H11.6665V2.33341H2.33317ZM6.99984 4.22925C6.75856 4.22919 6.5232 4.30393 6.32617 4.44319C6.12914 4.58245 5.98014 4.77937 5.89967 5.00683L5.70484 5.55691L4.60525 5.16841L4.7995 4.61833C4.91993 4.27682 5.11818 3.96801 5.37857 3.71634C5.63895 3.46467 5.95432 3.27705 6.29974 3.16831C6.64515 3.05956 7.01113 3.03269 7.36873 3.08981C7.72632 3.14694 8.06572 3.28648 8.36007 3.49742C8.65442 3.70836 8.89564 3.98489 9.06467 4.30516C9.23369 4.62542 9.32587 4.98062 9.33392 5.34266C9.34196 5.70469 9.26565 6.06364 9.11102 6.39109C8.9564 6.71855 8.72769 7.00553 8.443 7.22933C8.19159 7.42766 7.96642 7.61783 7.80367 7.81792C7.64384 8.01508 7.58317 8.17375 7.58317 8.31258V9.04175H6.4165V8.31258C6.4165 7.80683 6.644 7.395 6.89834 7.08175C7.15034 6.77258 7.4665 6.51358 7.72084 6.31291C7.91148 6.16296 8.05065 5.95732 8.11898 5.72459C8.18732 5.49187 8.18142 5.24363 8.1021 5.01441C8.02279 4.7852 7.874 4.5864 7.67645 4.44568C7.47889 4.30495 7.24239 4.2293 6.99984 4.22925ZM6.4165 9.62508H7.5855V10.7941H6.4165V9.62508Z" />
+                    </svg>
+                    Help
+                </button>
+            </div>
+        </div>
+        <div class="">
+            <div class="right-section tab-right-section">
+                <div class="outline-container">
+                    <div #stickybuttoncontainer class="sticky-button-container">
+                        <button id="tab1" (click)="onClickTab(1)" class="btn"
+                            [ngClass]="{'disabled-tab': isInputDisabled,'active':selectedTab == 1}">General</button>
+                        <button id="tab2" (click)="onClickTab(2)" class="btn"
+                            [ngClass]="{'disabled-tab': isInputDisabled,'active':selectedTab == 2}">Customer
+                            Details</button>
+                        <button id="tab3" (click)="onClickTab(3)" class="btn"
+                            [ngClass]="{'disabled-tab': isInputDisabled,'active':selectedTab == 3}">Other
+                            Details</button>
+                    </div>
+                    <form [formGroup]="CustomerSupplierForm">
+
+
+                        <div class="scrollable-content">
+                            <div class="section-content" [style.display]="showGeneralDetails ? 'block' : 'none'">
+                                <div class="general-details-wrapper">
+                                    <div class="general-details-left">
+                                        <div class="img-outer">
+                                        </div>
+                                        <div class="img-bottom-section">
+                                            <div class="active-section">
+                                                <span class="active-label">Active</span>
+                                                <label class="custom-checkbox">
+                                                    <input type="checkbox" class="form-check-input" [disabled]="isInputDisabled"
+                                                    formControlName="active">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                            <!-- Section for code -->
+                                            <div class="input-section">
+                                                <div class="input-label">
+                                                    <label>Code
+                                                        <span class="required-asterisk">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="input-value">
+                                                    <input type="text" class="form-control" id="code"
+                                                        formControlName="code">
+                                                    <!-- <div *ngIf="CustomerSupplierForm.get('code')?.hasError('required')"
+                                                        class="text-danger">
+                                                        Code is required.
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <!-- section for type.. -->
+                                            <div class="input-section">
+                                                <div class="input-label">
+                                                    <label>Type
+                                                        <span class="required-asterisk">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="input-value">
+                                                    <select class="form-select" id="type" formControlName="type"
+                                                        (change)="onTypeSelect()">
+                                                        <option value="">--Select--</option>
+                                                        <option *ngFor="let type of customerSupplierTypes"
+                                                            [value]="type?.id">
+                                                            {{type?.description }}</option>
+                                                    </select>
+                                                    <!-- <div *ngIf="CustomerSupplierForm.get('type')?.hasError('required')"
+                                                        class="text-danger">
+                                                        Type is required.
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <!-- Section for Category -->
+                                            <div class="input-section">
+                                                <div class="input-label">
+                                                    <label translate>Category
+                                                        <!-- <span class="required-asterisk">*</span> -->
+                                                    </label>
+                                                </div>
+                                                <div class="input-value">
+                                                    <select class="form-select" id="category" formControlName="category"
+                                                        (change)="onChangeCategory()">
+                                                        <option value="">--Select--</option>
+                                                        <option *ngFor="let category of customerSupplierCategories"
+                                                            [value]="category?.id">{{ category?.value }}</option>
+                                                    </select>
+                                                    <!-- <div *ngIf="CustomerSupplierForm.get('category')?.hasError('required')"
+                                                        class="text-danger">
+                                                        Category is required.
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <!-- Section for Salutation -->
+                                            <div class="input-section">
+                                                <div class="input-label">
+
+                                                </div>
+                                                <div class="input-value">
+                                                    <select class="form-select" id="salutation"
+                                                        formControlName="salutation">
+                                                        <option value="">--Select--</option>
+                                                        <option value="ms">Ms</option>
+                                                        <option value="mr">Mr</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="general-details-right">
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>Name<span class="required-asterisk">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="name"
+                                                        formControlName="name">
+                                                    <!-- <div *ngIf="CustomerSupplierForm.get('name')?.hasError('required')"
+                                                        class="text-danger">
+                                                        Name is required.
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="arabicname-wrapper">
+                                                    <div class="right-input-label">
+                                                        <label translate>Arabic Name
+                                                        </label>
+                                                    </div>
+                                                    <div class="right-input-value">
+                                                        <input type="text" class="form-control rtl-textbox"
+                                                            id="arabicname" formControlName="arabicname">
+                                                    </div>
+                                                </div>
+                                                <div class="translate-btn">
+                                                    <span [class.disabled]="isInputDisabled"
+                                                        (click)="translateItemName()">T</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>Contact Person
+                                                    </label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="contactpersonname"
+                                                        formControlName="contactpersonname">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>Telephone No.</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="telephoneno"
+                                                        formControlName="telephoneno">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>AddressLine 1</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="addresslineone"
+                                                        formControlName="addresslineone">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>Address Arabic</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control rtl-textbox"
+                                                        id="addressarabic" formControlName="addressarabic">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>Mobile No.</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="mobileno"
+                                                        formControlName="mobileno">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>VAT No.</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="vatno"
+                                                        formControlName="vatno">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="credit-period-wrapper">
+                                                <div class="right-input-label">
+                                                    <label translate>Credit Period</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="creditperiod"
+                                                        formControlName="creditperiod">
+                                                </div>
+                                            </div>
+                                            <div class="credit-limit-wrapper">
+                                                <div class="right-input-label">
+                                                    <label translate>Credit Limit</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="creditlimit"
+                                                        formControlName="creditlimit">
+                                                </div>
+                                            </div>
+                                            <div class="salesman-wrapper">
+                                                <div class="right-input-label">
+                                                    <label translate>Salesman</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <dfinance-frontend-searchable-dropdown [options]="salesmanOptions"
+                                                        [isdisabled]="isInputDisabled"
+                                                        [updatedOption]="selectedSalesmanOption"
+                                                        [returnField]="salesmanreturnField"
+                                                        [dropdownFields]="salesmanKeys"
+                                                        (selectedOption)="onSalesmanSelected($event)">
+                                                    </dfinance-frontend-searchable-dropdown>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>City</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="city"
+                                                        formControlName="city">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>City Arabic</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control rtl-textbox" id="cityarabic"
+                                                        formControlName="cityarabic">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>P.O Box</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="pobox"
+                                                        formControlName="pobox">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>Country Code</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="countrycode"
+                                                        formControlName="countrycode">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>Country</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <select class="form-select" id="country" formControlName="country">
+                                                        <option *ngFor="let country of countries" [value]="country?.id">
+                                                            {{country.value}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>Building No.</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="buildingno"
+                                                        formControlName="buildingno">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>District</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="district"
+                                                        formControlName="district">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>District Arabic</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control rtl-textbox"
+                                                        id="districtarabic" formControlName="districtarabic">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>Province</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control" id="province"
+                                                        formControlName="province">
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+                                                    <label translate>Province Arabic</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <input type="text" class="form-control rtl-textbox"
+                                                        id="provincearabic" formControlName="provincearabic">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="details-right-row">
+                                            <div class="input-left">
+                                                <div class="right-input-label">
+                                                    <label translate>Area</label>
+                                                </div>
+                                                <div class="right-input-value">
+                                                    <dfinance-frontend-searchable-dropdown [options]="areaOptions"
+                                                        [isdisabled]="isInputDisabled"
+                                                        [updatedOption]="selectedAreaOption"
+                                                        [returnField]="areareturnField" [dropdownFields]="areaKeys"
+                                                        (selectedOption)="onAreaSelected($event)">
+                                                    </dfinance-frontend-searchable-dropdown>
+                                                </div>
+                                            </div>
+                                            <div class="input-right">
+                                                <div class="right-input-label">
+
+                                                </div>
+                                                <div class="right-input-value">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="section-content"
+                                [style.display]="(selectedCustomerSupplierType == 1 && showCustomerDetails) ? 'block' : 'none'">
+                                <div class="customer-det-section">
+                                    <div class="commodity-title">Particulars of commodity sought/planned for the year
+                                    </div>
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Commodity Sought</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <mat-form-field class="dropdown-field custom-multi-dropdown"
+                                                    appearance="outline">
+                                                    <mat-select [formControl]="commoditysoughtControl" multiple
+                                                        (selectionChange)="onSelectionChange()">
+                                                        <mat-option *ngFor="let commodity of listCommoditySought"
+                                                            [value]="commodity.id">
+                                                            {{ commodity.description }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Sale Type</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="salestype" formControlName="salestype">
+                                                    <option value="">--Select--</option>
+                                                    <option *ngFor="let saletype of saleTypes" [value]="saletype?.id">{{
+                                                        saletype?.value }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Credit Collection Type</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="creditcollectiontype"
+                                                    formControlName="creditcollectiontype">
+                                                    <option value="">--Select--</option>
+                                                    <option *ngFor="let creditcollection of creditCollectionData"
+                                                        [value]="creditcollection?.value">{{
+                                                        creditcollection?.description
+                                                        }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>DL1</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="dl1" formControlName="dl1">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>DL2</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="dl2" formControlName="dl2">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Quantity Planned</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="quantityplanned"
+                                                    formControlName="quantityplanned">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Price Category</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="pricecategory"
+                                                    formControlName="pricecategory" (change)="onChangePriceCategory()">
+                                                    <option value="">--Select--</option>
+                                                    <option *ngFor="let priceCategory of customerPriceCategories"
+                                                        [value]="priceCategory?.id">{{ priceCategory?.name }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Place Of Supply</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <dfinance-frontend-searchable-dropdown [options]="placeofSupplyOptions"
+                                                    [isdisabled]="isInputDisabled"
+                                                    [updatedOption]="selectedPlaceofSupplyOption"
+                                                    [returnField]="placeofSupplyreturnField"
+                                                    [dropdownFields]="placeofSupplyKeys"
+                                                    (selectedOption)="onPlaceofSupplySelected($event)">
+                                                </dfinance-frontend-searchable-dropdown>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+
+                                            </div>
+                                            <div class="cus-sup-input">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- Business Details -->
+                                <div class="customer-det-section">
+                                    <div class="commodity-title">Business Details</div>
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Business Type</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="businesstype"
+                                                    formControlName="businesstype">
+                                                    <option value="">--Select--</option>
+                                                    <option *ngFor="let businesstype of businessTypes"
+                                                        [value]="businesstype?.value">{{ businesstype?.name }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Business Nature</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="businessnature"
+                                                    formControlName="businessnature">
+                                                    <option value="">--Select--</option>
+                                                    <option value="R">Retail</option>
+                                                    <option value="W">Whole Sale</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Availed Any Loan Limits/
+                                                    Facilities?</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="availedanyloanlimits"
+                                                    formControlName="availedanyloanlimits">
+                                                    <option value="">--Select--</option>
+                                                    <option value="Y">Yes</option>
+                                                    <option value="N">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Years Of Business</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="yearsofbusiness"
+                                                    formControlName="yearsofbusiness">
+                                            </div>
+                                        </div>
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Other Merchants of
+                                                    Customer</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="othermerchantsofcustomer"
+                                                    formControlName="othermerchantsofcustomer">
+                                            </div>
+                                        </div>
+                                        <div class="yearly-turnover-wrapper">
+                                            <div class="cus-sup-input-section">
+                                                <div class="cus-sup-label">
+                                                    <label>Yearly Turnover</label>
+                                                </div>
+                                                <div class="cus-sup-input">
+                                                    <input type="text" class="form-control" id="yearlyturnover"
+                                                        formControlName="yearlyturnover">
+                                                </div>
+                                            </div>
+
+                                            <div class="cus-sup-input-section">
+                                                <div class="input-sub-text">
+                                                    RS In Lakhs
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Business Address</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="businessaddress"
+                                                    formControlName="businessaddress">
+                                                    <option value="">--Select--</option>
+                                                    <option value="O">Owned</option>
+                                                    <option value="R">Rented</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="valueof-wrapper">
+                                            <div class="cus-sup-input-section">
+                                                <div class="cus-sup-label">
+                                                    <label>Value Of Property</label>
+                                                </div>
+                                                <div class="cus-sup-input">
+                                                    <input type="text" class="form-control" id="valueofproperty"
+                                                        formControlName="valueofproperty">
+                                                </div>
+                                            </div>
+                                            <div class="cus-sup-input-section">
+                                                <div class="input-sub-text">
+                                                    RS In Lakhs
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Market Reputation</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="marketreputation"
+                                                    formControlName="marketreputation">
+                                                    <option value="">--Select--</option>
+                                                    <option value="V">Very Good</option>
+                                                    <option value="G">Good</option>
+                                                    <option value="A">Average</option>
+                                                    <option value="B">Below Average</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                                <!-- For Branch -->
+                                <div class="customer-det-section">
+                                    <div class="commodity-title">For Branch</div>
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Category
+                                                    Recommended</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="categoryrecommended"
+                                                    formControlName="categoryrecommended"
+                                                    (change)="onChangeCategoryRecommended()">
+                                                    <option *ngFor="let custCategory of customerCategories"
+                                                        [value]="custCategory?.id">{{ custCategory?.name }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Limit Recommended</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="limitrecommended"
+                                                    formControlName="limitrecommended">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label></label>
+                                            </div>
+                                            <div class="cus-sup-input">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- For HQ -->
+                                <div class="customer-det-section">
+                                    <div class="commodity-title">For HQ</div>
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Category Fixed</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <select class="form-select" id="categoryfixed"
+                                                    formControlName="categoryfixed" (change)="onChangeCategoryFixed()">
+
+                                                    <option *ngFor="let catFixed of customerCategories"
+                                                        [value]="catFixed?.id">{{
+                                                        catFixed?.name }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Limit Fixed for
+                                                    Customer</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="limitfixedforcustomer"
+                                                    formControlName="limitfixedforcustomer">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Overdue Period Limit</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="overdueperiodlimit"
+                                                    formControlName="overdueperiodlimit">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Cheque Bounce Count
+                                                    Limit</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="text" class="form-control" id="chequebouncecountlimit"
+                                                    formControlName="chequebouncecountlimit">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Credit Period
+                                                    Permitted</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="number" class="form-control" id="creditperiodpermitted"
+                                                    formControlName="creditperiodpermitted">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Overdue Amount Limit</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="number" class="form-control" id="overdueamountlimit"
+                                                    formControlName="overdueamountlimit">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="customer-details-row">
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Sales price Low Varience
+                                                    Limit</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="number" class="form-control" id="salespricelowvarlimit"
+                                                    formControlName="salespricelowvarlimit">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Sales price High Varience
+                                                    Limit</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="number" class="form-control" id="salespriceupVarlimit"
+                                                    formControlName="salespriceupVarlimit">
+                                            </div>
+                                        </div>
+
+                                        <div class="cus-sup-input-section">
+                                            <div class="cus-sup-label">
+                                                <label>Credit Period
+                                                    Permitted</label>
+                                            </div>
+                                            <div class="cus-sup-input">
+                                                <input type="number" class="form-control" id="creditperiodpermitted"
+                                                    formControlName="creditperiodpermitted">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-content" [style.display]="(showOtherDetails) ? 'block' : 'none'">
+                                <div class="other-details-section">
+
+                                    <div class="checkbox-row">
+                                        <div class="checkbox-row-single">
+                                            <label>Party Act as both customer and supplier</label>
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" class="form-check-input" id="actassupplieralso"
+                                                formControlName="actassupplieralso" [disabled]="isInputDisabled">
+                                                <span class="checkmark"></span>
+                                            </label>                                            
+                                        </div>
+                                        <div class="checkbox-row-single">
+                                            <label>Let System Generate New Account For Party</label>
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" class="form-check-input" id="letsystemgeneratenewaccountforparty"
+                                                (change)="onChangeAccountOption($event)" [disabled]="isInputDisabled"
+                                                formControlName="letsystemgeneratenewaccountforparty">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="checkbox-row">
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Fax No.
+                                                </label>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="faxno" formControlName="faxno">
+                                        </div>
+
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Email Address
+                                                </label>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="emailaddress"
+                                                formControlName="emailaddress">
+                                        </div>
+
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Contact Person (2)
+                                                </label>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="contactperson2"
+                                                formControlName="contactperson2">
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="checkbox-row">
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Telephone No.(2)
+                                                </label>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="telephoneno2"
+                                                formControlName="telephoneno2">
+                                        </div>
+
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Central Sales Tax No.
+                                                </label>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="centralsalestaxno"
+                                                formControlName="centralsalestaxno">
+                                        </div>
+
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    PAN No.
+                                                </label>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="panno" formControlName="panno">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="checkbox-row">
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Account Group
+                                                </label>
+
+                                            </div><select class="form-select" id="accountgroup"
+                                                formControlName="accountgroup" (change)="onChangeAccountGroup()">
+                                                <option *ngFor="let accountgroup of accountGroupData"
+                                                    [value]="accountgroup?.id">{{ accountgroup?.name }}</option>
+
+                                            </select>
+                                        </div>
+
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Account
+                                                </label>
+
+                                            </div><select class="form-select" id="account" formControlName="account">
+                                                <option value="0">Select</option>
+                                                <option *ngFor="let account of accountData" [value]="account?.id">{{
+                                                    account?.name }}</option>
+
+                                            </select>
+                                        </div>
+
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+
+                                                </label>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="checkbox-row">
+                                        <div class="checkbox-one">
+                                            <div class="input-label-box">
+                                                <label>
+                                                    Remarks
+                                                </label>
+
+                                            </div>
+                                            <div class="remarks-box">
+                                                <input type="text" class="form-control" id="remarks"
+                                                    formControlName="remarks">
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Your scrollable content goes here -->
+                        </div>
+
+                    </form>
+                </div>
+
+
+                <div class="outline-container" [style.display]="showGeneralDetails ? 'block' : 'none'">
+                    <div class="section-content">
+                        <div class="item-purchase-table">
+
+                            <ngx-datatable #ngxTable class="material" [rows]="allDeliveryDetails" columnMode="force"
+                                [headerHeight]="40" [footerHeight]="40" [rowHeight]="40" [selected]="selected">
+
+                                <ngx-datatable-column *ngFor="let col of tablecolumns; let colIndex = index"
+                                    [name]="col.name" [flexGrow]="2">
+                                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                        <!-- Code for Column ID -->
+                                        <span *ngIf="col.field === 'id' && rowIndex != allDeliveryDetails.length -1"
+                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                            [attr.data-column-name]="col.field" (keydown)="onKeyDown($event)"
+                                            data-column-key-name="id">
+                                            {{ rowIndex+1 }}
+                                        </span>
+
+                                        <!-- Code for Column Location name -->
+                                        <span
+                                            *ngIf="col.field === 'locationname' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'locationname')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                            [attr.data-column-name]="col.field"
+                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                            data-column-key-name="locationName">
+                                            {{ row?.locationName }}
+                                        </span>
+
+                                        <input type="text" class="form-control"
+                                            *ngIf=" col.field === 'locationname' && enableInlineEditing && currentColumname == 'locationname'  && rowIndex == currentRowIndex"
+                                            value="{{ row?.locationName }}" [disabled]="isInputDisabled"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                            [attr.data-column-name]="col.field"
+                                            (input)="onChangeLocationName($event, rowIndex)">
+
+
+                                        <!-- Code for Column projectName -->
+                                        <span
+                                            *ngIf="col.field === 'project' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'project')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                            [attr.data-column-name]="col.field"
+                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                            data-column-key-name="projectName">
+                                            {{ row?.projectName }}
+                                        </span>
+
+                                        <input type="text" class="form-control"
+                                            *ngIf=" col.field === 'project' && enableInlineEditing && currentColumname == 'project'  && rowIndex == currentRowIndex"
+                                            value="{{ row?.projectName }}" [disabled]="isInputDisabled"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                            [attr.data-column-name]="col.field"
+                                            (input)="onChangeProjectName($event, rowIndex)">
+
+
+                                        <!-- Code for Column contactperson -->
+                                        <span
+                                            *ngIf="col.field === 'contactperson' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'contactperson')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                            [attr.data-column-name]="col.field"
+                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                            data-column-key-name="contactPerson">
+                                            {{ row?.contactPerson }}
+                                        </span>
+
+                                        <input type="text" class="form-control"
+                                            *ngIf=" col.field === 'contactperson' && enableInlineEditing && currentColumname == 'contactperson'  && rowIndex == currentRowIndex"
+                                            value="{{ row?.contactPerson }}" [disabled]="isInputDisabled"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                            [attr.data-column-name]="col.field"
+                                            (input)="onChangeContactPerson($event, rowIndex)">
+
+                                        <!-- Code for Column contactno -->
+                                        <span
+                                            *ngIf="col.field === 'contactno' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'contactno')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                            [attr.data-column-name]="col.field"
+                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                            data-column-key-name="contactNo">
+                                            {{ row?.contactNo }}
+                                        </span>
+
+                                        <input type="text" class="form-control"
+                                            *ngIf=" col.field === 'contactno' && enableInlineEditing && currentColumname == 'contactno'  && rowIndex == currentRowIndex"
+                                            value="{{ row?.contactNo }}" [disabled]="isInputDisabled"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                            [attr.data-column-name]="col.field"
+                                            (input)="onChangeContactNo($event, rowIndex)">
+
+
+                                        <!-- Code for Column address -->
+                                        <span
+                                            *ngIf="col.field === 'address' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'address')  || (enableInlineEditing && rowIndex != currentRowIndex))"
+                                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell tabindex="0"
+                                            [attr.data-column-name]="col.field"
+                                            (click)="onClickSpan($event,rowIndex, colIndex)"
+                                            (keydown)="onKeyDown($event)" (dblclick)="handleDoubleClick($event)"
+                                            data-column-key-name="address">
+                                            {{ row?.address }}
+                                        </span>
+
+                                        <input type="text" class="form-control"
+                                            *ngIf=" col.field === 'address' && enableInlineEditing && currentColumname == 'address'  && rowIndex == currentRowIndex"
+                                            value="{{ row?.address }}" [disabled]="isInputDisabled"
+                                            id="cell-{{rowIndex}}-{{colIndex}}" #gridCell (keydown)="onKeyDown($event)"
+                                            (click)="onClickInput($event,rowIndex,colIndex)"
+                                            [attr.data-column-name]="col.field"
+                                            (input)="onChangeAddress($event, rowIndex)">
+
+
+
+
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+                            <!-- <ngx-datatable class="material" [rows]="allDeliveryDetails" columnMode="force"
+                                [headerHeight]="50" [footerHeight]="0" [rowHeight]="70" [scrollbarV]="true"
+                                [scrollbarH]="true">
+                                
+
+                                
+
+                                
+
+                                <ngx-datatable-column name="Address" [flexGrow]="2">
+                                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                        <input type="text" class="form-control" value="{{row.address}}"
+                                            (change)="onChangeAddress($event, rowIndex)">
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+
+
+                            </ngx-datatable> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div class="commodity-popup" *ngIf="showCommodityPopup">
+        <div *ngFor="let commodity of listCommoditySought">
+            <input type="checkbox" class="form-check-input" [value]="commodity.id"
+                [checked]="isSelectedCommodity(commodity)"
+                (click)="onClickCommodity(commodity)">{{commodity.description}}
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-secondary" (click)="showCommodityList()">OK</button>
+            </div>
+        </div>
+
+    </div>

@@ -1,0 +1,190 @@
+<dfinance-frontend-main-header pageName="Dosage Master"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+  <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">
+    <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+      <p translate>Disabled</p>
+    </div>
+
+    <div class="col-md-12 mb-3 fill-item-master">
+      <ngx-datatable
+        class="material container striped"
+        [rows]="allDosageMaster"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="50"
+        [scrollbarV]="true"
+        (activate)="onClickDosageMaster($event)"
+        [limit]="10">
+        <ngx-datatable-column name="Dosage" [flexGrow]="2">
+          <ng-template ngx-datatable-cell-template let-row="row">
+            {{ row?.dosage }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Remarks" [flexGrow]="2">
+          <ng-template ngx-datatable-cell-template let-row="row">
+            {{ row?.remarks }}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+
+  <div class="right-wrapper">
+    <div #btngroup class="btn-group form-topbar" role="group" aria-label="Dosage Master">
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickNewDosageMaster()"
+        [disabled]="isNewBtnDisabled" [class.top-button-active]="!selecteddosage" translate>
+        <i class="large material-icons">add_to_photos</i> New
+      </button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveDosageMaster()"
+        [disabled]="isSaveBtnDisabled" translate>
+        <i class="large material-icons">save</i> Save
+      </button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickEditDosageMaster()"
+        [disabled]="isEditBtnDisabled" [class.top-button-active]="selecteddosage" translate>
+        <i class="large material-icons">edit</i> Edit
+      </button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteDosageMaster()"
+        [disabled]="isDeleteBtnDisabled" translate>
+        <i class="large material-icons">delete_forever</i> Delete
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">print</i> Print
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">pageview</i> Preview
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">settings</i> Settings
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">help</i> Help
+      </button>
+    </div>
+
+    <div class="right-section">
+      <form [formGroup]="DosageComponentForm">
+        <div class="section-container">
+          <div class="section-content">
+            <div class="row">
+              <label for="dosage" class="form-label col-md-2">Dosage<span class="required-asterisk">*</span></label>
+              <div class="col-md-4">
+                <input type="text" class="form-control" id="dosage" formControlName="dosage">
+                <div *ngIf="DosageComponentForm.get('dosage')?.hasError('required')">
+                  <small class="text-danger">This field is required.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="remarks" class="form-label col-md-2">Remarks</label>
+              <div class="col-md-10">
+                <!-- <input type="text" class="form-control" id="remarks" formControlName="remarks"> -->
+                <textarea class="form-control" id="remarks"
+                  formControlName="remarks"></textarea>
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="active" class="form-label col-md-2" style="margin-right: 3px">Active</label>
+              <div class="col-md-3">
+                <input type="checkbox" class="form-check-input" id="active" formControlName="active">
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

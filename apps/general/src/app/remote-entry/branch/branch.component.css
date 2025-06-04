@@ -1,0 +1,40 @@
+.content-wrapper .row {
+    margin-top: 10px;
+}
+.branch-row:hover{
+    cursor: pointer;
+}
+
+.content-wrapper {
+    display: flex;
+  }
+
+.col-md-3.left-content {
+    position: relative;
+}
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1; 
+  }
+  .overlay-disabled {
+    user-select: none; 
+  }
+
+  .overlay-disabled p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #fff;
+    font-size: 2em;
+  }
+  .required-asterisk {
+    color: red;
+    margin-left: 4px; /* Adjust spacing as needed */
+  }

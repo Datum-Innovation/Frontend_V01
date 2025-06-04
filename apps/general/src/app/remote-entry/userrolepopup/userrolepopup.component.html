@@ -1,0 +1,262 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <form [formGroup]="userRoleForm">
+            <div class="row">
+                <label for="Roles" class="form-label col-md-2" translate>Roles</label>
+                <div class="col-md-4">
+                    <select id="roles" class="form-select" formControlName="userrole" (change)="onUserRoleSelect()">
+                        <option *ngFor="let role of allUserRoles" [value]="role?.id">{{ role?.role }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-4" style="margin-bottom:10px">
+                    <input type="text" class="form-control" value="{{searchTerm}}" placeholder="Search Here" (input)="updateFilter($event)">
+                </div>
+            </div>
+        </form>
+        
+        <ngx-datatable class="material container striped" [rows]="filteredContent" [columnMode]="'flex'"
+            [headerHeight]="50" [footerHeight]="30" rowHeight="auto"
+            [limit]="10"  > 
+        <!-- <ngx-datatable class="material container striped" 
+               [rows]="filteredContent" 
+               [columnMode]="'flex'"
+               [headerHeight]="50" 
+               [footerHeight]="50" 
+               [scrollbarV]="true"
+               [virtualization]="true"
+               [rowHeight]="getRowHeight"> -->
+
+
+          <ngx-datatable-column name="" [flexGrow]="1" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllChecked" (change)="selectAllCheckboxes('all')">
+                </span>
+              </label>
+            </ng-template>
+
+            <ng-template let-row="row" [flexGrow]="1" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <input type="checkbox" (change)="selectRow($event,rowIndex)">
+            </ng-template>
+          </ngx-datatable-column>
+          
+          <ngx-datatable-column name="PageName" [flexGrow]="4">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.pageName }}
+            </ng-template>
+          </ngx-datatable-column>  
+          <ngx-datatable-column name="ModuleType" [flexGrow]="3">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row?.moduleType }}
+            </ng-template>
+          </ngx-datatable-column>
+                
+
+          <ngx-datatable-column name="View" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                View
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsViewChecked" (change)="selectAllCheckboxes('isView')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isView" (change)="onChangeSingleRight($event,'isView',rowIndex)">
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Create" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label >
+                Create
+                <span class="table-head-checkbox">
+                  <input type="checkbox" [checked]="selectAllIsCreateChecked" (change)="selectAllCheckboxes('isCreate')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isCreate" (change)="onChangeSingleRight($event,'isCreate',rowIndex)">
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Edit" [flexGrow]="1" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                Edit
+                <span class="table-head-checkbox">
+                  <input type="checkbox" [checked]="selectAllIsEditChecked" (change)="selectAllCheckboxes('isEdit')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isEdit" (change)="onChangeSingleRight($event,'isEdit',rowIndex)">
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Cancel" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                Cancel
+                <span class="table-head-checkbox">
+                  <input type="checkbox" [checked]="selectAllIsCancelChecked" (change)="selectAllCheckboxes('isCancel')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isCancel" (change)="onChangeSingleRight($event,'isCancel',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Delete" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                Delete
+                <span class="table-head-checkbox">
+                  <input type="checkbox" [checked]="selectAllIsDeleteChecked" (change)="selectAllCheckboxes('isDelete')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isDelete" (change)="onChangeSingleRight($event,'isDelete',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Approve" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                Approve
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsApproveChecked" (change)="selectAllCheckboxes('isApprove')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isApprove" (change)="onChangeSingleRight($event,'isApprove',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Edit Approved" [flexGrow]="3" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+                <label>
+                Edit Approved
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllisEditApprovedChecked" (change)="selectAllCheckboxes('isEditApprovedd')">
+                </span>
+                </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isEditApproved" (change)="onChangeSingleRight($event,'isEditApproved',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>
+
+
+          <ngx-datatable-column name="Higher Approve" [flexGrow]="3" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                HigherApprove
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsHigherApproveChecked" (change)="selectAllCheckboxes('isHigherApprove')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isHigherApprove" (change)="onChangeSingleRight($event,'isHigherApprove',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>                
+            
+          <ngx-datatable-column name="Print" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                Print
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsPrintChecked" (change)="selectAllCheckboxes('isPrint')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isPrint" (change)="onChangeSingleRight($event,'isPrint',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="IsEmail" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                IsEmail
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsEmailChecked" (change)="selectAllCheckboxes('isEmail')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isEmail" (change)="onChangeSingleRight($event,'isEmail',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="FrequentlyUsed" [flexGrow]="3" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                FrequentlyUsed
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsFrequentlyUsedChecked" (change)="selectAllCheckboxes('frequentlyUsed')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.frequentlyUsed" (change)="onChangeSingleRight($event,'frequentlyUsed',rowIndex)">
+              </div>
+              </ng-template>
+          </ngx-datatable-column>            
+          <ngx-datatable-column name="IsPage" [flexGrow]="2" [sortable]="false">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <label>
+                IsPage
+                <span class="table-head-checkbox">
+                    <input type="checkbox" [checked]="selectAllIsPageChecked" (change)="selectAllCheckboxes('isPage')">
+                </span>
+              </label>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="center-align">
+                <input type="checkbox" [checked]="row.isPage" (change)="onChangeSingleRight($event,'isPage',rowIndex)">
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+               
+        </ngx-datatable>
+      <div class="row">  
+        <div class="col-md-1">
+          <button (click)="onClickOk()" class="popup-button">OK</button>
+        </div>
+        <div class="col-md-2">
+          <button (click)="onClickCancel()" class="popup-button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

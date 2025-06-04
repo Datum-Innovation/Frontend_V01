@@ -1,0 +1,192 @@
+<dfinance-frontend-main-header pageName="Ledgers"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+    <div class="col-md-3 left-section" [class.overlay-disabled]="!isInputDisabled">     
+        <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+            <p translate>Disabled</p>
+          </div>
+        <div class="col-md-12 mb-3 fill-item-master" >
+                <ngx-datatable 
+                class="material container striped"
+                [rows]="allLedgers"
+                [columnMode]="'flex'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="50" 
+                [scrollbarV]="true"
+                (activate)="onClickLedgers($event)"
+                [limit]="10">
+
+                <ngx-datatable-column name="Name" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.description }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Alias" [flexGrow]="2">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        {{ row?.accountName }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    
+    <div class="col-md-9 ">
+        <div #btngroup class="btn-group form-topbar" role="group" aria-label="Ledgers">
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickNewCardMaster()"
+              [disabled]="isNewBtnDisabled" [class.top-button-active]="!selectedLedgerId" translate>
+              <i class="large material-icons">add_to_photos</i>New</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveLedger()"
+              [disabled]="isSaveBtnDisabled" translate>
+              <i class="large material-icons">save</i>Save</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickEditLedger()"
+              [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedLedgerId" translate>
+              <i class="large material-icons">edit</i>Edit</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteLedger()"
+              [disabled]="isDeleteBtnDisabled" translate>
+              <i class="large material-icons">delete_forever</i>Delete
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">print</i>Print
+            </button>
+            <button type="button" class="btn btn-outline-secondary" translate>
+                <i class="large material-icons">pageview</i>Preview
+            </button>
+          </div>
+        <div class="flex-wrapper ledgers-links">
+            <a href="#">Account List</a>
+            <a href="#">Update Sort Order</a>
+            <a href="#">Group Parent Update</a>
+            <a href="#">Branch Accounts</a>
+        </div>
+
+        <div class="right-section">
+
+            <form [formGroup]="ledgerForm" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-container">
+                            <div class="section-content">
+                                <div class="row">
+                                    <label for="group" class="form-label col-md-2">Group<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <select id="group" class="form-select" formControlName="group">
+                                            <option value="">Select</option>
+                                        </select>  
+                                        <div *ngIf="ledgerForm.get('group')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>   
+                                    <label for="active" class="form-label col-md-2" >Active</label>                                        
+                                    <div class="col-md-4">
+                                        <input type="checkbox" id="active" class="form-check-input"
+                                            formControlName="active">
+                                    </div>                                   
+                                </div>
+                                <div class="row">
+                                    <label for="subgroup" class="form-label col-md-2">Sub Group<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                        <select id="subgroup" class="form-select" formControlName="subgroup">
+                                            <option value="">Select</option>
+                                        </select>  
+                                        <div *ngIf="ledgerForm.get('subgroup')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>                                    
+                                </div> 
+                                
+                                <div class="row">
+                                    <label for="accountcode" class="form-label col-md-2">Account Code<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                       <input type="text" formControlName="accountcode" class="form-control"> 
+                                        <div *ngIf="ledgerForm.get('accountcode')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                
+                                <div class="row">
+                                    <label for="accountname" class="form-label col-md-2">Account Name<span
+                                            class="required-asterisk">*</span></label>
+                                    <div class="col-md-4">
+                                       <input type="text" formControlName="accountname" class="form-control"> 
+                                        <div *ngIf="ledgerForm.get('accountname')?.hasError('required')">
+                                            <small class="text-danger">This field is required.</small>
+                                        </div>
+                                    </div>                                    
+                                </div>
+
+                                <div class="row">
+                                    <label for="alternatename" class="form-label col-md-2">Alternate Name</label>
+                                    <div class="col-md-4">
+                                       <input type="text" formControlName="alternatename" class="form-control">
+                                    </div>                                    
+                                </div>
+
+                                <div class="row">
+                                    <label for="accountcategory" class="form-label col-md-2">Account Category</label>
+                                    <div class="col-md-4">
+                                        <select id="accountcategory" class="form-select" formControlName="accountcategory">
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>                                    
+                                </div> 
+
+                                <div class="row">
+                                    <label for="isgroup" class="form-label col-md-2" >IsGroup</label>                                        
+                                    <div class="col-md-1">
+                                        <input type="checkbox" id="isgroup" class="form-check-input "
+                                            formControlName="isgroup">
+                                    </div> 
+                                    <label for="maintainbillwise" class="form-label col-md-2" >Maintain Bill Wise</label>                                        
+                                    <div class="col-md-4">
+                                        <input type="checkbox" id="maintainbillwise" class="form-check-input "
+                                            formControlName="maintainbillwise">
+                                    </div>                                  
+                                </div>
+
+                                <div class="row">
+                                    <label for="preventextrapay" class="form-label col-md-2" >Prevent Extra Pay</label>                                        
+                                    <div class="col-md-1">
+                                        <input type="checkbox" id="preventextrapay" class="form-check-input "
+                                            formControlName="preventextrapay">
+                                    </div> 
+                                    <label for="trackcollection" class="form-label col-md-2" >Track Collection</label>                                        
+                                    <div class="col-md-4">
+                                        <input type="checkbox" id="trackcollection" class="form-check-input "
+                                            formControlName="trackcollection">
+                                    </div>                                  
+                                </div>
+
+                                <div class="row">
+                                    <label for="maintaincostcenter" class="form-label col-md-2" >Maintain Cost Center</label>                                        
+                                    <div class="col-md-1">
+                                        <input type="checkbox" id="maintaincostcenter" class="form-check-input "
+                                            formControlName="maintaincostcenter">
+                                    </div> 
+                                    <label for="maintainitemwise" class="form-label col-md-2" >Maintain Item Wise</label>                                        
+                                    <div class="col-md-4">
+                                        <input type="checkbox" id="maintainitemwise" class="form-check-input "
+                                            formControlName="maintainitemwise">
+                                    </div>                                  
+                                </div>
+
+                                <div class="row">
+                                    <label for="narration" class="form-label col-md-2" >Narration</label>                                        
+                                    <div class="col-md-4">
+                                        <textarea formControlName="narration" class="form-control"></textarea>
+                                    </div>                                                                     
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>   
+        </div>
+    </div>

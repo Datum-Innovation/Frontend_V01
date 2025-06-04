@@ -1,0 +1,55 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div>
+        </div>
+
+        <h5>Item Rates</h5>
+        <div class="remarks-content">
+            <div class="flex-wrapper" style="margin: 10px 0px;">
+                <label for="itemname" class="form-label">Item Name</label>
+                <span>{{itemname}}</span>
+            </div>
+            <ngx-datatable class="material" [rows]="itemRateArr" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="50">
+                <!-- First column with a button to add rows -->
+                <ngx-datatable-column name="Action" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{rowIndex+1}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="VNo" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{row?.vNo}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="VDate" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row?.vDate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Customer" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.customer }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Rate" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <span>{{ row.rate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="fixed-footer">
+            
+            <div class="row" style="margin-top:0px">
+                <div class="col-md-10" ></div>
+                <div class="col-md-2 flex-wrapper">
+                    <button class="btn btn-secondary ok-button" (click)="cancelItems()">OK</button>             
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

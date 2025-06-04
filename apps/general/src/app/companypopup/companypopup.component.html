@@ -1,0 +1,16 @@
+<div class="popup-container" *ngIf="showPopup">
+  <div class="popup-content">
+    <form [formGroup]="selectedBranchesForm">
+      <input type="checkbox" [checked]="allBranches.length == savedBranches.length" (change)="selectUnselectAll($event)">
+      <label>Select All</label>
+      <div *ngFor="let branch of allBranches">
+        <label>
+          <input type="checkbox" [formControlName]="branch.id" [checked]="savedBranches.includes(branch.id)" > {{ branch.company }}
+        </label>
+      </div>
+    </form>
+
+    <button (click)="onOkClick()" class="popup-button">OK</button>
+  </div>
+</div>
+

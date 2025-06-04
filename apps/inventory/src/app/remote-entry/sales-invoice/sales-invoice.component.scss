@@ -1,0 +1,36 @@
+// Default styles
+.btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    svg {
+      width: 14px;
+      height: 14px;
+      // Other icon styles...
+    }
+    // ... other button styles ...
+  }
+  
+  /* Mobile-specific styles */
+  @media only screen and (max-width: 768px) {
+    // Increase SVG icon size inside buttons on mobile for easier tapping
+    .btn svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+    
+    // Increase button padding and font size for better touch experience
+    .btn {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+    
+    // You may also want to increase icon container sizes or adjust margins as needed
+    .form-topbar {
+      // Adjust spacing for mobile view
+      flex-wrap: wrap;
+      button {
+        margin: 0.25rem;
+      }
+    }
+  }
+  

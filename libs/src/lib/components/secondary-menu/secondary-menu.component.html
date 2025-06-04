@@ -1,0 +1,10 @@
+<div class="seconday-menu" >     
+        <div class="secondary-menu-item" *ngFor="let menu of secodaryMenu">
+            <a [routerLink]="['/' + menu.url.toLowerCase()]" [queryParams]="{ pageId: menu.id, voucherNo:menu.voucherId }">{{ menu.menuText }}</a>
+        </div>
+   
+</div>
+
+
+
+

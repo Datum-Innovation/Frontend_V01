@@ -1,0 +1,13 @@
+.section-container {
+    border: 1px solid #ccc; /* Border style */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 15px; /* Optional: Add padding for spacing */
+    margin-bottom: 20px; /* Optional: Add margin between sections */
+  }
+  
+  .section-heading {
+    margin-top: 0; /* Optional: Remove top margin for heading */
+    margin-bottom: 15px; /* Optional: Add margin below heading */
+    color: #333; /* Optional: Customize heading color */
+  }
+  

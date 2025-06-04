@@ -1,0 +1,178 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <p>General</p>
+        <hr>
+        <form [formGroup]="additionalDetailsForm">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Party Invoice No. & Date">Party Invoice No. & Date</label>
+                </div>
+                <div class="col-md-4 flex-wrapper">
+                    <input type="text" formControlName="invoiceno" class="form-control">
+
+                    <div class="flex-wrapper">
+                        <input class="form-control" formControlName="invoicedate" matInput [matDatepicker]="indt">
+                        <mat-datepicker-toggle matSuffix [for]="indt"></mat-datepicker-toggle>
+                        <mat-datepicker #indt></mat-datepicker>
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-2">
+                    <label class="form-label" for="Order No. & Date">Order No. & Date</label>
+                </div>
+                <div class="col-md-4 flex-wrapper">
+                    <input type="text" formControlName="orderno" class="form-control">
+                    <div class="flex-wrapper">
+                        <input class="form-control" formControlName="orderdate" matInput [matDatepicker]="ordt">
+                        <mat-datepicker-toggle matSuffix [for]="ordt"></mat-datepicker-toggle>
+                        <mat-datepicker #ordt></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Party Name & Address">Party Name & Address</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" formControlName="partyaddress" class="form-control">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Expiry Date">Expiry Date</label>
+                </div>
+                <div class="col-md-4">
+                    <div class="flex-wrapper">
+                        <input class="form-control" formControlName="expirydate" matInput [matDatepicker]="expdt">
+                        <mat-datepicker-toggle matSuffix [for]="expdt"></mat-datepicker-toggle>
+                        <mat-datepicker #expdt></mat-datepicker>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="Transportation Type">Transportation Type</label>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" formControlName="transportationtype">
+                        <option value="">Select</option>
+                        <option *ngFor="let trType of transportationTypes" [value]="trType?.id">{{ trType?.value }}</option>             
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-2">
+                    <label class="form-label" for="Credit Period">Credit Period</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" formControlName="creditperiod">
+                </div>
+            </div>
+            <hr>
+            <p>Delivery Details</p>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Vehicle No.">Vehicle No.</label>
+                </div>
+                <div class="col-md-4">
+                    <dfinance-frontend-searchable-dropdown [options]="vehicleNoData"
+                        [updatedOption]="updatedVehicleNo"
+                        [returnField]="vehicleNoReturnField"
+                        [dropdownFields]="vehicleNoKeys"
+                        [tabIndex]="4"
+                        (selectedOption)="onVehicleNoSelected($event)"
+                        [isdisabled]="isdisabled">
+                    </dfinance-frontend-searchable-dropdown>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="Attention">Attention</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" formControlName="attention">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Delivery Note No. & Date">Delivery Note No. & Date</label>
+                </div>
+                <div class="col-md-4 flex-wrapper">
+                    <input type="text"  formControlName="deliverynote" class="form-control">
+                    <div class="flex-wrapper">
+                        <input class="form-control" formControlName="deliverydate" matInput [matDatepicker]="deldt">
+                        <mat-datepicker-toggle matSuffix [for]="deldt"></mat-datepicker-toggle>
+                        <mat-datepicker #deldt></mat-datepicker>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="Dispatch No. & Date">Dispatch No. & Date</label>
+                </div>
+                <div class="col-md-4 flex-wrapper">
+                    <input type="text" formControlName="dispatchno" class="form-control">
+                    <div class="flex-wrapper">
+                        <input class="form-control" formControlName="dispatchdate" matInput [matDatepicker]="disdt">
+                        <mat-datepicker-toggle matSuffix [for]="disdt"></mat-datepicker-toggle>
+                        <mat-datepicker #disdt></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Party Name">Party Name</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" formControlName="partyname" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Address Line 1">Address Line 1</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" formControlName="addressline1" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Address Line 2">Address Line 2</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" formControlName="addressline2" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label" for="Delivery Location">Delivery Location</label>
+                </div>
+                <div class="col-md-10">
+                    <dfinance-frontend-searchable-dropdown [options]="deliveryLocation"
+                        [updatedOption]="updatedDeliveryLocation"
+                        [returnField]="deliveryLocationReturnField"
+                        [dropdownFields]="deliveryLocationKeys"
+                        [tabIndex]="4"
+                        (selectedOption)="onDeliveryLocationSelected($event)"
+                        [isdisabled]="isdisabled">
+                    </dfinance-frontend-searchable-dropdown>
+                </div>
+            </div>
+            <p>Terms of Delivery</p>
+            <hr>
+            <textarea formControlName="terms" class="form-control"></textarea>
+        </form>
+
+
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <button class="btn btn-secondary" (click)="save()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

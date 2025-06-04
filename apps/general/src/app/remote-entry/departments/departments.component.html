@@ -1,0 +1,96 @@
+<dfinance-frontend-main-header pageName="Departments"></dfinance-frontend-main-header>
+<dfinance-frontend-loader [loadingFlag]="isLoading"></dfinance-frontend-loader>
+
+<div class="row content-wrapper">
+  <div class="col-md-3 left-section" #scrollableDivLeft [class.overlay-disabled]="!isInputDisabled">
+    <div #overlay [class.overlay]="!isInputDisabled" [style.display]="isInputDisabled ? 'none' : 'block'">
+      <p translate>Disabled</p>
+    </div>
+    <div class="col-md-12 mb-3" >
+        <ngx-datatable 
+            class="material container striped"
+            [rows]="allDepartments"
+            [columnMode]="'flex'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="50" 
+            [scrollbarV]="true"
+            (activate)="onClickDepartments($event)"
+            [limit]="10">
+        <ngx-datatable-column name="Department" [flexGrow]="2">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row?.department }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer></ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+  </div>
+  <div class="right-wrapper">
+
+
+    <div #btngroup class="btn-group form-topbar" role="group" aria-label="Branches">
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickNewDepartment()"
+        [disabled]="isNewBtnDisabled" [class.top-button-active]="selectedDepartmentId == 0" translate>
+        <i class="large material-icons">add_to_photos</i>New</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickSaveDepartment()"
+        [disabled]="isSaveBtnDisabled" translate><i class="large material-icons">save</i>Save</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickEditDepartment()"
+        [disabled]="isEditBtnDisabled" [class.top-button-active]="selectedDepartmentId!=0" translate>
+        <i class="large material-icons">edit</i>Edit</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="onClickDeleteDepartment()"
+        [disabled]="isDeleteBtnDisabled" translate>
+        <i class="large material-icons">delete_forever</i>Delete</button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">print</i>Print
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">pageview</i>Preview
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">settings</i>Settings
+      </button>
+      <button type="button" class="btn btn-outline-secondary" translate>
+        <i class="large material-icons">help</i>Help
+      </button>
+    </div>
+    <div class="right-section">
+      <form [formGroup]="departmentForm" style="width: 50%;">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <label for="department" class="form-label col-md-2" translate="">Department<span
+                  class="required-asterisk">*</span></label>
+              <div class="col-md-10">
+                <input type="text" class="form-control" id="department" formControlName="department">
+                <div *ngIf="departmentForm.get('department')?.hasError('required')">
+                  <small class="text-danger">This field is required.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <label for="company" class="form-label col-md-2" translate>Select Company<span
+                  class="required-asterisk">*</span></label>
+              <div class="col-md-3">
+                <button class="btn btn-primary" style="font-size: 10px;" [disabled]="isInputDisabled" (click)="openBranchSelectionPopup()">Add
+                  Company</button>
+              </div>
+
+              <div *ngFor="let branch of selectedBranches">
+                {{ branch.company }}
+              </div>
+              <dfinance-frontend-companypopup *ngIf="showBranchSelectionPopup" [allBranches]="allBranches"
+                [savedBranches]="selectedBranches"
+                (selectionConfirmed)="onBranchSelectionConfirmed($event)"></dfinance-frontend-companypopup>
+
+
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

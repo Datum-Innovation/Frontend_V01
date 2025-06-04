@@ -1,0 +1,276 @@
+<div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+        <div class="fixed-header">
+            <div class="close-icon" (click)="cancelItems()">X</div> 
+        </div>
+        <!-- Grid for other account popup  -->
+        <div class="item-purchase-table" *ngIf="popupType == ''">
+            <ngx-datatable class="material" [rows]="modifiedArray" columnMode="force" [headerHeight]="50"
+                [footerHeight]="0" [rowHeight]="40" [selected]="selected"
+                [selectionType]="SelectionType.single" (select)="onSelect($event)">
+                <!-- First column with a button to add rows -->
+                <!-- <ngx-datatable-column name="Action" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <button *ngIf="rowIndex == currentItemTableIndex || rowIndex == modifiedArray.length - 1"
+                            (click)="onClickAddItem(rowIndex)">+</button>
+                        <span
+                            *ngIf="rowIndex != currentItemTableIndex && rowIndex != modifiedArray.length - 1">{{rowIndex+1}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="PDCPayable" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <dfinance-frontend-searchable-dropdown *ngIf="!noGridItem" [options]="accountData"
+                            [updatedOption]="row?.pdcPayable.name" [returnField]="accountCodereturnField"
+                            [dropdownFields]="accountCodeKeys" [tabIndex]="10"
+                            (selectedOption)="onAccountCodeSelected($event,rowIndex)"></dfinance-frontend-searchable-dropdown>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="ChequeNo" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <input type="text" class="form-control" *ngIf="!noGridItem" value="{{row.chequeNo}}"
+                            (change)="onChangeChequeNo($event, rowIndex)">
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="ChequeDate" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <input type="text" class="form-control" *ngIf="!noGridItem" value="{{row.chequeDate | date: 'dd/MM/yyyy' }}"
+                            (change)="onChangeChequeDate($event, rowIndex)" appDateFormat>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Bank name" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <dfinance-frontend-searchable-dropdown *ngIf="!noGridItem" [options]="bankpopupData"
+                            [updatedOption]="row?.bankName.name"
+                            [returnField]="bankreturnField"
+                            [dropdownFields]="banknameKeys" [tabIndex]="4"
+                            (selectedOption)="onBankNameSelected($event,rowIndex)">
+                        </dfinance-frontend-searchable-dropdown>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Clearing Days" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <input type="text" class="form-control" *ngIf="!noGridItem" value="{{row.clrDays}}"
+                            (change)="onChangeClearingDays($event, rowIndex)">
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Description" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <input type="text" class="form-control" *ngIf="!noGridItem" value="{{row.description}}"
+                            (change)="onChangeDescription($event, rowIndex)">
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Amount" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                        <input type="text" class="form-control" *ngIf="!noGridItem" value="{{row.amount}}"
+                            (change)="onChangeAmount($event, rowIndex)" appNumberFormat>
+                    </ng-template>
+                </ngx-datatable-column> -->
+
+
+                <ngx-datatable-column
+                    *ngFor="let col of tablecolumns; let colIndex = index"
+                    [name]="col.name" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex"
+                        ngx-datatable-cell-template>
+
+                        <span
+                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                        id="accountcell-{{rowIndex}}-{{colIndex}}" 
+                        #gridCell
+                        (click)="onClickSpan($event,rowIndex,colIndex)"
+                        *ngIf="col.field === 'id' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'id') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                        (keydown)="onAccountKeyDown($event)"
+                        [attr.data-column-name]="col.field"
+                        (dblclick)="handleDoubleClick($event)"
+                        data-column-key-name="id">{{rowIndex+1}}</span>
+
+                        <!-- Code for Column pdcpayablee -->
+
+                        <span
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                            #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'pdcpayable' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'pdcpayable') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="pdcpayable">{{row?.pdcPayable.name}}</span>
+
+                        <dfinance-frontend-searchable-dropdown
+                            [options]="accountData"
+                            [updatedOption]="row?.pdcPayable.name"
+                            [returnField]="accountCodereturnField"
+                            [dropdownFields]="accountCodeKeys"
+                            (selectedOption)="onAccountCodeSelected($event, rowIndex)"
+                            [isGridCell]="true"
+                            cellid="accountcell-{{rowIndex}}-{{colIndex}}"
+                            (click)="onClickInput($event,rowIndex,colIndex)"
+                            (emitKeyboardEvent)="onColumKeyDown($event)"
+                            *ngIf="col.field === 'pdcpayable' && enableInlineEditing && currentColumname == 'pdcpayable'  && rowIndex == currentRowIndex"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field">
+                        </dfinance-frontend-searchable-dropdown>
+
+                        <!-- for chequeno -->
+                        <span
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                            #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'chequeno' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'chequeno') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="chequeno">{{row?.chequeNo}}</span>
+                            
+                            <input type="text" class="form-control"
+                            *ngIf=" col.field === 'chequeno' && enableInlineEditing && currentColumname == 'chequeno'  && rowIndex == currentRowIndex"
+                            value="{{ row?.chequeNo }}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)"
+                            (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeChequeNo($event, rowIndex)">
+
+                        <!-- for chequedate -->
+                        <span
+                        [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                        id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                        #gridCell
+                        (click)="onClickSpan($event,rowIndex,colIndex)"
+                        *ngIf="col.field === 'chequedate' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'chequedate') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                        (keydown)="onAccountKeyDown($event)"
+                        [attr.data-column-name]="col.field"
+                        (dblclick)="handleDoubleClick($event)"
+                        data-column-key-name="chequedate">{{row.chequeDate | date: 'dd/MM/yyyy' }}</span>
+
+                        <input type="text" class="form-control"
+                        *ngIf=" col.field === 'chequedate' && enableInlineEditing && currentColumname == 'chequedate'  && rowIndex == currentRowIndex"
+                        value="{{row.chequeDate | date: 'dd/MM/yyyy' }}"
+                        id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                        (keydown)="onAccountKeyDown($event)"
+                        (click)="onClickInput($event,rowIndex,colIndex)"
+                        [attr.data-column-name]="col.field" (input)="onChangeChequeDate($event, rowIndex)" appDateFormat>
+
+                        <!-- Code for Column bankname -->
+                        <span
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                            #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'bankname' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'bankname') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="bankname">{{row?.bankName.name}}</span>
+
+                        <dfinance-frontend-searchable-dropdown
+                            [options]="bankpopupData"
+                            [updatedOption]="row?.bankName.name"
+                            [returnField]="bankreturnField"
+                            [dropdownFields]="banknameKeys"
+                            (selectedOption)="onBankNameSelected($event, rowIndex)"
+                            [isGridCell]="true"
+                            cellid="accountcell-{{rowIndex}}-{{colIndex}}"
+                            (click)="onClickInput($event,rowIndex,colIndex)"
+                            (emitKeyboardEvent)="onColumKeyDown($event)"                            
+                            *ngIf="col.field === 'bankname' && enableInlineEditing && currentColumname == 'bankname'  && rowIndex == currentRowIndex"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field">
+                        </dfinance-frontend-searchable-dropdown>
+
+                        <!-- for clearingdays -->
+                        <span
+                            [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                            #gridCell
+                            (click)="onClickSpan($event,rowIndex,colIndex)"
+                            *ngIf="col.field === 'clearingdays' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'clearingdays') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                            (keydown)="onAccountKeyDown($event)"
+                            [attr.data-column-name]="col.field"
+                            (dblclick)="handleDoubleClick($event)"
+                            data-column-key-name="clearingdays">{{row?.clrDays}}</span>
+
+                            <input type="text" class="form-control"
+                            *ngIf=" col.field === 'clearingdays' && enableInlineEditing && currentColumname == 'clearingdays'  && rowIndex == currentRowIndex"
+                            value="{{ row?.clrDays }}"
+                            id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                            (keydown)="onAccountKeyDown($event)"
+                            (click)="onClickInput($event,rowIndex,colIndex)"
+                            [attr.data-column-name]="col.field" (input)="onChangeClearingDays($event, rowIndex)">
+
+                          <!-- for description -->
+                          <span
+                          [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                          id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                          #gridCell
+                          (click)="onClickSpan($event,rowIndex,colIndex)"
+                          *ngIf="col.field === 'description' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'description') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                          (keydown)="onAccountKeyDown($event)"
+                          [attr.data-column-name]="col.field"
+                          (dblclick)="handleDoubleClick($event)"
+                          data-column-key-name="description">{{row?.description}}</span>
+
+                          <input type="text" class="form-control"
+                          *ngIf=" col.field === 'description' && enableInlineEditing && currentColumname == 'description'  && rowIndex == currentRowIndex"
+                          value="{{ row?.description }}"
+                          id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                          (keydown)="onAccountKeyDown($event)"
+                          (click)="onClickInput($event,rowIndex,colIndex)"
+                          [attr.data-column-name]="col.field" (input)="onChangeDescription($event, rowIndex)">
+
+                         <!-- for amount -->
+                         <span
+                         [ngClass]="{'selected-cell': isSelectedCell(rowIndex,colIndex)}"
+                         id="accountcell-{{rowIndex}}-{{colIndex}}" tabindex="0"
+                         #gridCell
+                         (click)="onClickSpan($event,rowIndex,colIndex)"
+                         *ngIf="col.field === 'amount' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'amount') || (enableInlineEditing && rowIndex != currentRowIndex))"
+                         (keydown)="onAccountKeyDown($event)"
+                         [attr.data-column-name]="col.field"
+                         (dblclick)="handleDoubleClick($event)"
+                         data-column-key-name="amount">{{row?.amount}}</span>
+
+                         <input type="text" class="form-control"
+                         *ngIf=" col.field === 'amount' && enableInlineEditing && currentColumname == 'amount'  && rowIndex == currentRowIndex"
+                         value="{{ row?.amount }}"
+                         id="accountcell-{{rowIndex}}-{{colIndex}}" #gridCell
+                         (keydown)="onAccountKeyDown($event)"
+                         (click)="onClickInput($event,rowIndex,colIndex)"
+                         [attr.data-column-name]="col.field" (input)="onChangeAmount($event, rowIndex)" appNumberFormat>
+                         
+                    </ng-template>
+                </ngx-datatable-column>
+
+            </ngx-datatable>
+        </div>
+
+        <div class="fixed-footer">
+            <div class="row">
+                <hr>
+                    <span class="formatted-amount">{{formattedAmount}}</span>
+                <hr>
+                
+            </div>
+            <div class="row"  style="margin-top:0px">
+                <div class="col-md-10" *ngIf="!showBalanceAmount"></div>
+                <div class="col-md-8" *ngIf="showBalanceAmount"></div>
+                <div class="col-md-2 balanceamount-section" *ngIf="showBalanceAmount">
+                    <p>
+                        Balance
+                        <span [ngClass]="{ 'warning': isNegative() }">
+                            {{ balanceAmount | number: '1.4-4' }}
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-2 flex-wrapper">
+                    <button class="btn btn-secondary ok-button" (click)="save()" (keydown)="handleOkbuttonkeydown($event)" #okbutton>OK</button>
+                    <button class="btn btn-secondary close-button" (click)="cancelItems()" (keydown)="handleCancelbuttonkeydown($event)"#cancelbutton>Close</button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
