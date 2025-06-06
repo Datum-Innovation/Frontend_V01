@@ -7,10 +7,10 @@ export const environment = {
 };
 
 export const APP_URL = {
- API: 'http://localhost:5148/'
+ //API: 'http://localhost:5148/'
  
 // 'http://dibajapi.datuminnovation.com/'
-//'http://dev.datuminnovation.com/',
+API:'http://dev.datuminnovation.com/'
  
 };
 
