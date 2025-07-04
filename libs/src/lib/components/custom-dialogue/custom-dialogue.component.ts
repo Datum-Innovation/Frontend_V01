@@ -15,7 +15,9 @@ export class CustomDialogueComponent {
   @ViewChild('okButton') okButton!: ElementRef;
   @ViewChild('cancelButton') cancelButton!: ElementRef;
   @ViewChild('barcodeInputRef') barcodeInputRef!: ElementRef;
-
+ showToast: boolean = false;
+  toastMessage: string = '';
+  toastType: 'success' | 'error' | 'info' = 'success'; 
   onClose(): void {
     this.dialogRef.close();
   }
@@ -70,5 +72,15 @@ export class CustomDialogueComponent {
       this.okButton.nativeElement.focus();
     }
   }
+  // Show Toast/Alert message
+  showAlertMessage(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
 
+    // Hide the toast message after 3 seconds
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
 }

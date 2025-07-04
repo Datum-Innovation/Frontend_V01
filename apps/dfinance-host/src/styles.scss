@@ -108,11 +108,14 @@ hr {
 }
 
 .btn-secondary {
-  border-radius: var(--2, 4px);
-  border: 0.5px solid var(--Tertiary-600, #222) !important;
+  border-radius: 4px;
+  border: 0.5px solid var(--Tertiary-500, #222) !important;
   background: var(--Primary-300, #C6D7E1);
   padding: 2px 7px 0px 8px;
+  line-height: 11.5px; 
+ 
 }
+
 
 .btn-secondary:hover {
   background: #606060 !important;

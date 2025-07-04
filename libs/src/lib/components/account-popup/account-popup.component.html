@@ -7,8 +7,13 @@
         <!-- Grid for other account popup  -->
         <div  *ngIf="popupType == ''" class="item-purchase-table">
             <ngx-datatable class="material" [rows]="modifiedArray" columnMode="force" [headerHeight]="50"
-                [footerHeight]="0" [rowHeight]="40" [scrollbarV]="true" [scrollbarH]="true" [selected]="selected"
+                [footerHeight]="0" [rowHeight]="40" [scrollbarV]="true" [scrollbarH]="true"
+                [style.height.px]="400" [selected]="selected"
                 [selectionType]="SelectionType.single" (select)="onSelect($event)">
+
+               
+
+
                 <ngx-datatable-column
                     *ngFor="let col of tablecolumns; let colIndex = index"
                     [name]="col.name" [flexGrow]="2">

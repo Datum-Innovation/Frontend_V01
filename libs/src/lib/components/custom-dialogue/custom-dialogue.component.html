@@ -1,47 +1,66 @@
-<div class="custom-dialog-div" *ngIf="data.key == 'custom'">
-  <div class="custom-dialogue-header">
-    <h1 mat-dialog-title>{{ data.title }}</h1>
-    <div mat-dialog-actions class="dialog-close-button">
-        <button mat-icon-button (click)="onClose()">
-          <span>X</span>
-        </button>
+<div *ngIf="showToast" class="toast-message {{ toastType }} animate__animated animate__fadeInDown">
+  <div class="toast-content">
+    <p>{{ toastMessage }}</p>
+  </div>
+</div>
+
+<!-- Custom Alert Dialog -->
+<div class="modal-dialog custom-dialog animate__animated animate__fadeInDown" *ngIf="data.key == 'custom'">
+  <div class="modal-content custom-modal-content shadow-lg rounded-3 p-4">
+
+    <div class="modal-header border-0">
+      <h5 class="modal-title">{{ data.title }}</h5>
+      <button type="button" class="btn-close" (click)="onClose()">X</button>
     </div>
-  </div>    
-    <div mat-dialog-content>{{ data.message }}</div> 
-    <div #okButton class="close-section" (click)="onClose()">
-      <span>OK</span>
-    </div>   
-</div>
 
-<div class="barcode-dialog-div" *ngIf="data.key == 'barcode'" (click)="focusBarcodeInput($event)">
-  <div mat-dialog-actions class="dialog-close-button">
-      <button mat-icon-button (click)="closeBarcode()">
-        <span>X</span>
-      </button>
-  </div>
-  <h1 mat-dialog-title>Barcode</h1>
-  <div mat-dialog-content>
-      <input #barcodeInputRef type="text" class="form-control" [(ngModel)]="barcodeInput"
-       (keydown.enter)="onBarcodeInputChange()" >
-  </div>    
-  <div class="close-section" (click)="closeBarcode()">
-    <span>Close</span>
+    <div class="modal-body text-center">
+      <p>{{ data.message }}</p>
+    </div>
+
+    <div class="modal-footer justify-content-center border-0">
+      <button class="btn btn-primary custom-btn" (click)="onClose()">OK</button>
+    </div>
+
   </div>
 </div>
 
+<!-- Barcode Dialog -->
+<div class="modal-dialog barcode-dialog animate__animated animate__fadeInDown" *ngIf="data.key == 'barcode'" (click)="focusBarcodeInput($event)">
+  <div class="modal-content custom-modal-content shadow-lg rounded-3 p-4">
 
+    <div class="modal-header border-0">
+      <h5 class="modal-title">Barcode</h5>
+      <button type="button" class="btn-close" (click)="closeBarcode()"></button>
+    </div>
 
-<div class="custom-dialog-div" *ngIf="data.key === 'confirm'">
-  <div class="custom-dialogue-header">
-    <h1 mat-dialog-title>{{ data.title }}</h1>
-    <button mat-icon-button (click)="onCancel()" class="dialog-close-button">X</button>
-  </div>
+    <div class="modal-body text-center">
+      <input #barcodeInputRef type="text" class="form-control form-control-lg custom-input" [(ngModel)]="barcodeInput" (keydown.enter)="onBarcodeInputChange()" placeholder="Scan Barcode Here">
+    </div>
 
-  <div mat-dialog-content>{{ data.message }}</div>
+    <div class="modal-footer justify-content-center border-0">
+      <button class="btn btn-secondary custom-btn" (click)="closeBarcode()">Close</button>
+    </div>
 
-  <div class="dialogue-action-btns">
-    <button mat-button color="primary" class="cancel-section" (click)="onConfirm()">OK</button>
-    <button mat-button color="warn" (click)="onCancel()">Cancel</button>
   </div>
 </div>
 
+<!-- Confirm Dialog -->
+<div class="modal-dialog confirm-dialog animate__animated animate__fadeInDown" *ngIf="data.key == 'confirm'">
+  <div class="modal-content custom-modal-content shadow-lg rounded-3 p-4">
+
+    <div class="modal-header border-0">
+      <h5 class="modal-title">{{ data.title }}</h5>
+      <button type="button" class="btn-close" (click)="onCancel()">X</button>
+    </div>
+
+    <div class="modal-body text-center">
+      <p>{{ data.message }}</p>
+    </div>
+
+    <div class="modal-footer justify-content-center border-0">
+      <button class="btn btn-primary custom-btn" (click)="onConfirm()">OK</button>
+      <button class="btn btn-danger custom-btn" (click)="onCancel()">Cancel</button>
+    </div>
+
+  </div>
+</div>

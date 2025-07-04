@@ -647,6 +647,17 @@ export class SalesInvoiceComponent {
     this.fetchPartyBalance();
     window.addEventListener('storage', this.storageEventHandlerSales);
 
+
+    // const allTaxIsFifteen = this.itemDetails.every(
+    //   (item: any) => parseFloat(item.taxPerc) === 15
+    // );
+    // console.log("allTaxIsFifteen:",allTaxIsFifteen);
+    // if(allTaxIsFifteen){
+    //   this.salesForm.get('discsellamt')?.enable();
+    // }
+    // else{
+    //   this.salesForm.get('discsellamt')?.disable();
+    // }
     // Resubscribe to valueChanges after setting initial values
     this.salesForm.valueChanges.subscribe(() => {
       if (this.salesForm.dirty) {
@@ -700,6 +711,7 @@ export class SalesInvoiceComponent {
       terms: [{ value: '', disabled: this.isInputDisabled }],
       totaldiscpercent: [{ value: false, disabled: this.isInputDisabled }],
       discountamount: [{ value: '', disabled: this.isInputDisabled }],
+      discsellamt: [{ value: '',enabled:true}],
       roundoff: [{ value: '', disabled: this.isInputDisabled }],
       netamount: [{ value: 0.0000, disabled: this.isInputDisabled }],
       tax: [{ value: '', disabled: true }],
@@ -1640,64 +1652,7 @@ export class SalesInvoiceComponent {
         },
       });
   }
-//fetch data from database ( items- )
-//   fetchItemFillData() {
-//     this.partyId = this.selectedPartyId;
-//     this.locId = this.salesForm.get('warehouse')?.value;
-//     let getparms = 'partyId=' + this.partyId + '&locId=' + this.locId ;
 
-//    // itemtext!=null?
-//     getparms = 'partyId=' + this.partyId + '&locId=' + this.locId //+ '&itemkey=' + itemtext:'';
-// // console.log("Item api:"+EndpointConstant.FILLPURCHASEITEMS + getparms)
-// //console.log("Item api:"+EndpointConstant.FILLPURCHASEITEMS + "PageID="+this.pageId+"&locId="+this.locId+"&voucherId="+this.voucherNo+"&partyId="+this.partyId)
-//     this.PurchaseService
-//       .getDetails(EndpointConstant.FILLPURCHASEITEMS+"PageID="+this.pageId+"&locId="+this.locId+"&voucherId="+this.voucherNo+"&partyId="+this.partyId)
-//      // .getDetails(EndpointConstant.FILLPURCHASEITEMS + "PageID="+this.pageId+"&locId="+this.locId+"&voucherId="+this.voucherNo+"&partyId="+this.partyId)
-//       .pipe(takeUntil(this.destroySubscription))
-//       .subscribe({
-//         next: (response) => {
-         
-//           let responseData = response?.data.items;
-//           console.log("fill item data:"+JSON.stringify(responseData,null,2))
-//           console.log("No of items:"+responseData.length)
-//           let itemData = responseData.map((item: any) => {
-//             let unitObj = item.unitPopup.find((unit: any) => unit.unit === item.item.unit);
-
-//             return {
-//               itemCode: item.item.itemCode,
-//               itemName: item.item.itemName,
-//               barCode: item.item.barCode,
-//               id: item.item.id,
-//               unitname: unitObj?.unit,
-//               stock: item.item.stock,
-//               rate: item.item.rate,
-//               purchaseRate: item.item.purchaseRate,
-//               unit: unitObj ? {
-//                 unit: unitObj.unit,
-//                 basicUnit: unitObj.basicUnit,
-//                 factor: unitObj.factor
-//               } : {},
-//             };
-//           });
-
-//           // push our inital complete list
-//           this.fillItemsData = responseData;
-//           this.fillItemDataOptions = itemData;
-
-//           if (this.fillItemsData.length > 0) {
-//             //set expiry details ...
-//             this.setExpiryDetailsFromFill(this.invTransactions);
-//             //set gridDetails
-//             this.setGridDetailsFromFill(this.invTransactions);
-//           }
-//           //set item details from import reference...
-//           this.setItemDetailsFromImportReference();
-//         },
-//         error: (error) => {
-//           console.error('An Error Occured', error);
-//         },
-//       });
-//   }
 
 
 fetchItemFillData() {
@@ -1705,37 +1660,33 @@ fetchItemFillData() {
   this.partyId = this.selectedPartyId;
   this.locId = this.salesForm.get('warehouse')?.value;
   let getparms = 'partyId=' + this.partyId + '&locId=' + this.locId ;
-
- // itemtext!=null?
-  getparms = 'partyId=' + this.partyId + '&locId=' + this.locId //+ '&itemkey=' + itemtext:'';
-// console.log("Item api:"+EndpointConstant.FILLPURCHASEITEMS + getparms)
-//console.log("Item api:"+EndpointConstant.FILLPURCHASEITEMS + "PageID="+this.pageId+"&locId="+this.locId+"&voucherId="+this.voucherNo+"&partyId="+this.partyId)
+  getparms = 'partyId=' + this.partyId + '&locId=' + this.locId 
   this.PurchaseService
     .getDetails(EndpointConstant.FILLPURCHASEITEMS+"PageID="+this.pageId+"&locId="+this.locId+"&voucherId="+this.voucherNo+"&partyId="+this.partyId)
    // .getDetails(EndpointConstant.FILLPURCHASEITEMS + "PageID="+this.pageId+"&locId="+this.locId+"&voucherId="+this.voucherNo+"&partyId="+this.partyId)
     .pipe(takeUntil(this.destroySubscription))
     .subscribe({
       next: (response) => {
-       
         let responseData = response?.data.items;
-        console.log("fill item data:"+JSON.stringify(responseData,null,2))
-        console.log("No of items:"+responseData.length)
         let itemData = responseData.map((item: any) => {
-         // let unitObj = item.unitPopup.find((unit: any) => unit.unit === item.item.unit);
+      // let unitObj = item.unitPopup.find((unit: any) => unit.unit === item.item.unit);
 
           return {
             itemCode: item.itemCode,
             itemName: item.itemName,
             barCode: item.barCode,
             id: item.id,
+            itemId: item.itemId,
             unitname: item.unit,
             stock: item.stock,
             rate: item.rate,
             purchaseRate: item.purchaseRate,
-            // unit: unitObj ? {
-            //   unit: unitObj.unit,
-            //   basicUnit: unitObj.basicUnit,
-            //   factor: unitObj.factor
+             unit: null,
+              unitsPopup: [],
+            // unit: this.unitObj ? {
+            //   unit: this.unitObj.unit,
+            //   basicUnit: this.unitObj.basicUnit,
+            //   factor: this.unitObj.factor
             // } : {},
           };
         }
@@ -1759,7 +1710,55 @@ fetchItemFillData() {
       },
     });
 }
+// ...existing code...
+onClickUnitCell(row: any, rowIndex: number, colIndex: number): void {
+  this.currentRowIndex = rowIndex;
+  this.currentColIndex = colIndex;
+  this.currentColumname = 'unit';
+  this.enableInlineEditing = true;
 
+  if (row?.itemId && (!row.unitsPopup || row.unitsPopup.length === 0)) {
+    this.PurchaseService
+      .getDetails(EndpointConstant.unitpop + row.itemId)
+      .subscribe({
+        next: (response) => {
+          const unitsArr = response?.data;
+          if (Array.isArray(unitsArr)) {
+            const unitOptions = unitsArr.map((unitInfo: any) => ({
+              unit: unitInfo.unit,
+              basicunit: unitInfo.basicUnit,
+              factor: unitInfo.factor
+            }));
+
+            row.unitsPopup = unitOptions; 
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching unit data for item:', row.itemId, error);
+        }
+      });
+  }
+
+  setTimeout(() => {
+    this.gridnavigationService.focusCell(this.gridCells.toArray(), this.currentRowIndex, this.currentColIndex);
+  });
+}
+onUnitFieldSpecialKeyDown(event: KeyboardEvent, row: any, rowIndex: number, colIndex: number): void {
+  const allowedKeys = ['PageDown', 'PageUp', 'ArrowDown', 'ArrowUp', 'Enter', 'Escape', 'Tab'];
+
+  if (allowedKeys.includes(event.key)) {
+    event.preventDefault();
+
+    // Enable inline editing for the Unit column
+    this.currentColIndex = colIndex;
+    this.currentRowIndex = rowIndex;
+    this.currentColumname = 'unit';
+    this.enableInlineEditing = true;
+
+    // Call the same unit popup logic
+    this.onClickUnitCell(row, rowIndex, colIndex);
+  }
+}
 
 
 
@@ -2007,6 +2006,7 @@ fetchItemFillData() {
   }
 
   onClickSaveSales() {
+    this.isLoading = true;
     if (this.salesForm.get('customer')?.value == null) {
       this.baseService.showCustomDialogue('Enter Customer/Supplier and proceed');
       this.moveFocusToDropdown('customer');
@@ -2273,6 +2273,7 @@ fetchItemFillData() {
   // }
 
   createCallback(payload: any) {
+    this.isLoading = true;
     this.PurchaseService.saveDetails(EndpointConstant.SAVESALES + this.pageId + '&voucherId=' + this.voucherNo, payload)
       .pipe(takeUntil(this.destroySubscription))
       .subscribe({
@@ -4350,17 +4351,37 @@ this.fetchBatchNoPopup(itemInfo.id).subscribe((batchNoOptions: any) => {
 
   }
 
+  // setCommonDiscountPercent(commondiscountpercent: any) {
+  //   this.salesForm.patchValue({
+  //     totaldiscpercent: commondiscountpercent
+  //   });
+  //   this.itemDetails.forEach((item, index) => {
+  //     item.discountPerc = commondiscountpercent;
+  //     this.calculateItemAmount(index);
+  //   });
+  //   this.itemDetails = [...this.itemDetails];
+  //   this.tempItemFillDetails = [...this.itemDetails];
+  // }
+
   setCommonDiscountPercent(commondiscountpercent: any) {
     this.salesForm.patchValue({
       totaldiscpercent: commondiscountpercent
     });
+  
     this.itemDetails.forEach((item, index) => {
+      // Skip empty rows (adjust condition as per your data structure)
+      if (!item.itemId && !item.itemCode && !item.itemName) {
+        return;
+      }
+  
       item.discountPerc = commondiscountpercent;
       this.calculateItemAmount(index);
     });
+  
     this.itemDetails = [...this.itemDetails];
     this.tempItemFillDetails = [...this.itemDetails];
   }
+  
 
   onChangeCommonDiscountAmount(event: any) {
     let commondiscountamount = event.target.value;
@@ -5888,6 +5909,35 @@ this.fetchBatchNoPopup(itemInfo.id).subscribe((batchNoOptions: any) => {
 
   }
 
-  
+  onChangeDiscSellAmount(event: any) {   
 
+    const enteredValue = parseFloat(event.target.value);
+  
+    if (!isNaN(enteredValue)) {
+      const previousNetAmount = this.salesForm.get('netamount')?.value;
+      this.salesForm.get('grandtotal')?.patchValue(enteredValue);
+  
+      // Calculate and round netamount to 2 decimal places
+      const newNetAmount = (enteredValue * 100) / 115;
+      const roundedNetAmount = parseFloat(newNetAmount.toFixed(2));
+  const discAmountNew=parseFloat( (previousNetAmount-roundedNetAmount).toFixed(2));
+  this.salesForm.get('discountamount')?.patchValue(discAmountNew);
+  //const discpercNew=discAmountNew/previousNetAmount*100;
+  const discpercNew = (discAmountNew / previousNetAmount * 100).toFixed(2);
+
+  this.salesForm.get('totaldiscpercent')?.patchValue(discpercNew);
+
+let commondiscountpercent = Number(discpercNew);
+this.commonDiscountPercent = this.baseService.formatInput(commondiscountpercent);
+this.setCommonDiscountPercent(this.commonDiscountPercent);
+
+      this.salesForm.get('netamount')?.patchValue(roundedNetAmount);
+    } else {
+      this.salesForm.get('grandtotal')?.patchValue(0);
+      this.salesForm.get('netamount')?.patchValue(0);
+    }
+  }
+  
+  
+  
 }

@@ -649,7 +649,7 @@
                                                                         (keydown)="onKeyDown($event)"></dfinance-frontend-searchable-dropdown>
 
                                                                     <!-- Code for Column Unit -->
-                                                                    <span
+                                                                     <span
                                                                         *ngIf="col.field === 'unit' && (!enableInlineEditing || (enableInlineEditing && currentColumname != 'unit')  || (enableInlineEditing && rowIndex != currentRowIndex))"
                                                                         [ngClass]="{'selected-cell': isSelectedCell(rowIndex, colIndex)}"
                                                                         id="cell-{{rowIndex}}-{{colIndex}}" #gridCell
@@ -673,7 +673,10 @@
                                                                         [attr.data-column-name]="col.field"
                                                                         [isGridCell]="true"
                                                                         cellid="cell-{{rowIndex}}-{{colIndex}}"
-                                                                        (click)="onClickInput($event,rowIndex,colIndex)"
+                                                                        (click)="onClickSpan($event,rowIndex, colIndex)"
+                                                                        (keydown)="onUnitFieldSpecialKeyDown($event, row, rowIndex, colIndex)"
+                                                                        (dblclick)="onClickUnitCell(row, rowIndex, colIndex)"
+                                                                        (click)="onClickUnitCell(row, rowIndex, colIndex)"
                                                                         (emitKeyboardEvent)="onColumKeyDown($event)"
                                                                         *ngIf="col.field === 'unit' && enableInlineEditing && currentColumname == 'unit'  && rowIndex == currentRowIndex"
                                                                         (keydown)="onKeyDown($event)"></dfinance-frontend-searchable-dropdown>
@@ -1384,6 +1387,19 @@
                                             placement="top">
                                             Apl
                                         </button>
+
+                                        <label for="discsellamt" class="form-label amt-label">Disc Sell Amt</label>
+<input type="text"
+       id="discsellamt"
+       class="form-control"
+       formControlName="discsellamt"
+       tabindex="10"
+       (change)="onChangeDiscSellAmount($event)"
+       appNumberFormat>
+
+                                        <!-- <label for="discsellamt" class="form-label amt-label">Disc Sell Amt</label>
+                                        <input type="text" id="discsellamt" formControlName="discsellamt" tabindex="10"
+                                            (change)="onChangeDiscSellAmount($event)" appNumberFormat> -->
                                     </div>
                                     <!-- <a href="#" *ngIf="itemExpiryManagement" class="btn purchase-item-details"
                                         (click)="openItemDetails($event)">Item Details</a> -->
