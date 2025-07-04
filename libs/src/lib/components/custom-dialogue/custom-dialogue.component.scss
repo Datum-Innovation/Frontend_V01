@@ -1,11 +1,173 @@
-.custom-dialogue-header{
-    display: flex;
-    align-items: end;
-    text-align: center;
+/* General Modal Styling */
+.modal-dialog {
+  max-width: 400px;
+  margin: auto;
+  animation: fadeIn 0.5s ease-out;
 }
-.custom-dialogue-header h1{ 
-width: 80%;
+
+.custom-modal-content {
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background: #fff;
 }
-.barcode-dialog-div{
-    height: 100%;
+
+.modal-header {
+  padding: 0 0 15px 0;
+  border-bottom: none;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 22px;
+  color: #333;
+}
+
+.btn-close {
+  font-size: 1.3rem;
+  color: #333;
+  background: none;
+  border: none;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px 10px;
+}
+
+.message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.modal-body p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.modal-footer {
+  padding-top: 15px;
+  gap: 20px;
+}
+
+.modal-footer button {
+  min-width: 100px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 6px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Button Styles */
+.custom-btn {
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: #3f43b5;
+  border-color: #3f43b5;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #2e348b;
+  border-color: #2e348b;
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: #c62828;
+  border-color: #c62828;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+/* Input Styling */
+.custom-input {
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-input:focus {
+  border-color: #3f43b5;
+  box-shadow: 0 0 8px rgba(63, 67, 181, 0.6);
+  outline: none;
+}
+
+/* Modal Fade In Animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Toast Message Styling */
+.toast-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  max-width: 400px;
+  width: 100%;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #4caf50; /* Default for success */
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.toast-message.success {
+  background-color: #4CAF50; /* Success green */
+}
+
+.toast-message.error {
+  background-color: #f44336; /* Error red */
+}
+
+.toast-message.info {
+  background-color: #2196F3; /* Info blue */
+}
+
+.toast-message p {
+  margin: 0;
+  font-size: 16px;
 }

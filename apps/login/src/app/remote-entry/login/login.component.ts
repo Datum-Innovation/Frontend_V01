@@ -153,7 +153,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (response?.data?.result) {
               let secondaryMenu = JSON.stringify(response.data.result);
               this.baseService.setLocalStorgeItem('secondary-menu', secondaryMenu);
-              console.log('Secondary menu set in localStorage:', secondaryMenu);
             }
             resolve();
           },
@@ -221,7 +220,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             });
         },
         error: (error) => {
-          this.baseService.showCustomDialogue('Invalid request');
+          const errorMessage = error?.error?.message || 'Invalid request';
+this.baseService.showCustomDialogue(errorMessage);
+
           this.isLoading = false;
           console.error('Login failed', error);
         },

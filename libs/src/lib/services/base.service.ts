@@ -176,4 +176,17 @@ console.log("skey:"+skey)
       }
     });
   }
+  // Show Toast Message or Alert (Customized)
+  showAlert(message: string, type: 'success' | 'error' | 'info' = 'error'): void {
+    const dialogRef = this.dialog.open(CustomDialogueComponent, {
+      width: '300px',
+      height: '150px',
+      data: { message, key: type } // Pass the type ('success', 'error', etc.)
+    });
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, 3000); // Close the toast/alert after 3 seconds
+  }
+
 }
