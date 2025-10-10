@@ -659,7 +659,7 @@
                                                                         (keydown)="onKeyDown($event)"
                                                                         (dblclick)="handleDoubleClick($event)"
                                                                         data-column-key-name="unit">
-                                                                        {{ row?.unit?.unit }}
+                                                                        {{ getUnitDisplayValue(row?.unit) }}
                                                                     </span>
 
                                                                     <dfinance-frontend-searchable-dropdown
