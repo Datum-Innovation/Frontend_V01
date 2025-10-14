@@ -359,7 +359,7 @@ export class SalesInvoiceComponent {
     "itemName": "",
     "location": "",
     "batchNo": "",
-    "unit": {},
+    "unit": { unit: "" },
     "qty": "",
     "focQty": "",
     "basicQty": 0,
@@ -2509,7 +2509,7 @@ fetchPurchaseById(): void {
       this.FillPurchaseDetails();
 
       // push into grid rows and force table refresh
-      this.tempItemFillDetails = [...(this.invTransactions || [])];
+      this.tempItemFillDetails = [...(this.itemDetails || [])];
       setTimeout(() => this.ngxTable.recalculate(), 0);
     },
     error: (error) => {
@@ -2555,6 +2555,7 @@ FillPurchaseDetails(): void {
 
   // Populate grid data
   this.invTransactions = t.fillInvTransItems;
+  this.setGridDetailsFromFill(t.fillInvTransItems);
 
   // Populate remaining UI state
   this.onCustomerSelected(details.accountID, false);
@@ -2567,6 +2568,21 @@ FillPurchaseDetails(): void {
   this.setVoucherAllocationUsingReference();
   this.onChangePayType();
   this.calculateTotals();
+  
+  // Calculate and set discount percentage if discount exists
+  if (this.discountTotal > 0 && this.grossAmountTotal > 0) {
+    this.commonDiscountPercent = this.baseService.formatInput((this.discountTotal * 100) / this.grossAmountTotal);
+    this.salesForm.patchValue({
+      totaldiscpercent: this.commonDiscountPercent
+    });
+  }
+  
+  // Set the grand total in discsellamt field if it exists
+  if (this.grandTotal > 0) {
+    this.salesForm.patchValue({
+      discsellamt: this.grandTotal
+    });
+  }
 }
 
   setAdditionalDetailsFromFill(transactionAddditional: any) {
@@ -2644,8 +2660,8 @@ FillPurchaseDetails(): void {
         gridItem.itemId = trn.itemId;
         gridItem.itemCode = trn.itemCode;
         gridItem.itemName = trn.itemName;
-        gridItem.batchNo = trn.batchNo,
-          gridItem.unit = itemunitObj;
+        gridItem.batchNo = trn.batchNo;
+        gridItem.unit = itemunitObj || { unit: trn.unit };
         gridItem.unitsPopup = unitInfoOptions;
         gridItem.qty = Number(trn.qty);
         gridItem.focQty = Number(trn.focQty);
@@ -2686,6 +2702,7 @@ FillPurchaseDetails(): void {
   setTransactionEntries(transactionEntries: any) {
     this.additonalChargesGridDetails = [];
     let totalAddCharges = 0.00;
+    let totalTax = 0.00;
     this.taxPopupObj = [];
     transactionEntries.forEach((item: any) => {
 
@@ -2703,6 +2720,7 @@ FillPurchaseDetails(): void {
         }
         this.additonalChargesGridDetails.push(accountData);
       } else if (item.tranType == 'Tax') {
+        totalTax = totalTax + item.amount;
         this.taxPopupObj.push({
           taxid: item.accountId,
           accountCode: {
@@ -2723,8 +2741,11 @@ FillPurchaseDetails(): void {
       }
     });
     totalAddCharges = this.baseService.formatInput(totalAddCharges);
+    totalTax = this.baseService.formatInput(totalTax);
+    this.taxTotal = totalTax;
     this.salesForm.patchValue({
-      "addcharges": totalAddCharges
+      "addcharges": totalAddCharges,
+      "tax": totalTax
     });
     this.totalAdditioanalCharges = totalAddCharges;
   }
@@ -2734,7 +2755,11 @@ FillPurchaseDetails(): void {
     if (invTransactions.length > 0) {
       invTransactions.forEach((trn: any) => {
         // Create a map for faster lookups if item codes are unique
-        const itemInfoMap = new Map(this.fillItemsData.map((itemInfo: any) => [itemInfo.item.itemCode, itemInfo]));
+       const itemInfoMap = new Map(
+  this.fillItemsData
+    .filter((itemInfo: any) => itemInfo.item && itemInfo.item.itemCode) // only valid items
+    .map((itemInfo: any) => [itemInfo.item.itemCode, itemInfo])
+);
 
         // Check if the item code exists in the map
         const itemInfo = itemInfoMap.get(trn.itemCode);
@@ -2776,6 +2801,7 @@ FillPurchaseDetails(): void {
     this.calculateAmountTotal();
     this.calculateTaxTotal();
     this.calculateGridItemTotal();
+    this.calculateGrandTotal();
     this.calculateBalanceAndPaidAmount();
   }
 
@@ -5907,6 +5933,13 @@ this.fetchBatchNoPopup(itemInfo.id).subscribe((batchNoOptions: any) => {
         });
     }
 
+  }
+
+  getUnitDisplayValue(unit: any): string {
+    if (!unit) return '';
+    if (typeof unit === 'string') return unit;
+    if (unit.unit) return unit.unit;
+    return '';
   }
 
   onChangeDiscSellAmount(event: any) {   
